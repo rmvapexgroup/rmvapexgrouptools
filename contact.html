@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us | RMV Apex Group Tools</title>
+    <style>
+        :root { --primary: #0070f3; --hover: #0056b3; }
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            line-height: 1.6; 
+            max-width: 600px; 
+            margin: 40px auto; 
+            padding: 20px; 
+            color: #333; 
+            background-color: #f4f7f6;
+        }
+        .contact-card {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        h1 { color: var(--primary); margin-top: 0; }
+        .form-group { margin-bottom: 20px; text-align: left; }
+        label { display: block; margin-bottom: 8px; font-weight: bold; }
+        input, textarea { 
+            width: 100%; 
+            padding: 12px; 
+            border: 1px solid #ccc; 
+            border-radius: 6px; 
+            box-sizing: border-box; 
+            font-size: 16px;
+        }
+        input:focus, textarea:focus {
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: 0 0 5px rgba(0,112,243,0.2);
+        }
+        button { 
+            background-color: var(--primary); 
+            color: white; 
+            border: none; 
+            padding: 14px 20px; 
+            border-radius: 6px; 
+            cursor: pointer; 
+            font-size: 16px; 
+            width: 100%;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+        button:hover { background-color: var(--hover); }
+        .back-link { 
+            display: inline-block; 
+            margin-top: 25px; 
+            color: var(--primary); 
+            text-decoration: none; 
+            font-weight: bold;
+        }
+        .back-link:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+
+    <div class="contact-card">
+        <h1>RMV Apex Group से संपर्क करें</h1>
+        <p>कोई प्रश्न है या सहायता चाहिए? हमें नीचे संदेश भेजें। हम जल्द ही आपसे संपर्क करेंगे।</p>
+
+        <form action="https://formspree.io/f/xyknopdk" method="POST">
+            <div class="form-group">
+                <label for="name">आपका नाम</label>
+                <input type="text" id="name" name="name" required placeholder="अपना पूरा नाम लिखें">
+            </div>
+            
+            <div class="form-group">
+                <label for="email">ईमेल पता</label>
+                <input type="email" id="email" name="email" required placeholder="example@mail.com">
+            </div>
+            
+            <div class="form-group">
+                <label for="message">हम आपकी क्या मदद कर सकते हैं?</label>
+                <textarea id="message" name="message" rows="5" required placeholder="अपना संदेश यहाँ लिखें..."></textarea>
+            </div>
+            
+            <button type="submit">संदेश भेजें</button>
+        </form>
+
+        <a href="index.html" class="back-link">← डैशबोर्ड पर वापस जाएं</a>
+    </div>
+
+</body>
+</html>
