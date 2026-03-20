@@ -9,7 +9,8 @@
             --primary: #ff4d4d; --gold: #d4af37; --dark: #0f172a; 
             --bg: #f8fafc; --glass: rgba(255, 255, 255, 0.95);
             --wa: #25D366; --fb: #1877F2; --mail: #ea4335;
-            --gemini: #4285f4; --gumroad: #ff90e8; --kofi: #29abe0;
+            --gemini: #4285f4; --gsite: #4285f4; --kofi: #29abe0;
+            --aboutme: #000000;
         }
         
         * { box-sizing: border-box; transition: all 0.3s ease; }
@@ -45,6 +46,8 @@
         .bg-fb { background: var(--fb); }
         .bg-mail { background: var(--mail); }
         .bg-premium { background: var(--dark); border: 1px solid var(--gold); color: var(--gold); }
+        .bg-gsite { background: var(--gsite); }
+        .bg-aboutme { background: var(--aboutme); color: white; }
 
         /* INQUIRY SECTION */
         .inquiry-box { background: white; border-radius: 25px; padding: 40px; margin-top: 40px; text-align: center; border: 1px solid #e2e8f0; }
@@ -58,12 +61,27 @@
 <body oncontextmenu="return false;">
 
     <header class="header">
-        <h1>Contact Support</h1>
-        <p>RMV APEX GROUP | Official Digital Desk</p>
+        <h1>Official Digital Desk</h1>
+        <p>RMV APEX GROUP | Connectivity Hub</p>
     </header>
 
     <div class="container">
         <div class="contact-card-grid">
+            
+            <a href="https://sites.google.com/view/rmvapexgroup/" target="_blank" class="contact-item">
+                <div class="icon-box">🌐</div>
+                <h3>Official Site</h3>
+                <p>RMV APEX Google Portal</p>
+                <div class="btn-action bg-gsite">Visit Website</div>
+            </a>
+
+            <a href="https://about.me/rmvapexgroup" target="_blank" class="contact-item">
+                <div class="icon-box">👤</div>
+                <h3>About Me</h3>
+                <p>Profile & Visionary Bio</p>
+                <div class="btn-action bg-aboutme">Read Profile</div>
+            </a>
+
             <a href="https://wa.me/918652025006" target="_blank" class="contact-item">
                 <div class="icon-box">💬</div>
                 <h3>WhatsApp Chat</h3>
@@ -78,18 +96,11 @@
                 <div class="btn-action bg-mail">Send Mail</div>
             </a>
 
-            <a href="https://rmvapexgroup.gumroad.com/" target="_blank" class="contact-item">
-                <div class="icon-box">🛍️</div>
-                <h3>Digital Store</h3>
-                <p>Premium Tools & Software</p>
-                <div class="btn-action bg-premium">Visit Shop</div>
-            </a>
-
             <a href="https://ramesh27952.wcard.me" target="_blank" class="contact-item">
                 <div class="icon-box">🆔</div>
                 <h3>Digital Profile</h3>
                 <p>Business Card & Portfolio</p>
-                <div class="btn-action bg-premium" style="background:var(--gold); color:black">View Profile</div>
+                <div class="btn-action bg-premium" style="background:var(--gold); color:black">View Card</div>
             </a>
 
             <a href="https://www.facebook.com/rmvapexgroups/" target="_blank" class="contact-item">
@@ -104,6 +115,13 @@
                 <h3>Product Catalog</h3>
                 <p>View all our services</p>
                 <div class="btn-action bg-wa" style="background:#075E54">Open Catalog</div>
+            </a>
+
+            <a href="https://pin.it/4rVwo4aAl" target="_blank" class="contact-item">
+                <div class="icon-box">📌</div>
+                <h3>Pinterest</h3>
+                <p>Designs & Inspiration</p>
+                <div class="btn-action bg-premium">View Portfolio</div>
             </a>
         </div>
 
