@@ -3,39 +3,126 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contact Us | RMV Apex Group</title>
+    <title>Contact Us | RMV APEX GROUP</title>
     <style>
-        body { font-family: 'Segoe UI', sans-serif; background: #f4f7f6; margin: 0; padding: 20px; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
-        .card { background: white; padding: 40px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); max-width: 500px; width: 100%; text-align: center; }
-        h1 { color: #0070f3; }
-        .contact-method { display: block; padding: 15px; margin: 10px 0; border: 1px solid #eee; border-radius: 10px; text-decoration: none; color: #333; font-weight: bold; transition: 0.3s; }
-        .contact-method:hover { background: #eef6ff; border-color: #0070f3; }
-        input, textarea { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ccc; border-radius: 8px; box-sizing: border-box; }
-        button { background: #0070f3; color: white; border: none; padding: 15px; width: 100%; border-radius: 8px; cursor: pointer; font-weight: bold; }
-        .back { display: block; margin-top: 20px; color: #666; text-decoration: none; font-size: 14px; }
+        :root { 
+            --primary: #ff4d4d; --gold: #d4af37; --dark: #0f172a; 
+            --bg: #f8fafc; --glass: rgba(255, 255, 255, 0.95);
+            --wa: #25D366; --fb: #1877F2; --mail: #ea4335;
+            --gemini: #4285f4; --gumroad: #ff90e8; --kofi: #29abe0;
+        }
+        
+        * { box-sizing: border-box; transition: all 0.3s ease; }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); margin: 0; color: var(--dark); overflow-x: hidden; }
+        
+        /* HEADER */
+        .header { 
+            background: linear-gradient(135deg, var(--dark) 0%, #1e293b 100%); 
+            color: white; padding: 60px 20px; text-align: center; 
+            border-bottom: 6px solid var(--gold);
+        }
+        .header h1 { margin: 0; font-size: 2.5rem; font-weight: 900; color: var(--gold); }
+        .header p { margin-top: 10px; letter-spacing: 2px; font-size: 0.9rem; text-transform: uppercase; opacity: 0.8; }
+
+        .container { max-width: 900px; margin: -30px auto 50px; padding: 0 20px; position: relative; z-index: 10; }
+        
+        /* CONTACT GRID */
+        .contact-card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
+        
+        .contact-item { 
+            background: white; padding: 30px; border-radius: 20px; text-align: center;
+            text-decoration: none; color: var(--dark); border: 1px solid #e2e8f0;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05); display: flex; flex-direction: column; align-items: center;
+        }
+        .contact-item:hover { transform: translateY(-8px); border-color: var(--primary); box-shadow: 0 15px 30px rgba(0,0,0,0.1); }
+        .icon-box { font-size: 2.5rem; margin-bottom: 15px; }
+        .contact-item h3 { margin: 10px 0 5px; font-size: 1.2rem; }
+        .contact-item p { font-size: 0.85rem; color: #64748b; margin: 0; }
+
+        /* BUTTONS */
+        .btn-action { margin-top: 15px; padding: 10px 25px; border-radius: 50px; font-weight: 800; font-size: 0.8rem; color: white; text-transform: uppercase; }
+        .bg-wa { background: var(--wa); }
+        .bg-fb { background: var(--fb); }
+        .bg-mail { background: var(--mail); }
+        .bg-premium { background: var(--dark); border: 1px solid var(--gold); color: var(--gold); }
+
+        /* INQUIRY SECTION */
+        .inquiry-box { background: white; border-radius: 25px; padding: 40px; margin-top: 40px; text-align: center; border: 1px solid #e2e8f0; }
+        .btn-form { display: inline-block; background: #673ab7; color: white; padding: 15px 40px; border-radius: 50px; text-decoration: none; font-weight: bold; margin-top: 20px; box-shadow: 0 10px 20px rgba(103, 58, 183, 0.3); }
+
+        .back-home { display: block; text-align: center; margin-top: 30px; color: var(--primary); font-weight: bold; text-decoration: none; }
+
+        .footer { background: var(--dark); color: white; text-align: center; padding: 40px 20px; margin-top: 60px; border-top: 5px solid var(--gold); }
     </style>
 </head>
-<body>
+<body oncontextmenu="return false;">
 
-<div class="card">
-    <h1>संपर्क करें</h1>
-    <p>हम आपकी सहायता के लिए तैयार हैं</p>
-    
-    <div style="margin-bottom: 30px;">
-        <a href="https://wa.me/918652025006" class="contact-method" style="color: #25D366;">WhatsApp पर चैट करें</a>
-        <a href="https://m.me/rmvapexgroups" class="contact-method" style="color: #0084FF;">Messenger पर संदेश भेजें</a>
-        <p>Email: <strong>rmvapexgroup@gmail.com</strong></p>
+    <header class="header">
+        <h1>Contact Support</h1>
+        <p>RMV APEX GROUP | Official Digital Desk</p>
+    </header>
+
+    <div class="container">
+        <div class="contact-card-grid">
+            <a href="https://wa.me/918652025006" target="_blank" class="contact-item">
+                <div class="icon-box">💬</div>
+                <h3>WhatsApp Chat</h3>
+                <p>Instant support & queries</p>
+                <div class="btn-action bg-wa">Start Chat</div>
+            </a>
+
+            <a href="mailto:rmvapexgroup@gmail.com" class="contact-item">
+                <div class="icon-box">📧</div>
+                <h3>Official Email</h3>
+                <p>rmvapexgroup@gmail.com</p>
+                <div class="btn-action bg-mail">Send Mail</div>
+            </a>
+
+            <a href="https://rmvapexgroup.gumroad.com/" target="_blank" class="contact-item">
+                <div class="icon-box">🛍️</div>
+                <h3>Digital Store</h3>
+                <p>Premium Tools & Software</p>
+                <div class="btn-action bg-premium">Visit Shop</div>
+            </a>
+
+            <a href="https://ramesh27952.wcard.me" target="_blank" class="contact-item">
+                <div class="icon-box">🆔</div>
+                <h3>Digital Profile</h3>
+                <p>Business Card & Portfolio</p>
+                <div class="btn-action bg-premium" style="background:var(--gold); color:black">View Profile</div>
+            </a>
+
+            <a href="https://www.facebook.com/rmvapexgroups/" target="_blank" class="contact-item">
+                <div class="icon-box">👥</div>
+                <h3>Community</h3>
+                <p>Follow on Facebook</p>
+                <div class="btn-action bg-fb">Join Page</div>
+            </a>
+
+            <a href="https://wa.me/c/918652025006" target="_blank" class="contact-item">
+                <div class="icon-box">📜</div>
+                <h3>Product Catalog</h3>
+                <p>View all our services</p>
+                <div class="btn-action bg-wa" style="background:#075E54">Open Catalog</div>
+            </a>
+        </div>
+
+        <div class="inquiry-box">
+            <h2 style="margin:0">Have a Business Inquiry?</h2>
+            <p>कृपया अपनी विस्तृत जानकारी भेजने के लिए नीचे दिए गए फॉर्म का उपयोग करें।</p>
+            <a href="https://docs.google.com/forms/d/1udVlbomT01FV4xqDVZbzbKrfa0Nv8YUC2-R3y8TOB8k/viewform" target="_blank" class="btn-form">Fill Inquiry Form 📋</a>
+        </div>
+
+        <a href="index.html" class="back-home">← Back to Dashboard</a>
     </div>
 
-    <form action="https://formspree.io/f/xyknopdk" method="POST">
-        <input type="email" name="email" placeholder="आपका ईमेल" required>
-        <textarea name="message" placeholder="आपका संदेश" rows="4" required></textarea>
-        <button type="submit">संदेश भेजें</button>
-    </form>
-
-    <a href="index.html" class="back">← वापस होमपेज पर जाएं</a>
-    <p style="margin-top:20px; font-size:12px; color:#aaa;">©️ RMV Apex Group 2026</p>
-</div>
+    <footer class="footer">
+        <div style="color:var(--gold); font-weight: 900; font-size: 1.5rem;">RMV APEX GROUP</div>
+        <p style="font-size: 0.8rem; opacity: 0.6; margin-top: 10px;">
+            One Life • 9 Paths • Unlimited Growth<br>
+            © 2026 Developed by Ramesh Mewalal Vishwakarma
+        </p>
+    </footer>
 
 </body>
 </html>
