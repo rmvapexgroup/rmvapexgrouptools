@@ -3,145 +3,39 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contact Us | RMV Apex Group Tools</title>
+    <title>Contact Us | RMV Apex Group</title>
     <style>
-        :root { --primary: #0070f3; --hover: #0056b3; }
-        body { 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-            line-height: 1.6; 
-            max-width: 600px; 
-            margin: 40px auto; 
-            padding: 20px; 
-            color: #333; 
-            background-color: #f4f7f6;
-        }
-        .contact-card {
-            background: white;
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-        }
-        h1 { color: var(--primary); margin-top: 0; }
-        .form-group { margin-bottom: 20px; text-align: left; }
-        label { display: block; margin-bottom: 8px; font-weight: bold; }
-        input, textarea { 
-            width: 100%; 
-            padding: 12px; 
-            border: 1px solid #ccc; 
-            border-radius: 6px; 
-            box-sizing: border-box; 
-            font-size: 16px;
-        }
-        input:focus, textarea:focus {
-            border-color: var(--primary);
-            outline: none;
-            box-shadow: 0 0 5px rgba(0,112,243,0.2);
-        }
-        button { 
-            background-color: var(--primary); 
-            color: white; 
-            border: none; 
-            padding: 14px 20px; 
-            border-radius: 6px; 
-            cursor: pointer; 
-            font-size: 16px; 
-            width: 100%;
-            font-weight: bold;
-            transition: 0.3s;
-        }
-        button:hover { background-color: var(--hover); }
-        .back-link { 
-            display: inline-block; 
-            margin-top: 25px; 
-            color: var(--primary); 
-            text-decoration: none; 
-            font-weight: bold;
-        }
-        .back-link:hover { text-decoration: underline; }
+        body { font-family: 'Segoe UI', sans-serif; background: #f4f7f6; margin: 0; padding: 20px; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+        .card { background: white; padding: 40px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); max-width: 500px; width: 100%; text-align: center; }
+        h1 { color: #0070f3; }
+        .contact-method { display: block; padding: 15px; margin: 10px 0; border: 1px solid #eee; border-radius: 10px; text-decoration: none; color: #333; font-weight: bold; transition: 0.3s; }
+        .contact-method:hover { background: #eef6ff; border-color: #0070f3; }
+        input, textarea { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ccc; border-radius: 8px; box-sizing: border-box; }
+        button { background: #0070f3; color: white; border: none; padding: 15px; width: 100%; border-radius: 8px; cursor: pointer; font-weight: bold; }
+        .back { display: block; margin-top: 20px; color: #666; text-decoration: none; font-size: 14px; }
     </style>
 </head>
 <body>
 
-    <div class="contact-card">
-        <h1>RMV Apex Group से संपर्क करें</h1>
-        <p>कोई प्रश्न है या सहायता चाहिए? हमें नीचे संदेश भेजें। हम जल्द ही आपसे संपर्क करेंगे।</p>
-
-        <form action="https://formspree.io/f/xyknopdk" method="POST">
-            <div class="form-group">
-                <label for="name">आपका नाम</label>
-                <input type="text" id="name" name="name" required placeholder="अपना पूरा नाम लिखें">
-            </div>
-            
-            <div class="form-group">
-                <label for="email">ईमेल पता</label>
-                <input type="email" id="email" name="email" required placeholder="example@mail.com">
-            </div>
-            
-            <div class="form-group">
-                <label for="message">हम आपकी क्या मदद कर सकते हैं?</label>
-                <textarea id="message" name="message" rows="5" required placeholder="अपना संदेश यहाँ लिखें..."></textarea>
-            </div>
-            
-            <button type="submit">संदेश भेजें</button>
-        </form>
-
-        <a href="index.html" class="back-link">← डैशबोर्ड पर वापस जाएं</a>
-    </div>
-<footer style="background-color: #ffffff; padding: 40px 20px; border-top: 2px solid #0070f3; margin-top: 60px; color: #333;">
-    <div style="max-width: 900px; margin: 0 auto; display: flex; flex-wrap: wrap; justify-content: space-between; text-align: left;">
-        
-        <div style="flex: 1; min-width: 250px; margin-bottom: 20px;">
-            <h3 style="color: #0070f3; margin-top: 0;">RMV Apex Group</h3>
-            <p style="font-size: 14px; line-height: 1.6;">हमारा मिशन आपको सटीक और सरल डिजिटल टूल्स प्रदान करना है। आपकी सुविधा ही हमारी प्राथमिकता है।</p>
-        </div>
-
-        <div style="flex: 1; min-width: 150px; margin-bottom: 20px;">
-            <h4 style="margin-top: 0;">महत्वपूर्ण लिंक</h4>
-            <ul style="list-style: none; padding: 0; font-size: 14px;">
-                <li style="margin-bottom: 8px;"><a href="index.html" style="text-decoration: none; color: #555;">होम</a></li>
-                <li style="margin-bottom: 8px;"><a href="contact.html" style="text-decoration: none; color: #555;">संपर्क करें</a></li>
-                <li style="margin-bottom: 8px;"><a href="request-tool.html" style="text-decoration: none; color: #555;">नया टूल मांगें</a></li>
-            </ul>
-        </div>
-
-        <div style="flex: 1; min-width: 200px; margin-bottom: 20px;">
-            <h4 style="margin-top: 0;">सहायता</h4>
-            <p style="font-size: 14px;">ईमेल: rmvapexgroup@gmail.com</p>
-            <p style="font-size: 12px; color: #888;">Powered by Vercel Edge</p>
-        </div>
+<div class="card">
+    <h1>संपर्क करें</h1>
+    <p>हम आपकी सहायता के लिए तैयार हैं</p>
+    
+    <div style="margin-bottom: 30px;">
+        <a href="https://wa.me/918652025006" class="contact-method" style="color: #25D366;">WhatsApp पर चैट करें</a>
+        <a href="https://m.me/rmvapexgroups" class="contact-method" style="color: #0084FF;">Messenger पर संदेश भेजें</a>
+        <p>Email: <strong>rmvapexgroup@gmail.com</strong></p>
     </div>
 
-    <div style="border-top: 1px solid #eee; padding-top: 20px; margin-top: 20px; font-size: 13px; color: #999;">
-        <p>&copy; 2026 RMV Apex Group Tools. सर्वाधिकार सुरक्षित।</p>
-    </div>
-</footer>
-    <footer style="background-color: #ffffff; padding: 40px 20px; border-top: 2px solid #0070f3; margin-top: 60px; color: #333;">
-    <div style="max-width: 900px; margin: 0 auto; display: flex; flex-wrap: wrap; justify-content: space-between; text-align: left;">
-        
-        <div style="flex: 1; min-width: 250px; margin-bottom: 20px;">
-            <h3 style="color: #0070f3; margin-top: 0;">RMV Apex Group</h3>
-            <p style="font-size: 14px; line-height: 1.6;">हमारा मिशन आपको सटीक और सरल डिजिटल टूल्स प्रदान करना है। आपकी सुविधा ही हमारी प्राथमिकता है।</p>
-        </div>
+    <form action="https://formspree.io/f/xyknopdk" method="POST">
+        <input type="email" name="email" placeholder="आपका ईमेल" required>
+        <textarea name="message" placeholder="आपका संदेश" rows="4" required></textarea>
+        <button type="submit">संदेश भेजें</button>
+    </form>
 
-        <div style="flex: 1; min-width: 150px; margin-bottom: 20px;">
-            <h4 style="margin-top: 0;">महत्वपूर्ण लिंक</h4>
-            <ul style="list-style: none; padding: 0; font-size: 14px;">
-                <li style="margin-bottom: 8px;"><a href="index.html" style="text-decoration: none; color: #555;">होम</a></li>
-                <li style="margin-bottom: 8px;"><a href="contact.html" style="text-decoration: none; color: #555;">संपर्क करें</a></li>
-                <li style="margin-bottom: 8px;"><a href="request-tool.html" style="text-decoration: none; color: #555;">नया टूल मांगें</a></li>
-            </ul>
-        </div>
+    <a href="index.html" class="back">← वापस होमपेज पर जाएं</a>
+    <p style="margin-top:20px; font-size:12px; color:#aaa;">©️ RMV Apex Group 2026</p>
+</div>
 
-        <div style="flex: 1; min-width: 200px; margin-bottom: 20px;">
-            <h4 style="margin-top: 0;">सहायता</h4>
-            <p style="font-size: 14px;">ईमेल: rmvapexgroup@gmail.com</p>
-            <p style="font-size: 12px; color: #888;">Powered by Vercel Edge</p>
-        </div>
-    </div>
-
-    <div style="border-top: 1px solid #eee; padding-top: 20px; margin-top: 20px; font-size: 13px; color: #999;">
-        <p>&copy; 2026 RMV Apex Group Tools. सर्वाधिकार सुरक्षित।</p>
-    </div>
-    </footer>
 </body>
 </html>
