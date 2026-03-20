@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RMV APEX | All-in-One Super Hub</title>
+    <style>
+        :root { 
+            --primary: #4f46e5; --secondary: #10b981; --dark: #0f172a; 
+            --gold: #d4af37; --bg: #f8fafc; --accent: #ff4d4d;
+            --wa: #25D366; --fb: #1877F2; --mail: #ea4335;
+        }
+        * { box-sizing: border-box; font-family: 'Segoe UI', Tahoma, sans-serif; transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        body { background: var(--bg); margin: 0; padding: 10px; user-select: none; color: var(--dark); overflow-x: hidden; }
+        
+        /* MASTER CARD */
+        .main-container { max-width: 600px; margin: 20px auto; background: #fff; border-radius: 35px; padding: 30px; box-shadow: 0 30px 60px rgba(0,0,0,0.12); border-top: 10px solid var(--primary); position: relative; z-index: 5; }
+        
+        /* SMART WATERMARK */
+        .wm { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-30deg); font-size: 4.5rem; opacity: 0.03; font-weight: 900; pointer-events: none; z-index: 1; color: #000; width: 100%; text-align: center; }
+
+        .header-box { text-align: center; margin-bottom: 25px; border-bottom: 2px solid #f1f5f9; padding-bottom: 15px; }
+        .header-box h1 { margin: 0; font-size: 1.8rem; letter-spacing: -1px; background: linear-gradient(to right, var(--primary), var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .tagline { font-size: 0.75rem; font-weight: 800; color: var(--gold); letter-spacing: 2px; text-transform: uppercase; margin-top: 5px; }
+
+        /* NAVIGATION TABS */
+        .nav-tabs { display: flex; gap: 8px; overflow-x: auto; padding: 10px 0; scrollbar-width: none; margin-bottom: 25px; }
+        .nav-tabs::-webkit-scrollbar { display: none; }
+        .t-btn { padding: 12px 22px; border: none; background: #f1f5f9; border-radius: 15px; cursor: pointer; font-weight: 800; color: #64748b; white-space: nowrap; font-size: 0.85rem; }
+        .t-btn.active { background: var(--primary); color: white; box-shadow: 0 8px 20px rgba(79, 70, 229, 0.3); }
+
+        /* CALC MODULES */
+        .calc-module { display: none; animation: slideUp 0.4s ease-out; }
+        .active-module { display: block; }
+
+        .input-box { margin-bottom: 18px; }
+        label { display: block; margin-bottom: 8px; font-weight: 700; font-size: 0.9rem; color: #475569; }
+        input, select { width: 100%; padding: 15px; border: 2px solid #e2e8f0; border-radius: 16px; outline: none; background: #f8fafc; font-size: 1rem; font-weight: 600; }
+        input:focus { border-color: var(--primary); background: #fff; }
+
+        .btn-calc { width: 100%; padding: 18px; border: none; background: linear-gradient(135deg, var(--primary), #818cf8); color: white; border-radius: 18px; font-weight: 800; cursor: pointer; font-size: 1.1rem; margin-top: 10px; box-shadow: 0 10px 20px rgba(79, 70, 229, 0.2); }
+        .btn-calc:active { transform: scale(0.98); }
+        
+        /* RESULTS AREA */
+        .results { margin-top: 25px; padding: 25px; background: #f0fdf4; border-radius: 25px; border: 1px solid #dcfce7; display: none; position: relative; }
+        .res-item { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px dashed #cbd5e1; font-size: 1rem; }
+        .res-item:last-child { border-bottom: none; }
+        .res-item b { color: var(--primary); font-size: 1.1rem; }
+
+        /* CONNECTIVITY SUITE (Social Links) */
+        .social-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 35px; border-top: 2px solid #f1f5f9; padding-top: 25px; }
+        .s-link { text-align: center; padding: 14px; border-radius: 14px; text-decoration: none; font-size: 0.75rem; font-weight: 800; color: white; display: flex; flex-direction: column; align-items: center; gap: 5px; }
+        
+        /* FOOTER */
+        .footer-text { text-align: center; color: #94a3b8; font-size: 0.75rem; margin-top: 25px; line-height: 1.6; }
+
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body oncontextmenu="return false;">
+
+    <div class="wm" id="watermark">RMV APEX GROUP</div>
+
+    <div class="main-container">
+        <div class="header-box">
+            <h1>RMV APEX HUB</h1>
+            <div class="tagline">One Life • 9 Paths • Unlimited Growth</div>
+        </div>
+
+        <div class="nav-tabs">
+            <button class="t-btn active" onclick="showMod('gst', this)">GST Calc</button>
+            <button class="t-btn" onclick="showMod('age', this)">Age & Life</button>
+            <button class="t-btn" onclick="showMod('wealth', this)">Wealth (SIP)</button>
+            <button class="t-btn" onclick="showMod('tax', this)">Income Tax</button>
+            <button class="t-btn" onclick="showMod('date', this)">Date Adj.</button>
+        </div>
+
+        <div id="gst" class="calc-module active-module">
+            <div class="input-box"><label>Bill Amount (₹)</label><input type="number" id="gstAmt" placeholder="Ex: 5000"></div>
+            <div class="input-box">
+                <label>GST Rate (%)</label>
+                <select id="gstRate">
+                    <option value="5">5% (Essentials)</option><option value="12">12% (Standard)</option><option value="18" selected>18% (Services)</option><option value="28">28% (Luxury)</option>
+                </select>
+            </div>
+            <button class="btn-calc" onclick="runGST()">Calculate Total Bill ⚡</button>
+        </div>
+
+        <div id="age" class="calc-module">
+            <div class="input-box"><label>Date of Birth</label><input type="date" id="dob"></div>
+            <button class="btn-calc" onclick="runAge()">Calculate My Life 🎂</button>
+        </div>
+
+        <div id="wealth" class="calc-module">
+            <div class="input-box"><label>Monthly Investment (₹)</label><input type="number" id="wAmt" placeholder="Ex: 5000"></div>
+            <div class="input-box"><label>Expected Return (% Yearly)</label><input type="number" id="wRate" value="12"></div>
+            <div class="input-box"><label>Time Period (Years)</label><input type="number" id="wYears" value="10"></div>
+            <button class="btn-calc" onclick="runWealth()">Future Wealth 📈</button>
+        </div>
+
+        <div id="tax" class="calc-module">
+            <div class="input-box"><label>Annual Taxable Income (₹)</label><input type="number" id="taxInc" placeholder="Ex: 1200000"></div>
+            <button class="btn-calc" onclick="runTax()">Estimate Income Tax 🏛️</button>
+        </div>
+
+        <div id="date" class="calc-module">
+            <div class="input-box"><label>Target Date</label><input type="date" id="dStart"></div>
+            <div class="input-box"><label>Days to Add/Subtract</label><input type="number" id="daysDiff" placeholder="Ex: 45 or -45"></div>
+            <button class="btn-calc" onclick="runDate()">Find New Date 📅</button>
+        </div>
+
+        <div id="resBox" class="results"></div>
+
+        <div class="social-grid">
+            <a href="https://wa.me/918652025006" target="_blank" class="s-link" style="background: var(--wa);">WhatsApp</a>
+            <a href="https://ko-fi.com/rameshmewalalvishwakarma" target="_blank" class="s-link" style="background: #29abe0;">Ko-fi (Support)</a>
+            <a href="https://buymeacoffee.com/rameshmewalalvishwakarma" target="_blank" class="s-link" style="background: #FFDD00; color: black;">Coffee</a>
+            <a href="https://www.facebook.com/rmvapexgroups/" target="_blank" class="s-link" style="background: var(--fb);">Facebook</a>
+            <a href="mailto:rmvapexgroup@gmail.com" class="s-link" style="background: var(--mail);">Official Email</a>
+            <a href="https://about.me/rmvapexgroup" target="_blank" class="s-link" style="background: var(--aboutme);">About Me</a>
+        </div>
+
+        <div class="footer-text">
+            <b>RMV APEX GROUP</b><br>
+            Designed & Developed by Ramesh Mewalal Vishwakarma<br>
+            © 2026 | Licensed Exclusively
+        </div>
+    </div>
+
+    <script>
+        // BRAND_MODE logic from Master Prompt
+        const BRAND_MODE = true;
+        if(!BRAND_MODE) { document.getElementById('watermark').style.display='none'; }
+
+        function showMod(id, btn) {
+            document.querySelectorAll('.calc-module').forEach(m => m.style.display = 'none');
+            document.querySelectorAll('.t-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(id).style.display = 'block';
+            btn.classList.add('active');
+            document.getElementById('resBox').style.display = 'none';
+        }
+
+        function runGST() {
+            const a = parseFloat(document.getElementById('gstAmt').value);
+            const r = parseFloat(document.getElementById('gstRate').value);
+            if(!a) return;
+            const gst = (a * r) / 100;
+            showRes(`
+                <div class="res-item"><span>Base Amount:</span><b>₹${a.toLocaleString()}</b></div>
+                <div class="res-item"><span>GST (${r}%):</span><b>₹${gst.toLocaleString()}</b></div>
+                <div class="res-item" style="border:none; margin-top:10px; font-size:1.3rem;"><span>Total Bill:</span><b>₹${(a+gst).toLocaleString()}</b></div>
+            `);
+        }
+
+        function runAge() {
+            const dobInput = document.getElementById('dob').value;
+            if(!dobInput) return;
+            const dob = new Date(dobInput);
+            const now = new Date();
+            let y = now.getFullYear() - dob.getFullYear();
+            let m = now.getMonth() - dob.getMonth();
+            if (m < 0) { y--; m += 12; }
+            
+            const diff = now - dob;
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const heart = (days * 100000).toLocaleString(); // Average beats
+            
+            showRes(`
+                <div class="res-item"><span>Current Age:</span><b>${y} Years, ${m} Months</b></div>
+                <div class="res-item"><span>Days on Earth:</span><b>${days.toLocaleString()} Days</b></div>
+                <div class="res-item"><span>Heartbeats (Est.):</span><b>~${heart}</b></div>
+            `);
+        }
+
+        function runWealth() {
+            const p = parseFloat(document.getElementById('wAmt').value);
+            const r = (parseFloat(document.getElementById('wRate').value) / 12) / 100;
+            const n = parseFloat(document.getElementById('wYears').value) * 12;
+            if(!p || !r || !n) return;
+            
+            const fv = p * ((Math.pow(1 + r, n) - 1) / r) * (1 + r);
+            const invested = p * n;
+            showRes(`
+                <div class="res-item"><span>Total Invested:</span><b>₹${invested.toLocaleString()}</b></div>
+                <div class="res-item"><span>Wealth Gained:</span><b>₹${(fv - invested).toFixed(0).toLocaleString()}</b></div>
+                <div class="res-item" style="color:var(--secondary);"><span>Future Maturity:</span><b>₹${Math.round(fv).toLocaleString()}</b></div>
+            `);
+        }
+
+        function runTax() {
+            const i = parseFloat(document.getElementById('taxInc').value);
+            if(!i) return;
+            let tax = 0;
+            if(i > 1500000) tax = (i - 1500000) * 0.3 + 150000;
+            else if(i > 1000000) tax = (i - 1000000) * 0.2 + 50000;
+            else if(i > 500000) tax = (i - 500000) * 0.1;
+            
+            showRes(`
+                <div class="res-item"><span>Annual Income:</span><b>₹${i.toLocaleString()}</b></div>
+                <div class="res-item"><span>Est. Tax (New Regime):</span><b>₹${tax.toLocaleString()}</b></div>
+                <div class="res-item"><span>Monthly Take-home:</span><b>₹${Math.round((i - tax)/12).toLocaleString()}</b></div>
+            `);
+        }
+
+        function runDate() {
+            const start = new Date(document.getElementById('dStart').value);
+            const days = parseInt(document.getElementById('daysDiff').value);
+            if(!start.getTime() || isNaN(days)) return;
+            start.setDate(start.getDate() + days);
+            showRes(`<div class="res-item"><span>Calculated Date:</span><b>${start.toDateString()}</b></div>`);
+        }
+
+        function showRes(html) {
+            const rb = document.getElementById('resBox');
+            rb.innerHTML = html; rb.style.display = 'block';
+        }
+
+        // Security Warning
+        console.log("%cRMV APEX SECURITY ACTIVE", "color: red; font-size: 20px; font-weight: bold;");
+    </script>
+</body>
+</html>
