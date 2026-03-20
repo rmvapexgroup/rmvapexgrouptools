@@ -5,27 +5,47 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Financial Intelligence Hub | RMV APEX GROUP</title>
     <style>
-        :root { --primary: #ff4d4d; --dark: #1a1a1a; --light: #f8f9fa; --accent: #2c3e50; --success: #27ae60; }
+        :root { 
+            --primary: #ff4d4d; --dark: #0f172a; --light: #f8fafc; 
+            --accent: #2c3e50; --success: #27ae60; --gold: #d4af37;
+        }
         * { box-sizing: border-box; font-family: 'Segoe UI', Tahoma, sans-serif; }
         body { background: var(--light); margin: 0; padding: 10px; -webkit-user-select: none; user-select: none; }
-        #watermark { position: fixed; bottom: 15%; right: 5%; opacity: 0.04; font-size: 4rem; font-weight: 900; pointer-events: none; transform: rotate(-25deg); z-index: 1000; color: #000; }
-        .container { max-width: 600px; margin: 10px auto; background: #fff; padding: 25px; border-radius: 24px; box-shadow: 0 20px 40px rgba(0,0,0,0.08); border-top: 10px solid var(--primary); position: relative; overflow: hidden; }
-        .header { text-align: center; margin-bottom: 20px; z-index: 2; position: relative; }
-        .header h1 { color: var(--dark); margin: 0; font-size: 1.6rem; letter-spacing: -1px; }
-        .header p { color: var(--primary); font-weight: 700; font-size: 0.8rem; margin-top: 5px; text-transform: uppercase; }
-        .tabs-scroll { display: flex; gap: 8px; margin-bottom: 25px; background: #f0f0f0; padding: 5px; border-radius: 14px; overflow-x: auto; scrollbar-width: none; position: relative; z-index: 2; }
-        .tab-btn { padding: 10px 18px; border: none; background: transparent; cursor: pointer; border-radius: 10px; font-weight: 700; font-size: 0.8rem; transition: 0.3s; color: #666; }
-        .tab-btn.active { background: #fff; color: var(--primary); box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        
+        #watermark { position: fixed; bottom: 10%; right: 5%; opacity: 0.05; font-size: 3.5rem; font-weight: 900; pointer-events: none; transform: rotate(-25deg); z-index: 1000; color: #000; }
+        
+        .container { max-width: 600px; margin: 10px auto; background: #fff; padding: 25px; border-radius: 24px; box-shadow: 0 20px 40px rgba(0,0,0,0.08); border-top: 10px solid var(--primary); position: relative; }
+        
+        .header { text-align: center; margin-bottom: 25px; }
+        .header h1 { color: var(--dark); margin: 0; font-size: 1.8rem; font-weight: 800; letter-spacing: -1px; }
+        .header p { color: var(--primary); font-weight: 700; font-size: 0.85rem; margin-top: 5px; text-transform: uppercase; letter-spacing: 1px; }
+
+        .tabs-scroll { display: flex; gap: 8px; margin-bottom: 25px; background: #f1f5f9; padding: 6px; border-radius: 16px; overflow-x: auto; scrollbar-width: none; }
+        .tabs-scroll::-webkit-scrollbar { display: none; }
+        .tab-btn { padding: 10px 20px; border: none; background: transparent; cursor: pointer; border-radius: 12px; font-weight: 700; font-size: 0.8rem; transition: 0.3s; color: #64748b; white-space: nowrap; }
+        .tab-btn.active { background: #fff; color: var(--primary); box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
+
+        .calc-module { animation: fadeIn 0.4s ease; }
         .input-box { margin-bottom: 15px; text-align: left; }
-        label { display: block; margin-bottom: 5px; font-weight: 700; font-size: 0.85rem; color: var(--accent); }
-        input, select { width: 100%; padding: 12px; border: 2px solid #eef0f2; border-radius: 12px; outline: none; font-size: 1rem; background: #fcfdfe; transition: 0.3s; }
-        input:focus { border-color: var(--primary); background: #fff; }
-        .btn-calc { width: 100%; padding: 16px; border: none; background: linear-gradient(135deg, var(--primary), #e67e22); color: white; border-radius: 14px; font-size: 1rem; font-weight: 800; cursor: pointer; transition: 0.3s; }
-        .results { margin-top: 20px; padding: 20px; background: #fffdf5; border-radius: 16px; border: 1px solid #ffeeba; display: none; animation: fadeIn 0.4s ease; }
+        label { display: block; margin-bottom: 6px; font-weight: 700; font-size: 0.85rem; color: var(--accent); }
+        input, select { width: 100%; padding: 14px; border: 2px solid #e2e8f0; border-radius: 14px; outline: none; font-size: 1rem; background: #f8fafc; transition: 0.3s; }
+        input:focus { border-color: var(--primary); background: #fff; box-shadow: 0 0 0 4px rgba(255, 77, 77, 0.1); }
+        
+        /* BUTTON GROUP STYLES */
+        .btn-group { display: flex; gap: 10px; margin-top: 15px; }
+        .btn-calc { flex: 2; padding: 16px; border: none; background: linear-gradient(135deg, var(--primary), #e67e22); color: white; border-radius: 14px; font-size: 1.1rem; font-weight: 800; cursor: pointer; transition: 0.3s; }
+        .btn-clear { flex: 1; padding: 16px; border: 2px solid #e2e8f0; background: white; color: #64748b; border-radius: 14px; font-size: 1rem; font-weight: 700; cursor: pointer; transition: 0.3s; }
+        
+        .btn-calc:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(255, 77, 77, 0.3); }
+        .btn-clear:hover { background: #f1f5f9; color: var(--dark); border-color: #cbd5e1; }
+
+        .results { margin-top: 25px; padding: 20px; background: #fefce8; border-radius: 20px; border: 1px solid #fef08a; display: none; }
+        .res-item { display: flex; justify-content: space-between; margin-bottom: 12px; border-bottom: 1px dashed #e2e8f0; padding-bottom: 8px; font-size: 1rem; }
+        .total-row { font-weight: 900; color: var(--success); font-size: 1.2rem; border: none; }
+
+        .footer { text-align: center; margin-top: 30px; border-top: 1px solid #f1f5f9; padding-top: 20px; color: #94a3b8; font-size: 0.75rem; font-weight: 600; }
+
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        .res-item { display: flex; justify-content: space-between; margin-bottom: 10px; border-bottom: 1px solid #f0f0f0; padding-bottom: 5px; font-size: 0.95rem; }
-        .total-row { font-weight: 900; color: var(--success); font-size: 1.15rem; border: none; }
-        .footer { text-align: center; margin-top: 25px; font-size: 0.75rem; color: #bbb; border-top: 1px solid #eee; padding-top: 15px; }
     </style>
 </head>
 <body oncontextmenu="return false;">
@@ -33,9 +53,9 @@
     <div id="watermark">RMV APEX</div>
 
     <div class="container">
-        <div class="header" id="brandHeader">
-            <h1 id="brandName">RMV APEX GROUP</h1>
-            <p id="tagline">One Life • 9 Paths • Unlimited Growth</p>
+        <div class="header">
+            <h1>RMV APEX GROUP</h1>
+            <p>One Life • 9 Paths • Unlimited Growth</p>
         </div>
 
         <div class="tabs-scroll">
@@ -49,69 +69,79 @@
         <div id="gstSection" class="calc-module">
             <div class="input-box"><label>Amount (₹)</label><input type="number" id="gstAmt" placeholder="0.00"></div>
             <div class="input-box">
-                <label>Select GST Rate (%)</label>
+                <label>GST Rate (%)</label>
                 <select id="gstRate" onchange="toggleManualRate()">
-                    <option value="5">5% (Essential)</option>
-                    <option value="12">12% (Standard)</option>
-                    <option value="18" selected>18% (Services)</option>
-                    <option value="28">28% (Luxury)</option>
-                    <option value="manual">-- Manual / Custom Rate --</option>
+                    <option value="5">5%</option><option value="12">12%</option><option value="18" selected>18%</option><option value="28">28%</option><option value="manual">-- Custom --</option>
                 </select>
             </div>
-            <div id="manualRateDiv" class="input-box" style="display:none; animation: fadeIn 0.3s ease;">
-                <label>Enter Custom Rate (%)</label>
-                <input type="number" id="customGSTRate" placeholder="Ex: 3 or 1.5">
+            <div id="manualRateDiv" class="input-box" style="display:none;"><label>Custom Rate (%)</label><input type="number" id="customGSTRate" placeholder="Ex: 3"></div>
+            <div class="btn-group">
+                <button class="btn-calc" onclick="runGST()">Calculate ⚡</button>
+                <button class="btn-clear" onclick="clearForm('gstSection')">Clear 🧹</button>
             </div>
-            <button class="btn-calc" onclick="runGST()">Calculate GST ⚡</button>
         </div>
 
         <div id="wealthSection" class="calc-module" style="display:none;">
             <div class="input-box"><label>Principal (₹)</label><input type="number" id="wAmt" placeholder="Ex: 10000"></div>
-            <div class="input-box"><label>Interest Rate (%)</label><input type="number" id="wRate" placeholder="Ex: 12"></div>
+            <div class="input-box"><label>Return Rate (%)</label><input type="number" id="wRate" placeholder="Ex: 12"></div>
             <div class="input-box"><label>Years</label><input type="number" id="wYears" placeholder="Ex: 5"></div>
-            <button class="btn-calc" onclick="runWealth()">See Growth 📈</button>
+            <div class="btn-group">
+                <button class="btn-calc" onclick="runWealth()">Growth 📈</button>
+                <button class="btn-clear" onclick="clearForm('wealthSection')">Clear 🧹</button>
+            </div>
         </div>
 
         <div id="taxSection" class="calc-module" style="display:none;">
             <div class="input-box"><label>Annual Income (₹)</label><input type="number" id="taxInc" placeholder="Ex: 1500000"></div>
-            <button class="btn-calc" onclick="runTax()">Estimate Tax 🏛️</button>
+            <div class="btn-group">
+                <button class="btn-calc" onclick="runTax()">Tax 🏛️</button>
+                <button class="btn-clear" onclick="clearForm('taxSection')">Clear 🧹</button>
+            </div>
         </div>
 
         <div id="emiSection" class="calc-module" style="display:none;">
             <div class="input-box"><label>Loan Amount (₹)</label><input type="number" id="eAmt" placeholder="Ex: 500000"></div>
-            <div class="input-box"><label>Interest Rate (%)</label><input type="number" id="eRate" placeholder="Ex: 8.5"></div>
+            <div class="input-box"><label>Rate (%)</label><input type="number" id="eRate" placeholder="Ex: 8.5"></div>
             <div class="input-box"><label>Tenure (Months)</label><input type="number" id="eTime" placeholder="Ex: 24"></div>
-            <button class="btn-calc" onclick="runEMI()">Calculate EMI 🏠</button>
+            <div class="btn-group">
+                <button class="btn-calc" onclick="runEMI()">EMI 🏠</button>
+                <button class="btn-clear" onclick="clearForm('emiSection')">Clear 🧹</button>
+            </div>
         </div>
 
         <div id="currSection" class="calc-module" style="display:none;">
             <div class="input-box"><label>Amount</label><input type="number" id="cAmt" placeholder="Ex: 100"></div>
-            <div class="input-box">
-                <label>From</label>
-                <select id="cFrom"><option value="USD">USD ($)</option><option value="INR" selected>INR (₹)</option><option value="EUR">EUR (€)</option><option value="GBP">GBP (£)</option></select>
+            <div class="input-box"><label>From</label><select id="cFrom"><option value="USD">USD ($)</option><option value="INR" selected>INR (₹)</option></select></div>
+            <div class="input-box"><label>To</label><select id="cTo"><option value="INR">INR (₹)</option><option value="USD" selected>USD ($)</option></select></div>
+            <div class="btn-group">
+                <button class="btn-calc" onclick="runCurr()">Convert 🌍</button>
+                <button class="btn-clear" onclick="clearForm('currSection')">Clear 🧹</button>
             </div>
-            <div class="input-box">
-                <label>To</label>
-                <select id="cTo"><option value="INR">INR (₹)</option><option value="USD" selected>USD ($)</option><option value="EUR">EUR (€)</option><option value="GBP">GBP (£)</option></select>
-            </div>
-            <button class="btn-calc" onclick="runCurr()">Convert Now 🌍</button>
         </div>
 
         <div class="results" id="resultBox">
             <div id="resData"></div>
-            <button onclick="copyData()" style="width:100%; background: #eee; border:none; padding:12px; margin-top:15px; cursor:pointer; border-radius:10px; font-weight:bold;">📋 Copy Results</button>
+            <button onclick="copyData()" style="width:100%; background: #e2e8f0; border:none; padding:12px; margin-top:15px; cursor:pointer; border-radius:12px; font-weight:bold;">📋 Copy Results</button>
         </div>
 
-        <div class="footer" id="mainFooter">Powered by RMV APEX GROUP | Anti-Theft Protection Active</div>
+        <div class="footer">
+            Powered by RMV APEX GROUP | Anti-Theft Active<br>
+            &copy; 2026 Developed by Ramesh Mewalal Vishwakarma
+        </div>
     </div>
 
     <script>
-        const BRAND_MODE = true; 
         function switchTab(type, el) {
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
             document.querySelectorAll('.calc-module').forEach(m => m.style.display = 'none');
             el.classList.add('active');
             document.getElementById(type + 'Section').style.display = 'block';
+            document.getElementById('resultBox').style.display = 'none';
+        }
+
+        function clearForm(sectionId) {
+            const inputs = document.querySelectorAll(`#${sectionId} input`);
+            inputs.forEach(input => input.value = '');
             document.getElementById('resultBox').style.display = 'none';
         }
 
@@ -131,7 +161,7 @@
             r = (r === 'manual') ? parseFloat(document.getElementById('customGSTRate').value) : parseFloat(r);
             if(!a || isNaN(r)) return;
             const t = (a * r) / 100;
-            showRes(`<div class="res-item"><span>Base:</span> <span>₹${a.toLocaleString('en-IN')}</span></div><div class="res-item"><span>Tax (${r}%):</span> <span>₹${t.toLocaleString('en-IN')}</span></div><div class="res-item total-row"><span>Total:</span> <span>₹${(a+t).toLocaleString('en-IN')}</span></div>`);
+            showRes(`<div class="res-item"><span>Base:</span> <span>₹${a.toLocaleString('en-IN')}</span></div><div class="res-item"><span>GST (${r}%):</span> <span>₹${t.toLocaleString('en-IN')}</span></div><div class="res-item total-row"><span>Total:</span> <span>₹${(a+t).toLocaleString('en-IN')}</span></div>`);
         }
 
         function runWealth() {
@@ -140,22 +170,20 @@
             const y = parseFloat(document.getElementById('wYears').value);
             if(!p || !r || !y) return;
             const res = p * Math.pow((1 + (r/100)), y);
-            showRes(`<div class="res-item"><span>Capital:</span> <span>₹${p.toLocaleString('en-IN')}</span></div><div class="res-item"><span>Profit:</span> <span>₹${(res-p).toLocaleString('en-IN')}</span></div><div class="res-item total-row"><span>Future Value:</span> <span>₹${res.toLocaleString('en-IN')}</span></div>`);
+            showRes(`<div class="res-item"><span>Investment:</span> <span>₹${p.toLocaleString('en-IN')}</span></div><div class="res-item"><span>Earnings:</span> <span>₹${(res-p).toLocaleString('en-IN')}</span></div><div class="res-item total-row"><span>Future Value:</span> <span>₹${res.toLocaleString('en-IN')}</span></div>`);
         }
 
         function runTax() {
             let i = parseFloat(document.getElementById('taxInc').value) - 75000;
             if(!i || i < 0) i = 0;
             let tax = 0;
-            if (i > 1200000) {
-                if(i > 400000) tax += Math.min(i-400000, 400000) * 0.05;
-                if(i > 800000) tax += Math.min(i-800000, 400000) * 0.10;
-                if(i > 1200000) tax += Math.min(i-1200000, 400000) * 0.15;
-                if(i > 1600000) tax += Math.min(i-1600000, 400000) * 0.20;
-                if(i > 2000000) tax += (i-2000000) * 0.25;
-            }
+            if (i > 400000) tax += Math.min(i-400000, 400000) * 0.05;
+            if (i > 800000) tax += Math.min(i-800000, 400000) * 0.10;
+            if (i > 1200000) tax += Math.min(i-1200000, 400000) * 0.15;
+            if (i > 1600000) tax += Math.min(i-1600000, 400000) * 0.20;
+            if (i > 2000000) tax += (i-2000000) * 0.25;
             const cess = tax * 0.04;
-            showRes(`<div class="res-item"><span>Basic Tax:</span> <span>₹${tax.toLocaleString('en-IN')}</span></div><div class="res-item"><span>Cess:</span> <span>₹${cess.toLocaleString('en-IN')}</span></div><div class="res-item total-row"><span>Net Tax:</span> <span>₹${(tax+cess).toLocaleString('en-IN')}</span></div>`);
+            showRes(`<div class="res-item"><span>Basic Tax:</span> <span>₹${tax.toLocaleString('en-IN')}</span></div><div class="res-item"><span>Edu Cess:</span> <span>₹${cess.toLocaleString('en-IN')}</span></div><div class="res-item total-row"><span>Total Tax:</span> <span>₹${(tax+cess).toLocaleString('en-IN')}</span></div>`);
         }
 
         function runEMI() {
@@ -164,7 +192,7 @@
             const n = parseFloat(document.getElementById('eTime').value);
             if(!p || !r || !n) return;
             const emi = (p * r * Math.pow(1 + r, n)) / (Math.pow(1 + r, n) - 1);
-            showRes(`<div class="res-item"><span>EMI:</span> <span>₹${emi.toLocaleString('en-IN')}</span></div><div class="res-item"><span>Total Interest:</span> <span>₹${((emi*n)-p).toLocaleString('en-IN')}</span></div><div class="res-item total-row"><span>Payment:</span> <span>₹${(emi*n).toLocaleString('en-IN')}</span></div>`);
+            showRes(`<div class="res-item"><span>Monthly EMI:</span> <span>₹${emi.toLocaleString('en-IN')}</span></div><div class="res-item total-row"><span>Total Payable:</span> <span>₹${(emi*n).toLocaleString('en-IN')}</span></div>`);
         }
 
         function runCurr() {
@@ -172,15 +200,17 @@
             const from = document.getElementById('cFrom').value;
             const to = document.getElementById('cTo').value;
             if(!a) return;
-            const rates = { USD: 1, INR: 83.50, EUR: 0.92, GBP: 0.78 }; 
-            const res = (a / rates[from]) * rates[to];
-            showRes(`<div class="res-item"><span>Conversion:</span> <span>${from} to ${to}</span></div><div class="res-item total-row"><span>Result:</span> <span>${res.toFixed(2)} ${to}</span></div>`);
+            const rates = { USD: 1, INR: 83.50 }; 
+            const res = (from === 'USD') ? a * rates.INR : a / rates.INR;
+            showRes(`<div class="res-item"><span>Convert:</span> <span>${from} to ${to}</span></div><div class="res-item total-row"><span>Result:</span> <span>${res.toFixed(2)} ${to}</span></div>`);
         }
 
-        function copyData() { navigator.clipboard.writeText(document.getElementById('resData').innerText); alert("Copied!"); }
-        
+        function copyData() { navigator.clipboard.writeText(document.getElementById('resData').innerText); alert("Results Copied!"); }
+
         document.addEventListener('keydown', e => {
-            if(e.ctrlKey && (e.key==='u' || e.key==='i' || e.key==='j')) { e.preventDefault(); alert("RMV Protection Active!"); }
+            if(e.ctrlKey && (e.key==='u' || e.key==='s' || e.key==='c' || e.key==='i')) {
+                e.preventDefault(); alert("RMV Protection Active!");
+            }
         });
     </script>
 </body>
