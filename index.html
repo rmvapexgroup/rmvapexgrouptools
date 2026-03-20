@@ -9,7 +9,8 @@
             --primary: #ff4d4d; --gold: #d4af37; --dark: #0f172a; 
             --bg: #f8fafc; --glass: rgba(255, 255, 255, 0.95);
             --wa: #25D366; --fb: #1877F2; --mail: #ea4335;
-            --gemini: #4285f4; --gumroad: #ff90e8; --kofi: #29abe0;
+            --gemini: #4285f4; --gsite: #4285f4; --kofi: #29abe0;
+            --aboutme: #000000;
         }
         * { box-sizing: border-box; transition: all 0.3s ease; }
         body { font-family: 'Segoe UI', sans-serif; background: var(--bg); margin: 0; color: var(--dark); overflow-x: hidden; }
@@ -42,6 +43,8 @@
         .fb-btn { background: var(--fb); }
         .mail-btn { background: var(--mail); }
         .ai-btn { background: var(--gemini); }
+        .gsite-btn { background: var(--gsite); }
+        .aboutme-btn { background: var(--aboutme); }
 
         .footer { background: var(--dark); color: white; text-align: center; padding: 60px 20px; border-top: 6px solid var(--gold); }
         .footer-brand { font-size: 1.8rem; font-weight: 900; color: var(--gold); }
@@ -56,16 +59,28 @@
 
     <div class="container">
         <div class="hub-grid">
+            <a href="https://sites.google.com/view/rmvapexgroup/" target="_blank" class="hub-card">
+                <div class="icon-circle">🌐</div>
+                <h3>Official Site</h3>
+                <p>Google Web Portal</p>
+            </a>
+
+            <a href="https://about.me/rmvapexgroup" target="_blank" class="hub-card">
+                <div class="icon-circle">👤</div>
+                <h3>About Me</h3>
+                <p>Visionary Profile</p>
+            </a>
+
             <a href="financial-hub/" class="hub-card">
                 <div class="icon-circle">⚖️</div>
                 <h3>Financial Hub</h3>
                 <p>GST, Tax & Wealth Suite</p>
             </a>
             
-            <a href="https://gemini.google.com/app" target="_blank" class="hub-card">
-                <div class="icon-circle">✨</div>
-                <h3>Gemini AI</h3>
-                <p>Advanced Assistant</p>
+            <a href="https://ramesh27952.wcard.me" target="_blank" class="hub-card">
+                <div class="icon-circle">🆔</div>
+                <h3>WCard ID</h3>
+                <p>Digital Business Card</p>
             </a>
 
             <a href="https://rmvapexgroup.blogspot.com/" target="_blank" class="hub-card">
@@ -74,20 +89,21 @@
                 <p>Updates & Articles</p>
             </a>
 
-            <a href="https://ramesh27952.wcard.me" target="_blank" class="hub-card">
-                <div class="icon-circle">🆔</div>
-                <h3>WCard ID</h3>
-                <p>Digital Profile</p>
+            <a href="https://gemini.google.com/app" target="_blank" class="hub-card">
+                <div class="icon-circle">✨</div>
+                <h3>Gemini AI</h3>
+                <p>Advanced Assistant</p>
             </a>
         </div>
 
         <div class="contact-section">
             <h2 style="margin:0">Official Support Suite</h2>
             <div class="contact-grid">
-                <a href="https://wa.me/918652025006" class="btn-social wa-btn">WhatsApp</a>
+                <a href="https://wa.me/918652025006" target="_blank" class="btn-social wa-btn">WhatsApp</a>
                 <a href="mailto:rmvapexgroup@gmail.com" class="btn-social mail-btn">Email Me</a>
-                <a href="https://wa.me/c/918652025006" class="btn-social wa-btn" style="background:#075E54">Catalog</a>
-                <a href="https://rmvapexgroup.gumroad.com/" class="btn-social" style="background:#000; color:#ff90e8; border:1px solid #ff90e8">Store</a>
+                <a href="https://wa.me/c/918652025006" target="_blank" class="btn-social wa-btn" style="background:#075E54">Catalog</a>
+                <a href="https://sites.google.com/view/rmvapexgroup/" target="_blank" class="btn-social gsite-btn">Website</a>
+                <a href="https://about.me/rmvapexgroup" target="_blank" class="btn-social aboutme-btn">Profile</a>
             </div>
             <p style="margin-top:25px; font-weight: 800;">Contact: +91 8652025006</p>
         </div>
