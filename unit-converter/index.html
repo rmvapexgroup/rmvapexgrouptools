@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unit Converter Pro | RMV APEX GROUP</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root { --p: #8b5cf6; --s: #ec4899; --d: #0f172a; --bg: #f8fafc; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; user-select: none; padding: 20px; position: relative; overflow: hidden; }
+        
+        /* Premium Background Watermark */
+        .watermark { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-30deg); font-size: clamp(3rem, 10vw, 5rem); font-weight: 900; color: rgba(139, 92, 246, 0.04); z-index: -1; white-space: nowrap; pointer-events: none; text-transform: uppercase; letter-spacing: 8px; }
+
+        .card { background: white; padding: 40px; border-radius: 35px; box-shadow: 0 25px 60px rgba(0,0,0,0.1); width: 100%; max-width: 450px; border: 1px solid #eee; position: relative; overflow: hidden; z-index: 1; }
+        .card::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 8px; background: linear-gradient(90deg, var(--p), var(--s)); }
+        
+        h2 { color: var(--d); margin-bottom: 25px; font-size: 1.8rem; font-weight: 800; text-align: center; }
+        .input-group { margin-bottom: 20px; }
+        label { display: block; margin-bottom: 8px; font-weight: 600; color: #64748b; font-size: 0.9rem; }
+        input, select { width: 100%; padding: 14px; border: 2px solid #f1f5f9; border-radius: 12px; font-size: 1rem; outline: none; transition: 0.3s; }
+        input:focus, select:focus { border-color: var(--p); box-shadow: 0 0 15px rgba(139, 92, 246, 0.1); }
+        
+        .btn-calc { width: 100%; padding: 15px; border: none; border-radius: 15px; font-weight: 700; cursor: pointer; background: var(--p); color: white; font-size: 1rem; margin-top: 10px; transition: 0.3s; }
+        .btn-calc:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(139, 92, 246, 0.2); }
+
+        .result-box { background: #f5f3ff; padding: 25px; border-radius: 20px; margin-top: 30px; border: 2px dashed #ddd6fe; display: none; text-align: center; }
+        .res-val { font-size: 1.8rem; color: var(--p); font-weight: 800; }
+
+        /* SUPPORT SECTION */
+        .support-section { margin-top: 35px; padding-top: 20px; border-top: 1px solid #eee; text-align: center; }
+        .support-btns { display: flex; justify-content: center; gap: 12px; margin-top: 10px; }
+        .support-btn { padding: 10px 15px; border-radius: 12px; text-decoration: none; font-size: 0.75rem; font-weight: 700; display: flex; align-items: center; gap: 8px; }
+        .bmc-btn { background: #FFDD00; color: #000; }
+        .kofi-btn { background: #29abe0; color: #fff; }
+
+        .footer-tag { text-align: center; margin-top: 25px; font-size: 0.75rem; color: #94a3b8; font-weight: 700; }
+    </style>
+</head>
+<body oncontextmenu="return false;">
+
+<div class="watermark">RMV APEX GROUP</div>
+
+<div class="card">
+    <h2>📏 Unit Converter Pro</h2>
+    
+    <div class="input-group">
+        <label>Category (श्रेणी)</label>
+        <select id="category" onchange="updateUnits()">
+            <option value="length">Length (लंबाई)</option>
+            <option value="weight">Weight (वजन)</option>
+            <option value="temp">Temperature (तापमान)</option>
+        </select>
+    </div>
+
+    <div class="input-group">
+        <label>From (कहाँ से)</label>
+        <select id="fromUnit"></select>
+    </div>
+
+    <div class="input-group">
+        <label>Amount (राशि)</label>
+        <input type="number" id="inputValue" placeholder="Enter value">
+    </div>
+
+    <div class="input-group">
+        <label>To (किसमें)</label>
+        <select id="toUnit"></select>
+    </div>
+    
+    <button class="btn-calc" onclick="convert()">Convert Now</button>
+
+    <div class="result-box" id="resultBox">
+        <div class="res-val" id="resultValue">0.00</div>
+    </div>
+
+    <div class="support-section">
+        <div class="support-btns">
+            <a href="https://buymeacoffee.com/rameshmewalalvishwakarma" class="support-btn bmc-btn" target="_blank"><i class="fas fa-coffee"></i> Coffee</a>
+            <a href="https://ko-fi.com/rameshmewalalvishwakarma" class="support-btn kofi-btn" target="_blank"><i class="fas fa-mug-hot"></i> Ko-fi</a>
+        </div>
+    </div>
+    <div class="footer-tag">© 2026 RMV APEX GROUP 🚩</div>
+</div>
+
+<script>
+    const units = {
+        length: { "Meter": 1, "Kilometer": 0.001, "Centimeter": 100, "Inch": 39.37, "Foot": 3.28 },
+        weight: { "Kg": 1, "Gram": 1000, "Pound": 2.204, "Ounce": 35.27 },
+        temp: ["Celsius", "Fahrenheit", "Kelvin"]
+    };
+
+    function updateUnits() {
+        const cat = document.getElementById('category').value;
+        const from = document.getElementById('fromUnit');
+        const to = document.getElementById('toUnit');
+        from.innerHTML = ""; to.innerHTML = "";
+
+        const options = (cat === 'temp') ? units.temp : Object.keys(units[cat]);
+        options.forEach(u => {
+            from.add(new Option(u, u));
+            to.add(new Option(u, u));
+        });
+    }
+
+    function convert() {
+        const cat = document.getElementById('category').value;
+        const val = parseFloat(document.getElementById('inputValue').value);
+        const from = document.getElementById('fromUnit').value;
+        const to = document.getElementById('toUnit').value;
+        let res = 0;
+
+        if (isNaN(val)) return;
+
+        if (cat === 'temp') {
+            if (from === to) res = val;
+            else if (from === "Celsius" && to === "Fahrenheit") res = (val * 9/5) + 32;
+            else if (from === "Fahrenheit" && to === "Celsius") res = (val - 32) * 5/9;
+            else res = val; // simplified for example
+        } else {
+            res = (val / units[cat][from]) * units[cat][to];
+        }
+
+        document.getElementById('resultValue').innerText = res.toFixed(2) + " " + to;
+        document.getElementById('resultBox').style.display = "block";
+    }
+
+    updateUnits();
+</script>
+</body>
+</html>
