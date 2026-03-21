@@ -5,25 +5,43 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GST Master Pro | RMV APEX GROUP</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root { --p: #6366f1; --s: #f43f5e; --d: #0f172a; --bg: #f8fafc; }
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; user-select: none; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; user-select: none; padding: 20px; }
+        
         .card { background: white; padding: 40px; border-radius: 35px; box-shadow: 0 25px 60px rgba(0,0,0,0.1); width: 100%; max-width: 450px; border: 1px solid #eee; position: relative; overflow: hidden; }
         .card::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 8px; background: linear-gradient(90deg, var(--p), var(--s)); }
-        h2 { color: var(--d); margin-bottom: 30px; font-size: 1.8rem; font-weight: 800; text-align: center; }
+        
+        h2 { color: var(--d); margin-bottom: 25px; font-size: 1.8rem; font-weight: 800; text-align: center; }
         .input-group { margin-bottom: 20px; }
         label { display: block; margin-bottom: 10px; font-weight: 600; color: #64748b; font-size: 0.9rem; }
         input, select { width: 100%; padding: 15px; border: 2px solid #f1f5f9; border-radius: 15px; font-size: 1rem; outline: none; transition: 0.3s; }
         input:focus { border-color: var(--p); box-shadow: 0 0 15px rgba(99, 102, 241, 0.1); }
+        
+        #customRateInput { margin-top: 10px; display: none; }
+        
         .btn-group { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 25px; }
         button { padding: 15px; border: none; border-radius: 15px; font-weight: 700; cursor: pointer; transition: 0.3s; font-size: 1rem; }
         .btn-add { background: var(--p); color: white; }
-        .btn-sub { background: #f1f5f9; color: var(--d); }
+        .btn-sub { background: #e0e7ff; color: var(--p); }
+        .btn-clear { background: #f1f5f9; color: #64748b; grid-column: span 2; margin-top: 5px; }
         button:hover { transform: translateY(-3px); opacity: 0.9; }
+        
         .result-box { background: #f8faff; padding: 25px; border-radius: 20px; margin-top: 30px; border: 2px dashed #eef2ff; display: none; }
         .res-row { display: flex; justify-content: space-between; margin-bottom: 10px; font-weight: 600; color: #475569; }
-        .total { font-size: 1.4rem; color: var(--p); font-weight: 800; border-top: 1px solid #ddd; pt: 10px; margin-top: 10px; }
-        .footer { text-align: center; margin-top: 30px; font-size: 0.8rem; color: #94a3b8; font-weight: 600; }
+        .total { font-size: 1.4rem; color: var(--p); font-weight: 800; border-top: 1px solid #ddd; padding-top: 10px; margin-top: 10px; }
+
+        /* SUPPORT SECTION */
+        .support-section { margin-top: 35px; padding-top: 20px; border-top: 1px solid #eee; text-align: center; }
+        .support-text { font-size: 0.85rem; color: #64748b; margin-bottom: 15px; font-weight: 600; }
+        .support-btns { display: flex; justify-content: center; gap: 12px; }
+        .support-btn { padding: 10px 15px; border-radius: 12px; text-decoration: none; font-size: 0.75rem; font-weight: 700; display: flex; align-items: center; gap: 8px; transition: 0.3s; }
+        .bmc-btn { background: #FFDD00; color: #000; }
+        .kofi-btn { background: #29abe0; color: #fff; }
+        .support-btn:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+
+        .footer-tag { text-align: center; margin-top: 25px; font-size: 0.75rem; color: #94a3b8; font-weight: 700; letter-spacing: 0.5px; }
     </style>
 </head>
 <body oncontextmenu="return false;">
@@ -33,43 +51,71 @@
     
     <div class="input-group">
         <label>Amount (मूल राशि)</label>
-        <input type="number" id="amount" placeholder="e.g. 5000">
+        <input type="number" id="amount" placeholder="₹ 0.00">
     </div>
 
     <div class="input-group">
         <label>GST Rate (%)</label>
-        <select id="rate">
+        <select id="rate" onchange="toggleCustomRate()">
             <option value="5">5% (Essential)</option>
             <option value="12">12% (Standard)</option>
             <option value="18" selected>18% (Services)</option>
             <option value="28">28% (Luxury)</option>
+            <option value="custom">Custom (अपनी दर लिखें)</option>
         </select>
+        <input type="number" id="customRateInput" placeholder="Enter custom GST %">
     </div>
 
     <div class="btn-group">
         <button class="btn-add" onclick="calculate(true)">GST Extra (+)</button>
         <button class="btn-sub" onclick="calculate(false)">GST Inclusive (-)</button>
+        <button class="btn-clear" onclick="clearFields()">Clear (साफ़ करें)</button>
     </div>
 
     <div class="result-box" id="resultBox">
-        <div class="res-row"><span>Net Amount:</span> <span id="netAmt">0</span></div>
-        <div class="res-row"><span>CGST (9%):</span> <span id="cgst">0</span></div>
-        <div class="res-row"><span>SGST (9%):</span> <span id="sgst">0</span></div>
-        <div class="res-row total"><span>Total Amount:</span> <span id="totalAmt">0</span></div>
+        <div class="res-row"><span>Net Amount:</span> <span id="netAmt">₹0.00</span></div>
+        <div class="res-row"><span>CGST:</span> <span id="cgst">₹0.00</span></div>
+        <div class="res-row"><span>SGST:</span> <span id="sgst">₹0.00</span></div>
+        <div class="res-row total"><span>Total Amount:</span> <span id="totalAmt">₹0.00</span></div>
     </div>
 
-    <div class="footer">
-        © 2026 RMV APEX GROUP | Crafted with ❤️ 🚩
+    <div class="support-section">
+        <div class="support-text">Enjoying this tool? Support my work! ❤️</div>
+        <div class="support-btns">
+            <a href="https://buymeacoffee.com/rameshmewalalvishwakarma" class="support-btn bmc-btn" target="_blank">
+                <i class="fas fa-coffee"></i> Coffee
+            </a>
+            <a href="https://ko-fi.com/rameshmewalalvishwakarma" class="support-btn kofi-btn" target="_blank">
+                <i class="fas fa-mug-hot"></i> Ko-fi
+            </a>
+        </div>
+    </div>
+
+    <div class="footer-tag">
+        © 2026 RMV APEX GROUP | Ramesh Mewalal Vishwakarma 🚩
     </div>
 </div>
 
 <script>
+    function toggleCustomRate() {
+        const rateSelect = document.getElementById('rate');
+        const customInput = document.getElementById('customRateInput');
+        customInput.style.display = (rateSelect.value === 'custom') ? 'block' : 'none';
+    }
+
     function calculate(isExtra) {
         let amt = parseFloat(document.getElementById('amount').value);
-        let rate = parseFloat(document.getElementById('rate').value);
-        let resultBox = document.getElementById('resultBox');
+        let rateSelect = document.getElementById('rate').value;
+        let rate;
+
+        if (rateSelect === 'custom') {
+            rate = parseFloat(document.getElementById('customRateInput').value);
+        } else {
+            rate = parseFloat(rateSelect);
+        }
 
         if (isNaN(amt) || amt <= 0) { alert("कृपया वैध राशि दर्ज करें!"); return; }
+        if (isNaN(rate) || rate < 0) { alert("कृपया वैध GST दर दर्ज करें!"); return; }
 
         let gstAmt, total, net;
 
@@ -83,12 +129,20 @@
             total = amt;
         }
 
-        document.getElementById('netAmt').innerText = "₹" + net.toFixed(2);
-        document.getElementById('cgst').innerText = "₹" + (gstAmt / 2).toFixed(2);
-        document.getElementById('sgst').innerText = "₹" + (gstAmt / 2).toFixed(2);
-        document.getElementById('totalAmt').innerText = "₹" + total.toFixed(2);
+        document.getElementById('netAmt').innerText = "₹ " + net.toLocaleString('en-IN', {minimumFractionDigits: 2});
+        document.getElementById('cgst').innerText = "₹ " + (gstAmt / 2).toLocaleString('en-IN', {minimumFractionDigits: 2});
+        document.getElementById('sgst').innerText = "₹ " + (gstAmt / 2).toLocaleString('en-IN', {minimumFractionDigits: 2});
+        document.getElementById('totalAmt').innerText = "₹ " + total.toLocaleString('en-IN', {minimumFractionDigits: 2});
         
-        resultBox.style.display = "block";
+        document.getElementById('resultBox').style.display = "block";
+    }
+
+    function clearFields() {
+        document.getElementById('amount').value = "";
+        document.getElementById('rate').value = "18";
+        document.getElementById('customRateInput').value = "";
+        document.getElementById('customRateInput').style.display = "none";
+        document.getElementById('resultBox').style.display = "none";
     }
 </script>
 
