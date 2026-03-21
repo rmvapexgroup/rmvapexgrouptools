@@ -8,34 +8,48 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <style>
-        :root { --p: #1e293b; --s: #64748b; --d: #0f172a; --bg: #f8fafc; }
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; user-select: none; padding: 20px; position: relative; overflow: hidden; }
+        :root { --p: #1e293b; --s: #64748b; --d: #0f172a; --bg: #f8fafc; --success: #10b981; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; user-select: none; padding: 20px; position: relative; }
         
-        /* Premium Background Watermark */
-        .watermark { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-30deg); font-size: clamp(3rem, 10vw, 5rem); font-weight: 900; color: rgba(30, 41, 59, 0.04); z-index: -1; white-space: nowrap; pointer-events: none; text-transform: uppercase; letter-spacing: 8px; }
+        /* Watermark */
+        .watermark { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-30deg); font-size: clamp(3rem, 10vw, 5rem); font-weight: 900; color: rgba(30, 41, 59, 0.04); z-index: -1; pointer-events: none; text-transform: uppercase; letter-spacing: 8px; }
 
-        .card { background: white; padding: 40px; border-radius: 35px; box-shadow: 0 25px 60px rgba(0,0,0,0.1); width: 100%; max-width: 450px; border: 1px solid #eee; position: relative; overflow: hidden; z-index: 1; text-align: center; }
+        .card { background: white; padding: 40px; border-radius: 35px; box-shadow: 0 25px 60px rgba(0,0,0,0.1); width: 100%; max-width: 480px; border: 1px solid #eee; position: relative; overflow: hidden; text-align: center; }
         .card::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 8px; background: linear-gradient(90deg, var(--p), var(--s)); }
         
-        h2 { color: var(--d); margin-bottom: 25px; font-size: 1.8rem; font-weight: 800; }
-        .input-group { margin-bottom: 25px; text-align: left; }
-        label { display: block; margin-bottom: 8px; font-weight: 600; color: #64748b; font-size: 0.9rem; }
-        input { width: 100%; padding: 14px; border: 2px solid #f1f5f9; border-radius: 12px; font-size: 1rem; outline: none; transition: 0.3s; box-sizing: border-box; }
+        .back-nav { position: absolute; top: 20px; left: 20px; }
+        .back-link { text-decoration: none; color: var(--d); font-weight: 800; font-size: 0.8rem; display: flex; align-items: center; gap: 5px; opacity: 0.6; transition: 0.3s; }
+        .back-link:hover { opacity: 1; color: var(--p); }
+
+        h2 { color: var(--d); margin: 20px 0 25px; font-size: 1.8rem; font-weight: 800; }
+        .input-group { margin-bottom: 20px; text-align: left; }
+        label { display: block; margin-bottom: 8px; font-weight: 700; color: #64748b; font-size: 0.85rem; }
+        input { width: 100%; padding: 15px; border: 2px solid #f1f5f9; border-radius: 15px; font-size: 1rem; outline: none; transition: 0.3s; font-weight: 600; box-sizing: border-box; }
         input:focus { border-color: var(--p); box-shadow: 0 0 15px rgba(30, 41, 59, 0.1); }
         
-        .btn-gen { width: 100%; padding: 15px; border: none; border-radius: 15px; font-weight: 700; cursor: pointer; background: var(--p); color: white; font-size: 1rem; margin-top: 10px; transition: 0.3s; }
+        .btn-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 10px; margin-top: 10px; }
+        button { padding: 15px; border: none; border-radius: 15px; font-weight: 800; cursor: pointer; font-size: 0.9rem; transition: 0.3s; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .btn-gen { background: var(--p); color: white; }
         .btn-gen:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
+        .btn-clear { background: #f1f5f9; color: #64748b; }
+        .btn-clear:hover { background: #e2e8f0; color: #ef4444; }
 
-        #qrcode { margin: 30px auto; display: flex; justify-content: center; padding: 15px; background: white; border-radius: 20px; border: 2px solid #f1f5f9; width: fit-content; display: none; }
+        #qrWrapper { display: none; margin-top: 30px; animation: zoomIn 0.4s ease; }
+        @keyframes zoomIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
 
-        /* SUPPORT SECTION */
+        #qrcode { margin: 0 auto; display: flex; justify-content: center; padding: 15px; background: white; border-radius: 25px; border: 2px dashed #cbd5e1; width: fit-content; }
+        #qrcode img { border-radius: 10px; }
+
+        .btn-download { width: 100%; margin-top: 20px; background: var(--success); color: white; padding: 12px; font-size: 0.85rem; }
+        .btn-download:hover { transform: scale(1.02); box-shadow: 0 10px 20px rgba(16, 185, 129, 0.2); }
+
         .support-section { margin-top: 35px; padding-top: 20px; border-top: 1px solid #eee; }
         .support-btns { display: flex; justify-content: center; gap: 12px; margin-top: 10px; }
         .support-btn { padding: 10px 15px; border-radius: 12px; text-decoration: none; font-size: 0.75rem; font-weight: 700; display: flex; align-items: center; gap: 8px; }
         .bmc-btn { background: #FFDD00; color: #000; }
         .kofi-btn { background: #29abe0; color: #fff; }
 
-        .footer-tag { text-align: center; margin-top: 25px; font-size: 0.75rem; color: #94a3b8; font-weight: 700; }
+        .footer-tag { text-align: center; margin-top: 25px; font-size: 0.75rem; color: #94a3b8; font-weight: 800; }
     </style>
 </head>
 <body oncontextmenu="return false;">
@@ -43,16 +57,26 @@
 <div class="watermark">RMV APEX GROUP</div>
 
 <div class="card">
+    <div class="back-nav">
+        <a href="../index.html" class="back-link"><i class="fas fa-arrow-left"></i> DASHBOARD</a>
+    </div>
+
     <h2>🔳 QR Generator Pro</h2>
     
     <div class="input-group">
         <label>Enter URL or Text (लिंक या टेक्स्ट डालें)</label>
-        <input type="text" id="qrText" placeholder="https://example.com">
+        <input type="text" id="qrText" placeholder="https://rameshmewalal.com" onkeypress="if(event.key==='Enter') generateQR()">
     </div>
     
-    <button class="btn-gen" onclick="generateQR()">Generate QR Code</button>
+    <div class="btn-grid">
+        <button class="btn-gen" onclick="generateQR()"><i class="fas fa-magic"></i> Create QR</button>
+        <button class="btn-clear" onclick="clearAll()"><i class="fas fa-trash-alt"></i> Reset</button>
+    </div>
 
-    <div id="qrcode"></div>
+    <div id="qrWrapper">
+        <div id="qrcode"></div>
+        <button class="btn-download" onclick="downloadQR()"><i class="fas fa-download"></i> Save Image (PNG)</button>
+    </div>
 
     <div class="support-section">
         <div class="support-btns">
@@ -60,24 +84,52 @@
             <a href="https://ko-fi.com/rameshmewalalvishwakarma" class="support-btn kofi-btn" target="_blank"><i class="fas fa-mug-hot"></i> Ko-fi</a>
         </div>
     </div>
-    <div class="footer-tag">© 2026 RMV APEX GROUP 🚩</div>
+    <div class="footer-tag">Crafted by Ramesh Mewalal Vishwakarma 🚩</div>
 </div>
 
 <script>
     let qrcodeContainer = document.getElementById("qrcode");
-    let qrcode = new QRCode(qrcodeContainer, {
-        width: 180,
-        height: 180
-    });
+    let qrWrapper = document.getElementById("qrWrapper");
+    let qrGenerator = null;
 
     function generateQR() {
-        let text = document.getElementById('qrText').value;
+        let text = document.getElementById('qrText').value.trim();
         if (!text) {
-            alert("कृपया कुछ टेक्स्ट या लिंक दर्ज करें!");
+            alert("महत्वपूर्ण: कृपया कुछ टेक्स्ट या लिंक दर्ज करें!");
             return;
         }
-        qrcode.makeCode(text);
-        qrcodeContainer.style.display = "flex";
+
+        // Clear previous QR
+        qrcodeContainer.innerHTML = "";
+        
+        qrGenerator = new QRCode(qrcodeContainer, {
+            text: text,
+            width: 200,
+            height: 200,
+            colorDark : "#0f172a",
+            colorLight : "#ffffff",
+            correctLevel : QRCode.CorrectLevel.H
+        });
+
+        qrWrapper.style.display = "block";
+    }
+
+    function downloadQR() {
+        const qrImg = qrcodeContainer.querySelector('img');
+        if (!qrImg) return;
+        
+        const link = document.createElement('a');
+        link.href = qrImg.src;
+        link.download = 'RMV-QR-Code.png';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+
+    function clearAll() {
+        document.getElementById('qrText').value = "";
+        qrWrapper.style.display = "none";
+        qrcodeContainer.innerHTML = "";
     }
 </script>
 </body>
