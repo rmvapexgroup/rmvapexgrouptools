@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Age Intelligence Pro | RMV APEX GROUP</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root { --p: #f59e0b; --s: #ef4444; --d: #0f172a; --bg: #f8fafc; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; user-select: none; padding: 20px; position: relative; overflow: hidden; }
+        
+        /* Premium Background Watermark */
+        .watermark { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-30deg); font-size: clamp(3rem, 10vw, 5rem); font-weight: 900; color: rgba(245, 158, 11, 0.04); z-index: -1; white-space: nowrap; pointer-events: none; text-transform: uppercase; letter-spacing: 8px; }
+
+        .card { background: white; padding: 40px; border-radius: 35px; box-shadow: 0 25px 60px rgba(0,0,0,0.1); width: 100%; max-width: 450px; border: 1px solid #eee; position: relative; overflow: hidden; z-index: 1; }
+        .card::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 8px; background: linear-gradient(90deg, var(--p), var(--s)); }
+        
+        h2 { color: var(--d); margin-bottom: 25px; font-size: 1.8rem; font-weight: 800; text-align: center; }
+        .input-group { margin-bottom: 20px; }
+        label { display: block; margin-bottom: 8px; font-weight: 600; color: #64748b; font-size: 0.9rem; }
+        input { width: 100%; padding: 14px; border: 2px solid #f1f5f9; border-radius: 12px; font-size: 1rem; outline: none; transition: 0.3s; }
+        input:focus { border-color: var(--p); box-shadow: 0 0 15px rgba(245, 158, 11, 0.1); }
+        
+        .btn-calc { width: 100%; padding: 15px; border: none; border-radius: 15px; font-weight: 700; cursor: pointer; background: var(--p); color: white; font-size: 1rem; margin-top: 10px; }
+        
+        .result-box { background: #fffbeb; padding: 25px; border-radius: 20px; margin-top: 30px; border: 2px dashed #fef3c7; display: none; }
+        .main-age { font-size: 1.6rem; color: var(--p); font-weight: 800; text-align: center; margin-bottom: 15px; border-bottom: 1px solid #fef3c7; padding-bottom: 10px; }
+        .res-row { display: flex; justify-content: space-between; margin-bottom: 8px; font-weight: 600; color: #475569; font-size: 0.95rem; }
+
+        /* SUPPORT SECTION */
+        .support-section { margin-top: 35px; padding-top: 20px; border-top: 1px solid #eee; text-align: center; }
+        .support-btns { display: flex; justify-content: center; gap: 12px; margin-top: 10px; }
+        .support-btn { padding: 10px 15px; border-radius: 12px; text-decoration: none; font-size: 0.75rem; font-weight: 700; display: flex; align-items: center; gap: 8px; }
+        .bmc-btn { background: #FFDD00; color: #000; }
+        .kofi-btn { background: #29abe0; color: #fff; }
+
+        .footer-tag { text-align: center; margin-top: 25px; font-size: 0.75rem; color: #94a3b8; font-weight: 700; }
+    </style>
+</head>
+<body oncontextmenu="return false;">
+
+<div class="watermark">RMV APEX GROUP</div>
+
+<div class="card">
+    <h2>📅 Age Intelligence Pro</h2>
+    
+    <div class="input-group">
+        <label>Date of Birth (जन्म तिथि)</label>
+        <input type="date" id="dob">
+    </div>
+
+    <div class="input-group">
+        <label>Today's Date (आज की तिथि)</label>
+        <input type="date" id="today">
+    </div>
+    
+    <button class="btn-calc" onclick="calculateAge()">Calculate Age Now</button>
+
+    <div class="result-box" id="resultBox">
+        <div class="main-age" id="exactAge">0 Years Old</div>
+        <div class="res-row"><span>Total Months:</span> <span id="tMonths">0</span></div>
+        <div class="res-row"><span>Total Weeks:</span> <span id="tWeeks">0</span></div>
+        <div class="res-row"><span>Total Days:</span> <span id="tDays">0</span></div>
+        <div class="res-row" style="margin-top:10px; color: var(--s);">
+            <span>Next Birthday In:</span> <span id="nextBday">--</span>
+        </div>
+    </div>
+
+    <div class="support-section">
+        <div class="support-btns">
+            <a href="https://buymeacoffee.com/rameshmewalalvishwakarma" class="support-btn bmc-btn" target="_blank"><i class="fas fa-coffee"></i> Coffee</a>
+            <a href="https://ko-fi.com/rameshmewalalvishwakarma" class="support-btn kofi-btn" target="_blank"><i class="fas fa-mug-hot"></i> Ko-fi</a>
+        </div>
+    </div>
+    <div class="footer-tag">© 2026 RMV APEX GROUP 🚩</div>
+</div>
+
+<script>
+    // Set default today's date
+    document.getElementById('today').valueAsDate = new Date();
+
+    function calculateAge() {
+        let birthDate = new Date(document.getElementById('dob').value);
+        let today = new Date(document.getElementById('today').value);
+
+        if (isNaN(birthDate)) { alert("कृपया अपनी जन्म तिथि चुनें!"); return; }
+
+        let years = today.getFullYear() - birthDate.getFullYear();
+        let months = today.getMonth() - birthDate.getMonth();
+        let days = today.getDate() - birthDate.getDate();
+
+        if (days < 0) {
+            months--;
+            days += new Date(today.getFullYear(), today.getMonth(), 0).getDate();
+        }
+        if (months < 0) {
+            years--;
+            months += 12;
+        }
+
+        // Calculations for other stats
+        let diffTime = Math.abs(today - birthDate);
+        let diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+        let diffWeeks = Math.floor(diffDays / 7);
+        let diffMonths = (years * 12) + months;
+
+        // Next Birthday calculation
+        let nextBday = new Date(today.getFullYear(), birthDate.getMonth(), birthDate.getDate());
+        if (today > nextBday) {
+            nextBday.setFullYear(today.getFullYear() + 1);
+        }
+        let bdayDiff = Math.ceil((nextBday - today) / (1000 * 60 * 60 * 24));
+
+        // Display results
+        document.getElementById('exactAge').innerText = `${years} Y, ${months} M, ${days} D`;
+        document.getElementById('tMonths').innerText = diffMonths.toLocaleString();
+        document.getElementById('tWeeks').innerText = diffWeeks.toLocaleString();
+        document.getElementById('tDays').innerText = diffDays.toLocaleString();
+        document.getElementById('nextBday').innerText = bdayDiff + " Days Left";
+        
+        document.getElementById('resultBox').style.display = "block";
+    }
+</script>
+</body>
+</html>
