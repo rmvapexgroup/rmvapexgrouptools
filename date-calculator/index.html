@@ -3,48 +3,52 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Date Calculator Pro | RMV APEX GROUP</title>
+    <title>Date Calculator | RMV APEX GROUP</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        :root { --p: #3b82f6; --s: #2563eb; --d: #0f172a; --bg: #f8fafc; }
+        :root { --p: #2563eb; --s: #1d4ed8; --d: #0f172a; --bg: #f8fafc; }
         body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 20px; position: relative; overflow: hidden; }
         
-        /* 🚩 BACKGROUND COPYRIGHT WATERMARK */
-        .watermark { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-30deg); font-size: clamp(2.5rem, 10vw, 5rem); font-weight: 900; color: rgba(59, 130, 246, 0.06); z-index: 0; white-space: nowrap; pointer-events: none; text-transform: uppercase; letter-spacing: 10px; }
+        /* 🚩 FIXED BACKGROUND WATERMARK */
+        .watermark { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-30deg); font-size: clamp(3rem, 12vw, 6rem); font-weight: 900; color: rgba(15, 23, 42, 0.04); z-index: 0; white-space: nowrap; pointer-events: none; text-transform: uppercase; letter-spacing: 12px; }
 
-        .card { background: rgba(255, 255, 255, 0.98); padding: 35px; border-radius: 35px; box-shadow: 0 25px 60px rgba(0,0,0,0.08); width: 100%; max-width: 480px; border: 1px solid #f1f5f9; position: relative; z-index: 10; }
-        .card::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 8px; background: linear-gradient(90deg, var(--p), var(--s)); border-radius: 35px 35px 0 0; }
+        .card { background: #ffffff; padding: 40px; border-radius: 35px; box-shadow: 0 25px 60px rgba(0,0,0,0.08); width: 100%; max-width: 480px; border: 1px solid #f1f5f9; position: relative; z-index: 10; }
+        .card::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 8px; background: linear-gradient(90deg, #f59e0b, #d97706); border-radius: 35px 35px 0 0; }
         
         .back-nav { position: absolute; top: 20px; left: 20px; }
-        .back-link { text-decoration: none; color: var(--d); font-weight: 800; font-size: 0.7rem; opacity: 0.5; transition: 0.3s; display: flex; align-items: center; gap: 5px; }
-        .back-link:hover { opacity: 1; color: var(--p); }
+        .back-link { text-decoration: none; color: var(--d); font-weight: 800; font-size: 0.75rem; opacity: 0.6; display: flex; align-items: center; gap: 6px; transition: 0.3s; }
+        .back-link:hover { opacity: 1; color: #f59e0b; }
 
-        h2 { color: var(--d); margin: 15px 0 5px; font-size: 1.8rem; font-weight: 800; text-align: center; }
+        h2 { color: var(--d); margin: 15px 0 5px; font-size: 1.6rem; font-weight: 800; text-align: center; }
         .tagline { display: block; text-align: center; color: #94a3b8; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; margin-bottom: 25px; letter-spacing: 1px; }
 
         .input-group { margin-bottom: 15px; }
-        label { display: block; margin-bottom: 6px; font-weight: 800; color: #64748b; font-size: 0.7rem; text-transform: uppercase; }
-        input { width: 100%; padding: 12px; border: 2px solid #f1f5f9; border-radius: 12px; font-size: 1rem; outline: none; transition: 0.3s; font-weight: 700; box-sizing: border-box; font-family: inherit; }
-        input:focus { border-color: var(--p); background: #f0f7ff; }
-        
-        #result-display { background: #eff6ff; padding: 20px; border-radius: 20px; border: 2px dashed var(--p); text-align: center; margin-bottom: 20px; display: none; animation: slideUp 0.3s ease; }
-        .res-text { font-size: 1.2rem; font-weight: 800; color: var(--d); margin-bottom: 5px; }
-        .res-sub { font-size: 0.8rem; font-weight: 700; color: var(--p); }
+        label { display: block; margin-bottom: 8px; font-weight: 800; color: #64748b; font-size: 0.7rem; text-transform: uppercase; }
+        input { width: 100%; padding: 14px; border: 2px solid #f1f5f9; border-radius: 12px; font-size: 1rem; outline: none; font-weight: 700; color: var(--d); box-sizing: border-box; }
+        input:focus { border-color: #f59e0b; background: #fffcf5; }
 
+        /* Result Panel */
+        .res-container { background: #f8fafc; padding: 25px; border-radius: 20px; border: 2px dashed #e2e8f0; margin-bottom: 25px; display: none; text-align: center; animation: slideUp 0.3s ease; }
+        .res-main { font-size: 2rem; font-weight: 900; color: var(--d); line-height: 1; }
+        .res-sub { font-size: 0.85rem; font-weight: 700; color: #64748b; margin-top: 10px; }
+
+        /* Action Buttons */
         .btn-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-        .btn { padding: 14px; border: none; border-radius: 15px; font-weight: 800; cursor: pointer; transition: 0.3s; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 0.85rem; color: white; }
-        .btn-calc { background: var(--d); grid-column: span 2; margin-bottom: 5px; }
-        .btn-copy { background: #6366f1; } .btn-save { background: #a855f7; }
-        .btn-down { background: #1e293b; } .btn-clear { background: #f1f5f9; color: #64748b; }
+        .btn { padding: 14px; border: none; border-radius: 15px; font-weight: 800; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 0.85rem; transition: 0.3s; }
+        .btn-calc { background: var(--d); color: #fff; grid-column: span 2; margin-bottom: 5px; }
+        .btn-copy { background: #f1f5f9; color: #475569; }
+        .btn-save { background: #fef3c7; color: #d97706; }
+        .btn-down { background: #ecfdf5; color: #10b981; }
+        .btn-clear { background: #fff1f2; color: #e11d48; }
         .btn:hover { transform: translateY(-2px); opacity: 0.9; }
 
-        .support-section { margin-top: 25px; padding-top: 15px; border-top: 1px solid #eee; text-align: center; }
-        .support-btns { display: flex; justify-content: center; gap: 10px; margin-top: 8px; }
-        .s-btn { padding: 8px 15px; border-radius: 12px; text-decoration: none; font-size: 0.75rem; font-weight: 800; display: flex; align-items: center; gap: 6px; }
+        /* Support Buttons */
+        .support-btns { display: flex; justify-content: center; gap: 10px; margin-top: 25px; border-top: 1px solid #f1f5f9; padding-top: 20px; }
+        .s-btn { padding: 8px 15px; border-radius: 10px; text-decoration: none; font-size: 0.75rem; font-weight: 800; display: flex; align-items: center; gap: 6px; }
         .bmc { background: #FFDD00; color: #000; } .kofi { background: #29abe0; color: #fff; }
 
-        .footer { text-align: center; margin-top: 20px; font-size: 0.75rem; color: #94a3b8; font-weight: 800; }
+        .footer { text-align: center; margin-top: 25px; font-size: 0.7rem; color: #94a3b8; font-weight: 800; }
         @keyframes slideUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
@@ -53,40 +57,38 @@
 <div class="watermark">RAMESH MEWALAL VISHWAKARMA</div>
 
 <div class="card">
-    <div class="back-nav"><a href="../index.html" class="back-link"><i class="fas fa-arrow-left"></i> DASHBOARD</a></div>
+    <div class="back-nav"><a href="../index.html" class="back-link"><i class="fas fa-arrow-left"></i> BACK TO HUB</a></div>
     
     <h2>📅 Date Calculator</h2>
-    <span class="tagline">RMV APEX GROUP • PRECISION TIME</span>
+    <span class="tagline">RMV APEX GROUP • PRECISION TOOLS</span>
 
     <div class="input-group">
-        <label>Start Date (शुरुआत की तारीख)</label>
-        <input type="date" id="date1" onchange="calculate()">
+        <label>Start Date (शुरुआत)</label>
+        <input type="date" id="d1">
     </div>
 
     <div class="input-group">
-        <label>End Date (अंत की तारीख)</label>
-        <input type="date" id="date2" onchange="calculate()">
+        <label>End Date (अंत)</label>
+        <input type="date" id="d2">
     </div>
 
-    <button class="btn btn-calc" onclick="calculate()"><i class="fas fa-calculator"></i> Calculate Duration</button>
+    <button class="btn btn-calc" onclick="calculate()"><i class="fas fa-calculator"></i> CALCULATE DURATION</button>
 
-    <div id="result-display">
-        <div id="res-main" class="res-text">0 Days</div>
-        <div id="res-detail" class="res-sub">Select dates to begin</div>
+    <div class="res-container" id="box">
+        <div class="res-main" id="total-days">0 Days</div>
+        <div class="res-sub" id="breakdown">Select dates to calculate</div>
     </div>
 
     <div class="btn-grid">
-        <button class="btn btn-copy" onclick="copyResult()"><i class="fas fa-copy"></i> Copy</button>
-        <button class="btn btn-save" onclick="saveRecord()"><i class="fas fa-save"></i> Save</button>
-        <button class="btn btn-down" onclick="downloadData()"><i class="fas fa-download"></i> PDF</button>
-        <button class="btn btn-clear" onclick="clearAll()"><i class="fas fa-eraser"></i> Clear</button>
+        <button class="btn btn-copy" onclick="copy()"><i class="fas fa-copy"></i> Copy</button>
+        <button class="btn btn-save" onclick="save()"><i class="fas fa-save"></i> Save</button>
+        <button class="btn btn-down" onclick="down()"><i class="fas fa-file-pdf"></i> PDF</button>
+        <button class="btn btn-clear" onclick="clr()"><i class="fas fa-eraser"></i> Clear</button>
     </div>
 
-    <div class="support-section">
-        <div class="support-btns">
-            <a href="https://buymeacoffee.com/rameshmewalalvishwakarma" class="s-btn bmc" target="_blank"><i class="fas fa-coffee"></i> Coffee</a>
-            <a href="https://ko-fi.com/rameshmewalalvishwakarma" class="s-btn kofi" target="_blank"><i class="fas fa-mug-hot"></i> Ko-fi</a>
-        </div>
+    <div class="support-btns">
+        <a href="https://buymeacoffee.com/rameshmewalalvishwakarma" class="s-btn bmc" target="_blank"><i class="fas fa-coffee"></i> Coffee</a>
+        <a href="https://ko-fi.com/rameshmewalalvishwakarma" class="s-btn kofi" target="_blank"><i class="fas fa-mug-hot"></i> Ko-fi</a>
     </div>
 
     <div class="footer">© 2026 RAMESH MEWALAL VISHWAKARMA 🚩</div>
@@ -94,58 +96,47 @@
 
 <script>
     function calculate() {
-        const d1 = new Date(document.getElementById('date1').value);
-        const d2 = new Date(document.getElementById('date2').value);
-        const box = document.getElementById('result-display');
-
+        const d1 = new Date(document.getElementById('d1').value);
+        const d2 = new Date(document.getElementById('d2').value);
         if (isNaN(d1) || isNaN(d2)) return;
 
-        let diffTime = Math.abs(d2 - d1);
-        let diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+        const diffTime = Math.abs(d2 - d1);
+        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
-        // Detailed Breakdown
         let years = d2.getFullYear() - d1.getFullYear();
         let months = d2.getMonth() - d1.getMonth();
         let days = d2.getDate() - d1.getDate();
 
-        if (days < 0) {
-            months -= 1;
-            days += new Date(d2.getFullYear(), d2.getMonth(), 0).getDate();
-        }
-        if (months < 0) {
-            years -= 1;
-            months += 12;
-        }
+        if (days < 0) { months -= 1; days += new Date(d2.getFullYear(), d2.getMonth(), 0).getDate(); }
+        if (months < 0) { years -= 1; months += 12; }
 
-        document.getElementById('res-main').innerText = `${diffDays} Total Days`;
-        document.getElementById('res-detail').innerText = `${years} Years, ${months} Months, ${days} Days`;
-        box.style.display = "block";
+        document.getElementById('total-days').innerText = diffDays + " Total Days";
+        document.getElementById('breakdown').innerText = years + " Yrs, " + months + " Months, " + days + " Days";
+        document.getElementById('box').style.display = "block";
     }
 
-    function copyResult() {
-        const txt = document.getElementById('res-main').innerText + " (" + document.getElementById('res-detail').innerText + ")";
-        navigator.clipboard.writeText(txt);
-        alert("तारीख का अंतर कॉपी हो गया! 🚩");
+    function copy() {
+        const text = document.getElementById('total-days').innerText + " (" + document.getElementById('breakdown').innerText + ")";
+        navigator.clipboard.writeText(text);
+        alert("मापन कॉपी हो गया! 🚩");
     }
 
-    function clearAll() {
-        document.getElementById('date1').value = "";
-        document.getElementById('date2').value = "";
-        document.getElementById('result-display').style.display = "none";
+    function clr() {
+        document.getElementById('d1').value = "";
+        document.getElementById('d2').value = "";
+        document.getElementById('box').style.display = "none";
     }
 
-    function saveRecord() {
-        alert("Record Saved Successfully! 🚩");
-    }
-
-    function downloadData() {
-        const content = `RMV APEX DATE REPORT\n--------------------\nStart: ${document.getElementById('date1').value}\nEnd: ${document.getElementById('date2').value}\nTotal Days: ${document.getElementById('res-main').innerText}\nBreakdown: ${document.getElementById('res-detail').innerText}\nBy: RAMESH MEWALAL VISHWAKARMA 🚩`;
+    function down() {
+        const content = `RMV APEX DATE REPORT\n--------------------\nStart: ${document.getElementById('d1').value}\nEnd: ${document.getElementById('d2').value}\nResult: ${document.getElementById('total-days').innerText}\nBreakdown: ${document.getElementById('breakdown').innerText}\nBy: RAMESH MEWALAL VISHWAKARMA 🚩`;
         const blob = new Blob([content], {type: 'text/plain'});
         const a = document.createElement('a');
         a.href = URL.createObjectURL(blob);
         a.download = `Date_Report_RMV.txt`;
         a.click();
     }
+
+    function save() { alert("Report Saved! 🚩"); }
 </script>
 </body>
 </html>
