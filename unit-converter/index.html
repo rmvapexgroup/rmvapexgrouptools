@@ -7,71 +7,44 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        :root { --p: #8b5cf6; --s: #ec4899; --d: #0f172a; --bg: #f8fafc; }
+        :root { --p: #8b5cf6; --s: #ec4899; --d: #0f172a; --bg: #f8fafc; --success: #10b981; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; user-select: none; padding: 20px; position: relative; }
         
-        /* FIXED WATERMARK - अब यह हमेशा पीछे दिखाई देगा */
-        body { 
-            font-family: 'Plus Jakarta Sans', sans-serif; 
-            background: var(--bg); 
-            display: flex; 
-            justify-content: center; 
-            align-items: center; 
-            min-height: 100vh; 
-            margin: 0; 
-            user-select: none; 
-            padding: 20px; 
-            position: relative; 
-            overflow: hidden; 
-        }
-        
-        .watermark { 
-            position: fixed; 
-            top: 50%; 
-            left: 50%; 
-            transform: translate(-50%, -50%) rotate(-30deg); 
-            font-size: clamp(4rem, 15vw, 8rem); 
-            font-weight: 900; 
-            color: rgba(139, 92, 246, 0.08); /* Opacity थोड़ी बढ़ा दी है */
-            z-index: 0; /* कार्ड के पीछे रखने के लिए */
-            white-space: nowrap; 
-            pointer-events: none; 
-            text-transform: uppercase; 
-            letter-spacing: 12px; 
-        }
+        /* Watermark */
+        .watermark { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-30deg); font-size: clamp(3rem, 10vw, 5rem); font-weight: 900; color: rgba(139, 92, 246, 0.04); z-index: -1; pointer-events: none; text-transform: uppercase; letter-spacing: 8px; }
 
-        .card { 
-            background: rgba(255, 255, 255, 0.95); /* हल्की पारदर्शिता ताकि पीछे का रंग दिखे */
-            padding: 40px; 
-            border-radius: 35px; 
-            box-shadow: 0 25px 60px rgba(0,0,0,0.1); 
-            width: 100%; 
-            max-width: 480px; 
-            border: 1px solid #eee; 
-            position: relative; 
-            overflow: hidden; 
-            z-index: 10; /* वाटरमार्क के ऊपर रखने के लिए */
-        }
-
-        /* बाकी स्टाइल्स वही रहेंगे... */
+        .card { background: white; padding: 40px; border-radius: 35px; box-shadow: 0 25px 60px rgba(0,0,0,0.1); width: 100%; max-width: 480px; border: 1px solid #eee; position: relative; overflow: hidden; }
         .card::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 8px; background: linear-gradient(90deg, var(--p), var(--s)); }
+        
         .back-nav { position: absolute; top: 20px; left: 20px; }
         .back-link { text-decoration: none; color: var(--d); font-weight: 800; font-size: 0.8rem; display: flex; align-items: center; gap: 5px; opacity: 0.6; transition: 0.3s; }
+        .back-link:hover { opacity: 1; color: var(--p); }
+
         h2 { color: var(--d); margin: 20px 0 25px; font-size: 1.8rem; font-weight: 800; text-align: center; }
+        
         .input-group { margin-bottom: 18px; }
         label { display: block; margin-bottom: 8px; font-weight: 700; color: #64748b; font-size: 0.85rem; }
         input, select { width: 100%; padding: 14px; border: 2px solid #f1f5f9; border-radius: 15px; font-size: 1rem; outline: none; transition: 0.3s; font-weight: 600; box-sizing: border-box; }
         input:focus, select:focus { border-color: var(--p); box-shadow: 0 0 15px rgba(139, 92, 246, 0.1); }
+        
         .convert-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 18px; }
+
         .btn-calc { width: 100%; padding: 16px; border: none; border-radius: 18px; font-weight: 800; cursor: pointer; background: var(--p); color: white; font-size: 1rem; margin-top: 10px; transition: 0.3s; display: flex; align-items: center; justify-content: center; gap: 10px; }
         .btn-calc:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(139, 92, 246, 0.2); background: var(--s); }
-        .result-box { background: #f5f3ff; padding: 25px; border-radius: 25px; margin-top: 30px; border: 2px dashed #ddd6fe; display: none; text-align: center; animation: zoomIn 0.3s ease; }
+
+        .result-box { background: #f5f3ff; padding: 25px; border-radius: 25px; margin-top: 30px; border: 2px dashed #ddd6fe; display: none; text-align: center; animation: zoomIn 0.3s ease; position: relative; }
+        @keyframes zoomIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
+        
+        .res-label { font-size: 0.75rem; color: #7c3aed; font-weight: 800; letter-spacing: 1px; margin-bottom: 5px; text-transform: uppercase; }
         .res-val { font-size: 1.6rem; color: var(--d); font-weight: 800; word-break: break-all; }
         .copy-btn { margin-top: 10px; background: none; border: none; color: var(--p); cursor: pointer; font-size: 0.8rem; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 5px; width: 100%; }
+
         .support-section { margin-top: 35px; padding-top: 20px; border-top: 1px solid #eee; text-align: center; }
         .support-btns { display: flex; justify-content: center; gap: 12px; margin-top: 10px; }
         .support-btn { padding: 10px 15px; border-radius: 12px; text-decoration: none; font-size: 0.75rem; font-weight: 700; display: flex; align-items: center; gap: 8px; }
         .bmc-btn { background: #FFDD00; color: #000; }
         .kofi-btn { background: #29abe0; color: #fff; }
+
         .footer-tag { text-align: center; margin-top: 25px; font-size: 0.75rem; color: #94a3b8; font-weight: 800; }
     </style>
 </head>
@@ -87,27 +60,27 @@
     <h2>📏 Unit Converter Pro</h2>
     
     <div class="input-group">
-        <label><i class="fas fa-th-large"></i> Category</label>
+        <label><i class="fas fa-th-large"></i> Category (श्रेणी चुनें)</label>
         <select id="category" onchange="updateUnits()">
-            <option value="length">Length</option>
-            <option value="weight">Weight</option>
-            <option value="temp">Temperature</option>
-            <option value="area">Area</option>
+            <option value="length">Length (लंबाई)</option>
+            <option value="weight">Weight (वजन)</option>
+            <option value="temp">Temperature (तापमान)</option>
+            <option value="area">Area (क्षेत्रफल)</option>
         </select>
     </div>
 
     <div class="input-group">
-        <label><i class="fas fa-keyboard"></i> Amount</label>
+        <label><i class="fas fa-keyboard"></i> Amount (राशि डालें)</label>
         <input type="number" id="inputValue" placeholder="0.00" oninput="convert()">
     </div>
 
     <div class="convert-grid">
         <div class="input-group">
-            <label>From</label>
+            <label>From (कहाँ से)</label>
             <select id="fromUnit" onchange="convert()"></select>
         </div>
         <div class="input-group">
-            <label>To</label>
+            <label>To (किसमें)</label>
             <select id="toUnit" onchange="convert()"></select>
         </div>
     </div>
@@ -115,6 +88,7 @@
     <button class="btn-calc" onclick="convert()"><i class="fas fa-sync-alt"></i> Convert Now</button>
 
     <div class="result-box" id="resultBox">
+        <div class="res-label">Converted Value</div>
         <div class="res-val" id="resultValue">0.00</div>
         <button class="copy-btn" onclick="copyResult()"><i class="fas fa-copy"></i> Copy Result</button>
     </div>
@@ -129,7 +103,6 @@
 </div>
 
 <script>
-    // Script logic remains the same as previous refined version...
     const units = {
         length: { "Meter": 1, "Kilometer": 1000, "Centimeter": 0.01, "Millimeter": 0.001, "Inch": 0.0254, "Foot": 0.3048, "Mile": 1609.34 },
         weight: { "Kilogram": 1, "Gram": 0.001, "Milligram": 0.000001, "Pound": 0.453592, "Ounce": 0.0283495 },
@@ -142,11 +115,14 @@
         const from = document.getElementById('fromUnit');
         const to = document.getElementById('toUnit');
         from.innerHTML = ""; to.innerHTML = "";
+
         const options = (cat === 'temp') ? units.temp : Object.keys(units[cat]);
         options.forEach(u => {
             from.add(new Option(u, u));
             to.add(new Option(u, u));
         });
+        
+        // Set default 'To' unit different from 'From' if possible
         if (to.options.length > 1) to.selectedIndex = 1;
         convert();
     }
@@ -158,7 +134,12 @@
         const to = document.getElementById('toUnit').value;
         const resBox = document.getElementById('resultBox');
         let res = 0;
-        if (isNaN(val)) { resBox.style.display = "none"; return; }
+
+        if (isNaN(val)) {
+            resBox.style.display = "none";
+            return;
+        }
+
         if (cat === 'temp') {
             if (from === to) res = val;
             else if (from === "Celsius" && to === "Fahrenheit") res = (val * 9/5) + 32;
@@ -168,9 +149,11 @@
             else if (from === "Kelvin" && to === "Celsius") res = val - 273.15;
             else if (from === "Kelvin" && to === "Fahrenheit") res = (val - 273.15) * 9/5 + 32;
         } else {
+            // Logic: Convert from source to base unit, then base to target unit
             const baseValue = val * units[cat][from];
             res = baseValue / units[cat][to];
         }
+
         document.getElementById('resultValue').innerText = res.toLocaleString(undefined, {maximumFractionDigits: 4}) + " " + to;
         resBox.style.display = "block";
     }
@@ -181,6 +164,7 @@
         alert("Result copied! 🚩");
     }
 
+    // Initial setup
     updateUnits();
 </script>
 </body>
