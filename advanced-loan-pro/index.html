@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ultimate Loan Engine | RMV APEX GROUP</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root { --p: #2563eb; --d: #0f172a; --bg: #f8fafc; --gold: #f59e0b; --success: #10b981; --danger: #ef4444; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); margin: 0; padding: 20px; position: relative; }
+        .watermark { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-30deg); font-size: 5rem; font-weight: 900; color: rgba(15, 23, 42, 0.03); z-index: 0; pointer-events: none; text-transform: uppercase; white-space: nowrap; }
+        .container { max-width: 1000px; margin: 0 auto; position: relative; z-index: 10; }
+        .card { background: white; padding: 30px; border-radius: 30px; box-shadow: 0 20px 50px rgba(0,0,0,0.05); border: 1px solid #f1f5f9; position: relative; margin-bottom: 20px; }
+        .card::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 8px; background: linear-gradient(90deg, var(--p), var(--gold)); border-radius: 30px 30px 0 0; }
+        .grid-input { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-top: 20px; }
+        label { font-size: 0.7rem; font-weight: 800; color: #64748b; text-transform: uppercase; display: block; margin-bottom: 5px; }
+        input, select { width: 100%; padding: 12px; border-radius: 10px; border: 2px solid #f1f5f9; font-weight: 700; outline: none; box-sizing: border-box; }
+        .dashboard { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin: 25px 0; }
+        .stat-box { background: #f8fafc; padding: 15px; border-radius: 20px; text-align: center; border: 1px solid #eff6ff; }
+        .stat-box h3 { margin: 0; color: var(--d); font-size: 1.1rem; }
+        .stat-box p { margin: 5px 0 0; font-size: 0.6rem; font-weight: 800; color: #94a3b8; text-transform: uppercase; }
+        .action-btns { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; }
+        .btn { padding: 12px; border: none; border-radius: 12px; font-weight: 800; cursor: pointer; transition: 0.3s; font-size: 0.8rem; color: white; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .btn-calc { background: var(--d); }
+        .btn-save { background: var(--p); }
+        .btn-clear { background: var(--danger); }
+        .btn-down { background: var(--success); }
+        .table-container { background: white; border-radius: 25px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.02); }
+        table { width: 100%; border-collapse: collapse; font-size: 0.75rem; text-align: right; }
+        th { background: #f1f5f9; padding: 12px; color: #475569; text-transform: uppercase; }
+        td { padding: 10px 12px; border-bottom: 1px solid #f1f5f9; font-weight: 700; }
+        tr:hover { background: #f8fafc; }
+        @media print { .no-print { display: none !important; } .container { width: 100% !important; max-width: none !important; } }
+    </style>
+</head>
+<body>
+
+<div class="watermark">RMV APEX GROUP</div>
+
+<div class="container">
+    <div class="card no-print">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+            <a href="../index.html" style="text-decoration:none; color:var(--gold); font-weight:800; font-size:0.7rem;">← DASHBOARD</a>
+            <span style="font-size: 0.6rem; font-weight: 800; color: #94a3b8;">RMV APEX ADVANCED v4.0</span>
+        </div>
+        <h2 style="text-align:center;">🏦 Ultimate Loan Engine</h2>
+
+        <div class="grid-input">
+            <div><label>Loan Amount (₹)</label><input type="number" id="principal" value="100000"></div>
+            <div><label>Interest Rate (% P.A.)</label><input type="number" id="rate" value="10" step="0.1"></div>
+            <div><label>Tenure (Months)</label><input type="number" id="months" value="12"></div>
+            <div><label>Interest Type</label>
+                <select id="type"><option value="reducing">Reducing Balance</option><option value="fixed">Fixed Rate</option></select>
+            </div>
+        </div>
+
+        <div class="dashboard">
+            <div class="stat-box"><h3 id="emi-val">₹0</h3><p>Monthly EMI</p></div>
+            <div class="stat-box"><h3 id="tot-int">₹0</h3><p>Total Interest Paid</p></div>
+            <div class="stat-box"><h3 id="tot-pay">₹0</h3><p>Total Loan Amount</p></div>
+        </div>
+
+        <div class="action-btns">
+            <button class="btn btn-calc" onclick="calculate()">CALCULATE</button>
+            <button class="btn btn-save" onclick="saveData()">SAVE LOCAL</button>
+            <button class="btn btn-down" onclick="window.print()"><i class="fas fa-file-pdf"></i> REPORT</button>
+            <button class="btn btn-clear" onclick="clearAll()">CLEAR</button>
+        </div>
+    </div>
+
+    <div class="table-container" id="report">
+        <div style="padding: 20px; border-bottom: 2px solid #f1f5f9;">
+            <h3 style="margin:0;">Monthly Repayment & Balance Schedule</h3>
+            <p style="margin:5px 0 0; font-size: 0.65rem; color: #94a3b8; font-weight: 800;">RMV APEX GROUP • FINANCIAL LOG</p>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th style="text-align:left;">Month</th>
+                    <th>Opening Bal</th>
+                    <th>Interest</th>
+                    <th>Principal</th>
+                    <th>EMI</th>
+                    <th>Closing Bal</th>
+                </tr>
+            </thead>
+            <tbody id="table-body"></tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    function calculate() {
+        const P = parseFloat(document.getElementById('principal').value);
+        const annualR = parseFloat(document.getElementById('rate').value);
+        const N = parseInt(document.getElementById('months').value);
+        const type = document.getElementById('type').value;
+        const R = annualR / 12 / 100;
+        
+        let emi = 0, totInterest = 0, balance = P;
+        const tbody = document.getElementById('table-body');
+        tbody.innerHTML = '';
+
+        if (type === 'reducing') {
+            emi = (P * R * Math.pow(1 + R, N)) / (Math.pow(1 + R, N) - 1);
+            for (let i = 1; i <= N; i++) {
+                let interest = balance * R;
+                let principalMonth = emi - interest;
+                let opening = balance;
+                balance -= principalMonth;
+                totInterest += interest;
+                addRow(i, opening, interest, principalMonth, emi, Math.max(0, balance));
+            }
+        } else {
+            totInterest = (P * (annualR/100) * (N/12));
+            emi = (P + totInterest) / N;
+            let principalMonth = P / N;
+            let interestMonth = totInterest / N;
+            for (let i = 1; i <= N; i++) {
+                let opening = balance;
+                balance -= principalMonth;
+                addRow(i, opening, interestMonth, principalMonth, emi, Math.max(0, balance));
+            }
+        }
+
+        document.getElementById('emi-val').innerText = "₹" + Math.round(emi).toLocaleString();
+        document.getElementById('tot-int').innerText = "₹" + Math.round(totInterest).toLocaleString();
+        document.getElementById('tot-pay').innerText = "₹" + Math.round(P + totInterest).toLocaleString();
+    }
+
+    function addRow(m, op, int, pr, emi, cl) {
+        document.getElementById('table-body').innerHTML += `<tr>
+            <td style="text-align:left;">Month ${m}</td>
+            <td>${Math.round(op).toLocaleString()}</td>
+            <td style="color:var(--danger)">${Math.round(int).toLocaleString()}</td>
+            <td style="color:var(--success)">${Math.round(pr).toLocaleString()}</td>
+            <td>${Math.round(emi).toLocaleString()}</td>
+            <td style="background:#f1f5f9">${Math.round(cl).toLocaleString()}</td>
+        </tr>`;
+    }
+
+    function saveData() {
+        const data = { p: document.getElementById('principal').value, r: document.getElementById('rate').value, m: document.getElementById('months').value };
+        localStorage.setItem('rmv_loan_data', JSON.stringify(data));
+        alert("डाटा सुरक्षित कर लिया गया है! 🚩");
+    }
+
+    function clearAll() {
+        document.getElementById('principal').value = "";
+        document.getElementById('rate').value = "";
+        document.getElementById('months').value = "";
+        document.getElementById('table-body').innerHTML = "";
+        document.getElementById('emi-val').innerText = "₹0";
+        document.getElementById('tot-int').innerText = "₹0";
+        document.getElementById('tot-pay').innerText = "₹0";
+    }
+
+    window.onload = () => {
+        const saved = localStorage.getItem('rmv_loan_data');
+        if(saved) {
+            const d = JSON.parse(saved);
+            document.getElementById('principal').value = d.p;
+            document.getElementById('rate').value = d.r;
+            document.getElementById('months').value = d.m;
+            calculate();
+        }
+    };
+</script>
+</body>
+</html>
