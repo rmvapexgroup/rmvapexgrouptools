@@ -14,45 +14,60 @@
         * { box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; transition: all 0.3s ease; }
         body { background: var(--light); margin: 0; padding: 0; user-select: none; color: var(--dark); overflow-x: hidden; }
 
+        /* ADVANCED LOADER */
+        #loader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: white; z-index: 10000; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: 0.8s; }
+        .spin { width: 55px; height: 55px; border: 5px solid #f3f3f3; border-top: 5px solid var(--primary); border-radius: 50%; animation: spin 1s linear infinite; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
         /* HEADER */
-        .header { background: var(--dark); padding: 80px 20px; text-align: center; border-bottom: 5px solid; border-image: var(--gradient) 1; }
-        .header h1 { margin: 0; font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 800; background: var(--gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .header p { color: white; opacity: 0.9; margin-top: 10px; font-size: 1.1rem; letter-spacing: 1px; }
+        .header { background: var(--dark); padding: 100px 20px; text-align: center; border-bottom: 5px solid; border-image: var(--gradient) 1; }
+        .header h1 { margin: 0; font-size: clamp(2.2rem, 6vw, 4rem); font-weight: 800; background: var(--gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .header p { color: white; opacity: 0.9; margin-top: 15px; font-size: 1.2rem; letter-spacing: 1px; font-weight: 600; }
 
         /* CONTAINER & SEARCH */
-        .container { max-width: 1200px; margin: -40px auto 60px; padding: 0 20px; }
-        #searchBar { width: 100%; padding: 22px 30px; border-radius: 25px; border: none; box-shadow: 0 20px 40px rgba(0,0,0,0.1); font-size: 1.1rem; outline: none; border: 2px solid transparent; }
-        #searchBar:focus { border-color: var(--primary); }
+        .container { max-width: 1200px; margin: -45px auto 60px; padding: 0 20px; }
+        #searchBar { width: 100%; padding: 25px 35px; border-radius: 30px; border: none; box-shadow: 0 20px 50px rgba(0,0,0,0.1); font-size: 1.1rem; outline: none; border: 2px solid transparent; font-weight: 600; }
+        #searchBar:focus { border-color: var(--primary); transform: translateY(-3px); }
 
         /* TOOL GRID */
-        .tool-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 25px; margin-top: 50px; }
-        .tool-card { background: white; padding: 35px 25px; border-radius: 30px; text-align: center; text-decoration: none; color: var(--dark); border: 1px solid rgba(0,0,0,0.05); box-shadow: 0 10px 20px rgba(0,0,0,0.02); }
-        .tool-card:hover { transform: translateY(-10px); box-shadow: 0 25px 50px rgba(99, 102, 241, 0.15); border-color: var(--primary); }
-        .tool-card .icon { font-size: 3.5rem; margin-bottom: 15px; }
-        .tool-card h3 { margin: 0; font-size: 1.3rem; font-weight: 700; }
+        .tool-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 30px; margin-top: 60px; }
+        .tool-card { background: white; padding: 40px 30px; border-radius: 35px; text-align: center; text-decoration: none; color: var(--dark); border: 1px solid rgba(0,0,0,0.05); box-shadow: 0 10px 30px rgba(0,0,0,0.02); display: flex; flex-direction: column; align-items: center; }
+        .tool-card:hover { transform: translateY(-12px); box-shadow: 0 30px 60px rgba(99, 102, 241, 0.15); border-color: var(--primary); }
+        .tool-card .icon { font-size: 3.8rem; margin-bottom: 20px; filter: drop-shadow(0 10px 10px rgba(0,0,0,0.1)); }
+        .tool-card h3 { margin: 0; font-size: 1.4rem; font-weight: 800; }
 
-        /* SOCIAL GRID */
-        footer { background: white; padding: 80px 20px; border-top: 1px solid #eee; text-align: center; margin-top: 80px; }
-        .footer-logo { font-size: 2rem; font-weight: 800; background: var(--gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 30px; }
+        /* MASTER FOOTER */
+        footer { background: white; padding: 100px 20px 60px; border-top: 1px solid #f1f5f9; text-align: center; margin-top: 100px; border-radius: 60px 60px 0 0; }
+        .footer-logo { font-size: 2.2rem; font-weight: 800; background: var(--gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 40px; }
         
-        .social-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; max-width: 1000px; margin: 0 auto 40px; }
-        .s-link { width: 42px; height: 42px; display: flex; align-items: center; justify-content: center; border-radius: 10px; color: white; text-decoration: none; font-size: 1.2rem; transition: 0.3s; }
-        .s-link:hover { transform: translateY(-5px) scale(1.1); filter: brightness(1.2); }
+        .social-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; max-width: 1100px; margin: 0 auto 50px; }
+        .s-link { width: 48px; height: 48px; display: flex; align-items: center; justify-content: center; border-radius: 14px; color: white; text-decoration: none; font-size: 1.3rem; transition: 0.4s; }
+        .s-link:hover { transform: translateY(-8px) rotate(8deg); box-shadow: 0 15px 30px rgba(0,0,0,0.15); filter: brightness(1.1); }
 
-        /* Brand Colors */
+        /* Unified Social Colors */
         .wa { background: #25D366; } .fb { background: #1877F2; } .ig { background: #E4405F; } .yt { background: #FF0000; }
         .li { background: #0A66C2; } .tg { background: #26A5E4; } .rd { background: #FF4500; } .tw { background: #000000; }
-        .pi { background: #BD081C; } .md { background: #000000; } .ms { background: #2b90d9; } .bs { background: #0085ff; }
-        .bl { background: #f57d00; } .sp { background: #3f3df4; } .mc { background: #FFDD00; color: black; } 
+        .pi { background: #BD081C; } .md { background: #000000; } .ms { background: #0084ff; } .bs { background: #0085ff; }
+        .bl { background: #f57d00; } .sp { background: #3f3df4; } .mc { background: #FFDD00; color: black !important; } 
         .kofi { background: #29abe0; } .gemini { background: linear-gradient(45deg, #1a73e8, #9b51e0); }
-        .link-alt { background: var(--primary); }
+        .link-alt { background: var(--primary); } .sub { background: #ff6719; } .th { background: #000000; }
 
-        .copyright { color: #64748b; font-size: 0.95rem; margin-top: 30px; line-height: 1.6; }
-        .heart { color: var(--secondary); animation: beat 0.4s infinite alternate; display: inline-block; }
-        @keyframes beat { to { transform: scale(1.3); } }
+        /* Legal Links */
+        .legal-links { margin-bottom: 30px; font-weight: 800; display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; }
+        .legal-links a { color: #64748b; text-decoration: none; font-size: 0.95rem; }
+        .legal-links a:hover { color: var(--primary); }
+
+        .copyright { color: #94a3b8; font-size: 0.9rem; margin-top: 40px; font-weight: 600; letter-spacing: 0.5px; line-height: 1.8; }
+        .heart { color: var(--secondary); animation: beat 0.5s infinite alternate; display: inline-block; }
+        @keyframes beat { to { transform: scale(1.4); } }
     </style>
 </head>
 <body oncontextmenu="return false;">
+
+<div id="loader">
+    <div class="spin"></div>
+    <p style="margin-top:20px; font-weight:800; color:var(--primary); letter-spacing:1px;">RMV APEX GROUP 🚩</p>
+</div>
 
 <div class="header">
     <h1>RMV APEX GROUP</h1>
@@ -68,23 +83,37 @@
         
         <div class="social-grid">
             <a title="WhatsApp" href="https://wa.me/918652025006" class="s-link wa" target="_blank"><i class="fab fa-whatsapp"></i></a>
+            <a title="Messenger" href="https://m.me/rmvapexgroups" class="s-link ms" target="_blank"><i class="fab fa-facebook-messenger"></i></a>
+            <a title="Telegram" href="https://t.me/RMVApexGroupFreeCommunity" class="s-link tg" target="_blank"><i class="fab fa-telegram-plane"></i></a>
+            
             <a title="Facebook" href="https://www.facebook.com/rmvapexgroups/" class="s-link fb" target="_blank"><i class="fab fa-facebook-f"></i></a>
             <a title="Instagram" href="https://www.instagram.com/rmvapexgroups?igsh=MzR6aXA3NDlvbnhx" class="s-link ig" target="_blank"><i class="fab fa-instagram"></i></a>
             <a title="YouTube" href="https://www.youtube.com/@rmvapexgroup" class="s-link yt" target="_blank"><i class="fab fa-youtube"></i></a>
             <a title="LinkedIn" href="https://www.linkedin.com/in/rmvapexgroup/" class="s-link li" target="_blank"><i class="fab fa-linkedin-in"></i></a>
-            <a title="Telegram" href="https://t.me/RMVApexGroupFreeCommunity" class="s-link tg" target="_blank"><i class="fab fa-telegram-plane"></i></a>
-            
-            <a title="Gemini AI" href="https://gemini.google.com/app?pli=1" class="s-link gemini" target="_blank"><i class="fas fa-wand-magic-sparkles"></i></a>
-            <a title="Ko-fi" href="https://ko-fi.com/rameshmewalalvishwakarma" class="s-link kofi" target="_blank"><i class="fas fa-mug-hot"></i></a>
-            <a title="Buy Me A Coffee" href="https://buymeacoffee.com/rameshmewalalvishwakarma" class="s-link mc" target="_blank"><i class="fas fa-coffee"></i></a>
-            
-            <a title="Reddit" href="https://www.reddit.com/u/rmvapexgroup/s/Dq32SOp5aS" class="s-link rd" target="_blank"><i class="fab fa-reddit-alien"></i></a>
             <a title="X (Twitter)" href="https://x.com/rmvapexgroup" class="s-link tw" target="_blank"><i class="fab fa-x-twitter"></i></a>
+            
+            <a title="Gemini AI" href="https://gemini.google.com/app" class="s-link gemini" target="_blank"><i class="fas fa-wand-magic-sparkles"></i></a>
+            <a title="Reddit" href="https://www.reddit.com/u/rmvapexgroup/" class="s-link rd" target="_blank"><i class="fab fa-reddit-alien"></i></a>
+            <a title="Threads" href="https://www.threads.net/@rmvapexgroups" class="s-link th" target="_blank"><i class="fab fa-threads"></i></a>
             <a title="Pinterest" href="https://pin.it/4rVwo4aAl" class="s-link pi" target="_blank"><i class="fab fa-pinterest-p"></i></a>
+            
             <a title="Blogger" href="https://rmvapexgroup.blogspot.com/" class="s-link bl" target="_blank"><i class="fab fa-blogger-b"></i></a>
             <a title="Medium" href="https://medium.com/@rmvapexgroup" class="s-link md" target="_blank"><i class="fab fa-medium-m"></i></a>
+            <a title="Substack" href="https://substack.com/@rmvapexgroup" class="s-link sub" target="_blank"><i class="fas fa-bookmark"></i></a>
+            <a title="BlueSky" href="https://bsky.app/profile/rmvapexgroup.bsky.social" class="s-link bs" target="_blank"><i class="fas fa-cloud"></i></a>
+
             <a title="About.me" href="https://about.me/rmvapexgroup" class="s-link link-alt" target="_blank"><i class="fas fa-user"></i></a>
             <a title="SuperProfile" href="https://superprofile.bio/rmvapexgroup" class="s-link sp" target="_blank"><i class="fas fa-id-card"></i></a>
+            
+            <a title="Buy Me A Coffee" href="https://buymeacoffee.com/rameshmewalalvishwakarma" class="s-link mc" target="_blank"><i class="fas fa-coffee"></i></a>
+            <a title="Ko-fi" href="https://ko-fi.com/rameshmewalalvishwakarma" class="s-link kofi" target="_blank"><i class="fas fa-mug-hot"></i></a>
+        </div>
+
+        <div class="legal-links">
+            <a href="contact/index.html">Contact Us</a>
+            <a href="privacy/index.html">Privacy Policy</a>
+            <a href="terms/index.html">Terms & Conditions</a>
+            <a href="about/index.html">About RMV</a>
         </div>
 
         <div class="copyright">
@@ -95,6 +124,7 @@
 </div>
 
 <script>
+    // 10 Tools Data
     const MY_TOOLS = [
         { name: "GST Master Pro", path: "gst-calculator", icon: "📊" },
         { name: "Wealth SIP Planner", path: "sip-calculator", icon: "💰" },
@@ -106,20 +136,24 @@
         { name: "QR Generator Pro", path: "qr-generator", icon: "🔳" },
         { name: "Daily Expense Pro", path: "expense-tracker", icon: "💸" },
         { name: "Digital Stopwatch Pro", path: "stopwatch-pro", icon: "⏱️" },
-        
     ];
 
     const grid = document.getElementById('toolGrid');
+
+    // Load Tools with Folder Logic
     function loadTools() {
         MY_TOOLS.forEach(tool => {
             const card = document.createElement('a');
-            card.href = tool.path + "/";
+            // Important: This path structure requires folders named exactly as 'path'
+            card.href = tool.path + "/index.html"; 
             card.className = "tool-card";
             card.setAttribute('data-search', tool.name.toLowerCase());
             card.innerHTML = `<div class="icon">${tool.icon}</div><h3>${tool.name}</h3>`;
             grid.appendChild(card);
         });
     }
+
+    // Advanced Filter Function
     function filterTools() {
         let input = document.getElementById('searchBar').value.toLowerCase();
         let cards = document.getElementsByClassName('tool-card');
@@ -128,7 +162,16 @@
             cards[i].style.display = name.includes(input) ? "flex" : "none";
         }
     }
-    window.onload = loadTools;
+
+    // Loader & Window Control
+    window.onload = () => {
+        loadTools();
+        setTimeout(() => {
+            const loader = document.getElementById('loader');
+            loader.style.opacity = '0';
+            setTimeout(() => { loader.style.display = 'none'; }, 600);
+        }, 1200);
+    };
 </script>
 </body>
 </html>
