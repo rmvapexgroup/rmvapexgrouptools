@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Secure Password Pro | RMV APEX GROUP</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root { --p: #6366f1; --s: #a855f7; --d: #0f172a; --bg: #f8fafc; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; user-select: none; padding: 20px; position: relative; overflow: hidden; }
+        
+        /* Premium Background Watermark */
+        .watermark { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-30deg); font-size: clamp(3rem, 10vw, 5rem); font-weight: 900; color: rgba(99, 102, 241, 0.04); z-index: -1; white-space: nowrap; pointer-events: none; text-transform: uppercase; letter-spacing: 8px; }
+
+        .card { background: white; padding: 40px; border-radius: 35px; box-shadow: 0 25px 60px rgba(0,0,0,0.1); width: 100%; max-width: 450px; border: 1px solid #eee; position: relative; overflow: hidden; z-index: 1; }
+        .card::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 8px; background: linear-gradient(90deg, var(--p), var(--s)); }
+        
+        h2 { color: var(--d); margin-bottom: 25px; font-size: 1.8rem; font-weight: 800; text-align: center; }
+        
+        .pass-display { background: #f1f5f9; padding: 20px; border-radius: 15px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 25px; border: 2px solid #e2e8f0; }
+        #passwordText { font-family: monospace; font-size: 1.2rem; font-weight: 800; color: var(--d); word-break: break-all; }
+        .copy-icon { cursor: pointer; color: var(--p); font-size: 1.3rem; transition: 0.3s; padding-left: 10px; }
+        .copy-icon:hover { transform: scale(1.2); }
+
+        .setting-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; font-weight: 600; color: #475569; }
+        input[type="range"] { width: 100%; margin-top: 10px; cursor: pointer; accent-color: var(--p); }
+        input[type="checkbox"] { width: 20px; height: 20px; accent-color: var(--p); cursor: pointer; }
+        
+        .btn-gen { width: 100%; padding: 15px; border: none; border-radius: 15px; font-weight: 700; cursor: pointer; background: var(--p); color: white; font-size: 1rem; margin-top: 15px; transition: 0.3s; }
+        .btn-gen:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(99, 102, 241, 0.2); }
+
+        /* SUPPORT SECTION */
+        .support-section { margin-top: 35px; padding-top: 20px; border-top: 1px solid #eee; text-align: center; }
+        .support-btns { display: flex; justify-content: center; gap: 12px; margin-top: 10px; }
+        .support-btn { padding: 10px 15px; border-radius: 12px; text-decoration: none; font-size: 0.75rem; font-weight: 700; display: flex; align-items: center; gap: 8px; }
+        .bmc-btn { background: #FFDD00; color: #000; }
+        .kofi-btn { background: #29abe0; color: #fff; }
+
+        .footer-tag { text-align: center; margin-top: 25px; font-size: 0.75rem; color: #94a3b8; font-weight: 700; }
+    </style>
+</head>
+<body oncontextmenu="return false;">
+
+<div class="watermark">RMV APEX GROUP</div>
+
+<div class="card">
+    <h2>🔐 Secure Password Pro</h2>
+    
+    <div class="pass-display">
+        <span id="passwordText">P@ssw0rd123!</span>
+        <i class="fas fa-copy copy-icon" onclick="copyPassword()" title="Copy to Clipboard"></i>
+    </div>
+
+    <div class="settings">
+        <div class="setting-row">
+            <label>Length: <span id="lenValue">12</span></label>
+            <input type="range" id="length" min="8" max="32" value="12" oninput="updateLenDisplay()">
+        </div>
+        <div class="setting-row">
+            <label>Include Uppercase</label>
+            <input type="checkbox" id="upper" checked>
+        </div>
+        <div class="setting-row">
+            <label>Include Numbers</label>
+            <input type="checkbox" id="numbers" checked>
+        </div>
+        <div class="setting-row">
+            <label>Include Symbols</label>
+            <input type="checkbox" id="symbols" checked>
+        </div>
+    </div>
+    
+    <button class="btn-gen" onclick="generatePassword()">Generate Strong Password</button>
+
+    <div class="support-section">
+        <div class="support-btns">
+            <a href="https://buymeacoffee.com/rameshmewalalvishwakarma" class="support-btn bmc-btn" target="_blank"><i class="fas fa-coffee"></i> Coffee</a>
+            <a href="https://ko-fi.com/rameshmewalalvishwakarma" class="support-btn kofi-btn" target="_blank"><i class="fas fa-mug-hot"></i> Ko-fi</a>
+        </div>
+    </div>
+    <div class="footer-tag">© 2026 RMV APEX GROUP 🚩</div>
+</div>
+
+<script>
+    function updateLenDisplay() {
+        document.getElementById('lenValue').innerText = document.getElementById('length').value;
+    }
+
+    function generatePassword() {
+        const length = document.getElementById('length').value;
+        const hasUpper = document.getElementById('upper').checked;
+        const hasNumber = document.getElementById('numbers').checked;
+        const hasSymbol = document.getElementById('symbols').checked;
+
+        const lower = "abcdefghijklmnopqrstuvwxyz";
+        const upper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        const nums = "0123456789";
+        const syms = "!@#$%^&*()_+~`|}{[]:;?><,./-=";
+
+        let charSet = lower;
+        if (hasUpper) charSet += upper;
+        if (hasNumber) charSet += nums;
+        if (hasSymbol) charSet += syms;
+
+        let generatedPassword = "";
+        for (let i = 0; i < length; i++) {
+            const randomIndex = Math.floor(Math.random() * charSet.length);
+            generatedPassword += charSet[randomIndex];
+        }
+
+        document.getElementById('passwordText').innerText = generatedPassword;
+    }
+
+    async function copyPassword() {
+        const text = document.getElementById('passwordText').innerText;
+        try {
+            await navigator.clipboard.writeText(text);
+            alert("Password copied to clipboard! 🚩");
+        } catch (err) {
+            alert("Failed to copy!");
+        }
+    }
+
+    // Initial Generate
+    generatePassword();
+</script>
+</body>
+</html>
