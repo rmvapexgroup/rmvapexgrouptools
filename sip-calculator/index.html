@@ -8,9 +8,11 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root { --p: #10b981; --s: #6366f1; --d: #0f172a; --bg: #f8fafc; }
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; user-select: none; padding: 20px; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; user-select: none; padding: 20px; position: relative; overflow: hidden; }
         
-        .card { background: white; padding: 40px; border-radius: 35px; box-shadow: 0 25px 60px rgba(0,0,0,0.1); width: 100%; max-width: 450px; border: 1px solid #eee; position: relative; overflow: hidden; }
+        .watermark { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-30deg); font-size: clamp(3rem, 10vw, 5rem); font-weight: 900; color: rgba(16, 185, 129, 0.04); z-index: -1; white-space: nowrap; pointer-events: none; text-transform: uppercase; letter-spacing: 8px; }
+
+        .card { background: white; padding: 40px; border-radius: 35px; box-shadow: 0 25px 60px rgba(0,0,0,0.1); width: 100%; max-width: 450px; border: 1px solid #eee; position: relative; overflow: hidden; z-index: 1; }
         .card::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 8px; background: linear-gradient(90deg, var(--p), var(--s)); }
         
         h2 { color: var(--d); margin-bottom: 25px; font-size: 1.8rem; font-weight: 800; text-align: center; }
@@ -19,67 +21,46 @@
         input { width: 100%; padding: 14px; border: 2px solid #f1f5f9; border-radius: 12px; font-size: 1rem; outline: none; transition: 0.3s; }
         input:focus { border-color: var(--p); box-shadow: 0 0 15px rgba(16, 185, 129, 0.1); }
         
-        .btn-group { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 25px; }
-        button { padding: 15px; border: none; border-radius: 15px; font-weight: 700; cursor: pointer; transition: 0.3s; font-size: 1rem; }
-        .btn-calc { background: var(--p); color: white; grid-column: span 2; }
-        .btn-clear { background: #f1f5f9; color: #64748b; grid-column: span 2; }
-        button:hover { transform: translateY(-3px); opacity: 0.9; }
+        .btn-calc { width: 100%; padding: 15px; border: none; border-radius: 15px; font-weight: 700; cursor: pointer; background: var(--p); color: white; font-size: 1rem; margin-top: 10px; }
+        .btn-clear { width: 100%; padding: 12px; border: none; border-radius: 15px; background: #f1f5f9; color: #64748b; cursor: pointer; margin-top: 10px; font-weight: 600; }
         
         .result-box { background: #f0fdf4; padding: 25px; border-radius: 20px; margin-top: 30px; border: 2px dashed #bbf7d0; display: none; }
         .res-row { display: flex; justify-content: space-between; margin-bottom: 10px; font-weight: 600; color: #475569; }
         .total-wealth { font-size: 1.4rem; color: var(--p); font-weight: 800; border-top: 1px solid #bbf7d0; padding-top: 10px; margin-top: 10px; }
 
-        /* SUPPORT SECTION */
         .support-section { margin-top: 35px; padding-top: 20px; border-top: 1px solid #eee; text-align: center; }
-        .support-text { font-size: 0.85rem; color: #64748b; margin-bottom: 15px; font-weight: 600; }
-        .support-btns { display: flex; justify-content: center; gap: 12px; }
-        .support-btn { padding: 10px 15px; border-radius: 12px; text-decoration: none; font-size: 0.75rem; font-weight: 700; display: flex; align-items: center; gap: 8px; transition: 0.3s; }
+        .support-btns { display: flex; justify-content: center; gap: 12px; margin-top: 10px; }
+        .support-btn { padding: 10px 15px; border-radius: 12px; text-decoration: none; font-size: 0.75rem; font-weight: 700; display: flex; align-items: center; gap: 8px; }
         .bmc-btn { background: #FFDD00; color: #000; }
         .kofi-btn { background: #29abe0; color: #fff; }
-
         .footer-tag { text-align: center; margin-top: 25px; font-size: 0.75rem; color: #94a3b8; font-weight: 700; }
     </style>
 </head>
 <body oncontextmenu="return false;">
 
+<div class="watermark">RMV APEX GROUP</div>
+
 <div class="card">
     <h2>💰 Wealth SIP Planner</h2>
+    <div class="input-group"><label>Monthly SIP (₹)</label><input type="number" id="monthly" placeholder="e.g. 5000"></div>
+    <div class="input-group"><label>Return Rate (% Yearly)</label><input type="number" id="rate" placeholder="e.g. 12"></div>
+    <div class="input-group"><label>Period (Years)</label><input type="number" id="years" placeholder="e.g. 10"></div>
     
-    <div class="input-group">
-        <label>Monthly Investment (प्रति माह निवेश)</label>
-        <input type="number" id="monthly" placeholder="₹ 5,000">
-    </div>
-
-    <div class="input-group">
-        <label>Expected Return Rate (% Yearly)</label>
-        <input type="number" id="rate" placeholder="e.g. 12%">
-    </div>
-
-    <div class="input-group">
-        <label>Time Period (Years)</label>
-        <input type="number" id="years" placeholder="e.g. 10">
-    </div>
-
-    <div class="btn-group">
-        <button class="btn-calc" onclick="calculateSIP()">Calculate Wealth</button>
-        <button class="btn-clear" onclick="clearFields()">Clear Fields</button>
-    </div>
+    <button class="btn-calc" onclick="calculateSIP()">Calculate Wealth</button>
+    <button class="btn-clear" onclick="clearFields()">Clear</button>
 
     <div class="result-box" id="resultBox">
-        <div class="res-row"><span>Invested Amount:</span> <span id="invested">₹0</span></div>
-        <div class="res-row"><span>Estimated Returns:</span> <span id="returns">₹0</span></div>
-        <div class="total-wealth"><span>Total Wealth:</span> <span id="total">₹0</span></div>
+        <div class="res-row"><span>Invested:</span> <span id="invested">₹0</span></div>
+        <div class="total-wealth"><span>Wealth:</span> <span id="total">₹0</span></div>
     </div>
 
     <div class="support-section">
-        <div class="support-text">Enjoying this tool? Support my work! ❤️</div>
         <div class="support-btns">
             <a href="https://buymeacoffee.com/rameshmewalalvishwakarma" class="support-btn bmc-btn" target="_blank"><i class="fas fa-coffee"></i> Coffee</a>
             <a href="https://ko-fi.com/rameshmewalalvishwakarma" class="support-btn kofi-btn" target="_blank"><i class="fas fa-mug-hot"></i> Ko-fi</a>
         </div>
     </div>
-
-    <div class="footer-tag">© 2026 RMV APEX GROUP | Ramesh Mewalal Vishwakarma 🚩</div>
+    <div class="footer-tag">© 2026 RMV APEX GROUP 🚩</div>
 </div>
 
 <script>
@@ -87,27 +68,13 @@
         let p = parseFloat(document.getElementById('monthly').value);
         let r = parseFloat(document.getElementById('rate').value) / 12 / 100;
         let n = parseFloat(document.getElementById('years').value) * 12;
-
-        if (isNaN(p) || isNaN(r) || isNaN(n)) { alert("कृपया सभी जानकारी भरें!"); return; }
-
+        if (isNaN(p) || isNaN(r) || isNaN(n)) return;
         let totalValue = p * (((Math.pow(1 + r, n)) - 1) / r) * (1 + r);
-        let investedAmount = p * n;
-        let estReturns = totalValue - investedAmount;
-
-        document.getElementById('invested').innerText = "₹ " + Math.round(investedAmount).toLocaleString('en-IN');
-        document.getElementById('returns').innerText = "₹ " + Math.round(estReturns).toLocaleString('en-IN');
+        document.getElementById('invested').innerText = "₹ " + Math.round(p * n).toLocaleString('en-IN');
         document.getElementById('total').innerText = "₹ " + Math.round(totalValue).toLocaleString('en-IN');
-        
         document.getElementById('resultBox').style.display = "block";
     }
-
-    function clearFields() {
-        document.getElementById('monthly').value = "";
-        document.getElementById('rate').value = "";
-        document.getElementById('years').value = "";
-        document.getElementById('resultBox').style.display = "none";
-    }
+    function clearFields() { document.getElementById('resultBox').style.display = "none"; }
 </script>
-
 </body>
 </html>
