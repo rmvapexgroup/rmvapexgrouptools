@@ -8,9 +8,12 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root { --p: #6366f1; --s: #f43f5e; --d: #0f172a; --bg: #f8fafc; }
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; user-select: none; padding: 20px; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; user-select: none; padding: 20px; position: relative; overflow-x: hidden; }
         
-        .card { background: white; padding: 40px; border-radius: 35px; box-shadow: 0 25px 60px rgba(0,0,0,0.1); width: 100%; max-width: 450px; border: 1px solid #eee; position: relative; overflow: hidden; }
+        /* Premium Background Watermark */
+        .watermark { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-30deg); font-size: clamp(3rem, 10vw, 5rem); font-weight: 900; color: rgba(99, 102, 241, 0.04); z-index: -1; white-space: nowrap; pointer-events: none; text-transform: uppercase; letter-spacing: 8px; }
+
+        .card { background: white; padding: 40px; border-radius: 35px; box-shadow: 0 25px 60px rgba(0,0,0,0.1); width: 100%; max-width: 450px; border: 1px solid #eee; position: relative; overflow: hidden; z-index: 1; }
         .card::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 8px; background: linear-gradient(90deg, var(--p), var(--s)); }
         
         h2 { color: var(--d); margin-bottom: 25px; font-size: 1.8rem; font-weight: 800; text-align: center; }
@@ -20,7 +23,6 @@
         input:focus { border-color: var(--p); box-shadow: 0 0 15px rgba(99, 102, 241, 0.1); }
         
         #customRateInput { margin-top: 10px; display: none; }
-        
         .btn-group { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 25px; }
         button { padding: 15px; border: none; border-radius: 15px; font-weight: 700; cursor: pointer; transition: 0.3s; font-size: 1rem; }
         .btn-add { background: var(--p); color: white; }
@@ -32,119 +34,70 @@
         .res-row { display: flex; justify-content: space-between; margin-bottom: 10px; font-weight: 600; color: #475569; }
         .total { font-size: 1.4rem; color: var(--p); font-weight: 800; border-top: 1px solid #ddd; padding-top: 10px; margin-top: 10px; }
 
-        /* SUPPORT SECTION */
         .support-section { margin-top: 35px; padding-top: 20px; border-top: 1px solid #eee; text-align: center; }
         .support-text { font-size: 0.85rem; color: #64748b; margin-bottom: 15px; font-weight: 600; }
         .support-btns { display: flex; justify-content: center; gap: 12px; }
         .support-btn { padding: 10px 15px; border-radius: 12px; text-decoration: none; font-size: 0.75rem; font-weight: 700; display: flex; align-items: center; gap: 8px; transition: 0.3s; }
         .bmc-btn { background: #FFDD00; color: #000; }
         .kofi-btn { background: #29abe0; color: #fff; }
-        .support-btn:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
-
-        .footer-tag { text-align: center; margin-top: 25px; font-size: 0.75rem; color: #94a3b8; font-weight: 700; letter-spacing: 0.5px; }
+        .footer-tag { text-align: center; margin-top: 25px; font-size: 0.75rem; color: #94a3b8; font-weight: 700; }
     </style>
 </head>
 <body oncontextmenu="return false;">
 
+<div class="watermark">RMV APEX GROUP</div>
+
 <div class="card">
     <h2>📊 GST Master Pro</h2>
-    
     <div class="input-group">
         <label>Amount (मूल राशि)</label>
         <input type="number" id="amount" placeholder="₹ 0.00">
     </div>
-
     <div class="input-group">
         <label>GST Rate (%)</label>
         <select id="rate" onchange="toggleCustomRate()">
-            <option value="5">5% (Essential)</option>
-            <option value="12">12% (Standard)</option>
-            <option value="18" selected>18% (Services)</option>
-            <option value="28">28% (Luxury)</option>
-            <option value="custom">Custom (अपनी दर लिखें)</option>
+            <option value="5">5%</option><option value="12">12%</option>
+            <option value="18" selected>18%</option><option value="28">28%</option>
+            <option value="custom">Custom</option>
         </select>
         <input type="number" id="customRateInput" placeholder="Enter custom GST %">
     </div>
-
     <div class="btn-group">
         <button class="btn-add" onclick="calculate(true)">GST Extra (+)</button>
         <button class="btn-sub" onclick="calculate(false)">GST Inclusive (-)</button>
-        <button class="btn-clear" onclick="clearFields()">Clear (साफ़ करें)</button>
+        <button class="btn-clear" onclick="clearFields()">Clear All</button>
     </div>
-
     <div class="result-box" id="resultBox">
         <div class="res-row"><span>Net Amount:</span> <span id="netAmt">₹0.00</span></div>
-        <div class="res-row"><span>CGST:</span> <span id="cgst">₹0.00</span></div>
-        <div class="res-row"><span>SGST:</span> <span id="sgst">₹0.00</span></div>
+        <div class="res-row"><span>CGST/SGST:</span> <span id="cgst">₹0.00</span></div>
         <div class="res-row total"><span>Total Amount:</span> <span id="totalAmt">₹0.00</span></div>
     </div>
-
     <div class="support-section">
-        <div class="support-text">Enjoying this tool? Support my work! ❤️</div>
+        <div class="support-text">Support my work! ❤️</div>
         <div class="support-btns">
-            <a href="https://buymeacoffee.com/rameshmewalalvishwakarma" class="support-btn bmc-btn" target="_blank">
-                <i class="fas fa-coffee"></i> Coffee
-            </a>
-            <a href="https://ko-fi.com/rameshmewalalvishwakarma" class="support-btn kofi-btn" target="_blank">
-                <i class="fas fa-mug-hot"></i> Ko-fi
-            </a>
+            <a href="https://buymeacoffee.com/rameshmewalalvishwakarma" class="support-btn bmc-btn" target="_blank"><i class="fas fa-coffee"></i> Coffee</a>
+            <a href="https://ko-fi.com/rameshmewalalvishwakarma" class="support-btn kofi-btn" target="_blank"><i class="fas fa-mug-hot"></i> Ko-fi</a>
         </div>
     </div>
-
-    <div class="footer-tag">
-        © 2026 RMV APEX GROUP | Ramesh Mewalal Vishwakarma 🚩
-    </div>
+    <div class="footer-tag">© 2026 RMV APEX GROUP 🚩</div>
 </div>
 
 <script>
-    function toggleCustomRate() {
-        const rateSelect = document.getElementById('rate');
-        const customInput = document.getElementById('customRateInput');
-        customInput.style.display = (rateSelect.value === 'custom') ? 'block' : 'none';
-    }
-
+    function toggleCustomRate() { const rs = document.getElementById('rate'); const ci = document.getElementById('customRateInput'); ci.style.display = (rs.value === 'custom') ? 'block' : 'none'; }
     function calculate(isExtra) {
         let amt = parseFloat(document.getElementById('amount').value);
-        let rateSelect = document.getElementById('rate').value;
-        let rate;
-
-        if (rateSelect === 'custom') {
-            rate = parseFloat(document.getElementById('customRateInput').value);
-        } else {
-            rate = parseFloat(rateSelect);
-        }
-
-        if (isNaN(amt) || amt <= 0) { alert("कृपया वैध राशि दर्ज करें!"); return; }
-        if (isNaN(rate) || rate < 0) { alert("कृपया वैध GST दर दर्ज करें!"); return; }
-
+        let rs = document.getElementById('rate').value;
+        let rate = (rs === 'custom') ? parseFloat(document.getElementById('customRateInput').value) : parseFloat(rs);
+        if (isNaN(amt) || isNaN(rate)) { alert("Please enter valid values!"); return; }
         let gstAmt, total, net;
-
-        if (isExtra) {
-            gstAmt = (amt * rate) / 100;
-            total = amt + gstAmt;
-            net = amt;
-        } else {
-            net = amt / (1 + (rate / 100));
-            gstAmt = amt - net;
-            total = amt;
-        }
-
+        if (isExtra) { gstAmt = (amt * rate) / 100; total = amt + gstAmt; net = amt; } 
+        else { net = amt / (1 + (rate / 100)); gstAmt = amt - net; total = amt; }
         document.getElementById('netAmt').innerText = "₹ " + net.toLocaleString('en-IN', {minimumFractionDigits: 2});
         document.getElementById('cgst').innerText = "₹ " + (gstAmt / 2).toLocaleString('en-IN', {minimumFractionDigits: 2});
-        document.getElementById('sgst').innerText = "₹ " + (gstAmt / 2).toLocaleString('en-IN', {minimumFractionDigits: 2});
         document.getElementById('totalAmt').innerText = "₹ " + total.toLocaleString('en-IN', {minimumFractionDigits: 2});
-        
         document.getElementById('resultBox').style.display = "block";
     }
-
-    function clearFields() {
-        document.getElementById('amount').value = "";
-        document.getElementById('rate').value = "18";
-        document.getElementById('customRateInput').value = "";
-        document.getElementById('customRateInput').style.display = "none";
-        document.getElementById('resultBox').style.display = "none";
-    }
+    function clearFields() { document.getElementById('amount').value = ""; document.getElementById('resultBox').style.display = "none"; }
 </script>
-
 </body>
 </html>
