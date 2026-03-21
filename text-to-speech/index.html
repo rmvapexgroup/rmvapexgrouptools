@@ -8,117 +8,122 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root { --p: #6366f1; --d: #0f172a; --bg: #f8fafc; --gold: #f59e0b; }
-        
         @media print {
             body * { visibility: hidden; }
             #print-area, #print-area * { visibility: visible; }
             #print-area { position: absolute; left: 0; top: 0; width: 100%; display: block !important; padding: 40px; }
             .no-print { display: none !important; }
         }
-
         body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 20px; }
-        
         .watermark { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-30deg); font-size: 4rem; font-weight: 900; color: rgba(15, 23, 42, 0.03); z-index: 0; pointer-events: none; text-transform: uppercase; letter-spacing: 10px; }
-
-        .card { background: white; padding: 35px; border-radius: 30px; box-shadow: 0 20px 50px rgba(0,0,0,0.05); width: 100%; max-width: 500px; border: 1px solid #f1f5f9; position: relative; z-index: 10; }
+        .card { background: white; padding: 30px; border-radius: 30px; box-shadow: 0 20px 50px rgba(0,0,0,0.05); width: 100%; max-width: 500px; border: 1px solid #f1f5f9; position: relative; z-index: 10; }
         .card::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 8px; background: linear-gradient(90deg, var(--p), var(--gold)); border-radius: 30px 30px 0 0; }
-
-        h2 { color: var(--d); font-weight: 800; text-align: center; margin-bottom: 5px; }
-        .tagline { display: block; text-align: center; color: #94a3b8; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; margin-bottom: 25px; }
-
-        textarea { width: 100%; height: 150px; padding: 15px; border-radius: 15px; border: 2px solid #f1f5f9; font-family: inherit; font-size: 1rem; font-weight: 600; resize: none; outline: none; transition: 0.3s; box-sizing: border-box; }
-        textarea:focus { border-color: var(--p); background: #fdfdff; }
-
-        .controls { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px; }
-        select, input[type="range"] { width: 100%; padding: 10px; border-radius: 10px; border: 1px solid #f1f5f9; font-weight: 700; }
-        label { font-size: 0.7rem; font-weight: 800; color: #64748b; text-transform: uppercase; display: block; margin-bottom: 5px; }
-
-        .btn-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 25px; }
-        .btn { padding: 15px; border: none; border-radius: 15px; font-weight: 800; cursor: pointer; transition: 0.3s; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 0.85rem; }
+        textarea { width: 100%; height: 150px; padding: 15px; border-radius: 15px; border: 2px solid #f1f5f9; font-size: 1rem; font-weight: 600; resize: none; outline: none; box-sizing: border-box; margin-bottom: 15px; }
+        .controls { display: grid; grid-template-columns: 1fr; gap: 10px; margin-bottom: 20px; }
+        select { width: 100%; padding: 12px; border-radius: 10px; border: 2px solid #f1f5f9; font-weight: 700; background: #fff; cursor: pointer; }
+        .btn-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .btn { padding: 14px; border: none; border-radius: 15px; font-weight: 800; cursor: pointer; transition: 0.3s; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 0.8rem; }
         .btn-play { background: var(--d); color: white; grid-column: span 2; font-size: 1rem; }
-        .btn-stop { background: #fff1f2; color: #e11d48; }
         .btn-down { background: #ecfdf5; color: #10b981; }
-        .btn:hover { transform: translateY(-3px); opacity: 0.9; }
-
+        .btn-txt { background: #fef3c7; color: #d97706; }
+        .btn-stop { background: #fff1f2; color: #e11d48; grid-column: span 2; }
         #print-area { display: none; }
-        .footer { text-align: center; margin-top: 25px; font-size: 0.7rem; color: #94a3b8; font-weight: 800; }
+        .footer { text-align: center; margin-top: 20px; font-size: 0.7rem; color: #94a3b8; font-weight: 800; }
     </style>
 </head>
-<body oncontextmenu="return false;">
+<body>
 
 <div class="watermark">RMV APEX GROUP</div>
 
 <div class="card no-print">
-    <h2>🎙️ Voice Studio</h2>
-    <span class="tagline">RMV APEX GROUP • AI SPEECH</span>
+    <h2 style="text-align:center; margin-bottom:5px;">🎙️ AI Voice Studio</h2>
+    <span style="display:block; text-align:center; color:#94a3b8; font-size:0.65rem; font-weight:700; margin-bottom:20px; text-transform:uppercase;">RMV APEX GROUP • MULTI-LANG</span>
 
-    <textarea id="text-input" placeholder="यहाँ टाइप करें या पेस्ट करें..."></textarea>
+    <textarea id="text-input" placeholder="यहाँ टाइप करें (Hindi, English, etc.)..."></textarea>
 
     <div class="controls">
-        <div>
-            <label>Select Voice</label>
-            <select id="voice-select"></select>
-        </div>
-        <div>
-            <label>Speed (गति)</label>
-            <input type="range" id="rate" min="0.5" max="2" value="1" step="0.1">
-        </div>
+        <label style="font-size:0.7rem; font-weight:800; color:#64748b;">CHOOSE LANGUAGE & VOICE</label>
+        <select id="voice-select"><option>Loading Voices...</option></select>
     </div>
 
     <div class="btn-grid">
-        <button class="btn btn-play" onclick="speak()"><i class="fas fa-play"></i> SPEAK NOW</button>
-        <button class="btn btn-stop" onclick="stop()"><i class="fas fa-stop"></i> STOP</button>
-        <button class="btn btn-down" onclick="window.print()"><i class="fas fa-file-alt"></i> SCRIPT PDF</button>
+        <button class="btn btn-play" onclick="speak()"><i class="fas fa-play"></i> START SPEAKING</button>
+        <button class="btn btn-down" onclick="generatePDF()"><i class="fas fa-file-pdf"></i> PDF REPORT</button>
+        <button class="btn btn-txt" onclick="downloadTXT()"><i class="fas fa-file-alt"></i> SAVE TEXT</button>
+        <button class="btn btn-stop" onclick="stop()"><i class="fas fa-stop"></i> STOP VOICE</button>
     </div>
 
     <div class="footer">© 2026 RAMESH MEWALAL VISHWAKARMA 🚩</div>
 </div>
 
 <div id="print-area">
-    <h1 style="border-bottom: 4px solid #f59e0b; padding-bottom: 10px;">RMV APEX GROUP</h1>
-    <h2>SPEECH SCRIPT REPORT</h2>
-    <div style="padding: 30px; border: 1px solid #ddd; border-radius: 15px; margin: 20px 0; text-align: left; line-height: 1.6;">
-        <p><strong>Voice Script:</strong></p>
-        <p id="p-text"></p>
+    <h1 style="border-bottom: 4px solid #f59e0b;">RMV APEX GROUP</h1>
+    <h2>AI VOICE SCRIPT REPORT</h2>
+    <div style="padding: 30px; border: 1px solid #ddd; border-radius: 15px; margin: 20px 0; text-align: left;">
+        <p><strong>Voice Script Content:</strong></p>
+        <p id="p-text" style="font-size: 18px; line-height: 1.6;"></p>
     </div>
     <p>Generated by Ramesh Mewalal Vishwakarma 🚩</p>
 </div>
 
 <script>
-    let synth = window.speechSynthesis;
-    let voiceSelect = document.getElementById('voice-select');
+    const synth = window.speechSynthesis;
+    const voiceSelect = document.querySelector('#voice-select');
     let voices = [];
 
-    function loadVoices() {
+    // 🚩 FORCE LOAD VOICES (Fixes English-only issue)
+    function populateVoiceList() {
         voices = synth.getVoices();
+        if(voices.length === 0) return; 
+
         voiceSelect.innerHTML = '';
-        voices.forEach((voice, i) => {
-            let option = document.createElement('option');
-            option.value = i;
+        voices.forEach((voice) => {
+            const option = document.createElement('option');
             option.textContent = `${voice.name} (${voice.lang})`;
+            option.setAttribute('data-lang', voice.lang);
+            option.setAttribute('data-name', voice.name);
             voiceSelect.appendChild(option);
         });
     }
 
+    populateVoiceList();
     if (speechSynthesis.onvoiceschanged !== undefined) {
-        speechSynthesis.onvoiceschanged = loadVoices;
+        speechSynthesis.onvoiceschanged = populateVoiceList;
     }
-    loadVoices();
 
     function speak() {
         if (synth.speaking) { synth.cancel(); }
-        let text = document.getElementById('text-input').value;
+        const text = document.querySelector('#text-input').value;
         if (!text) return alert("कृपया कुछ टेक्स्ट लिखें!");
+
+        const utter = new SpeechSynthesisUtterance(text);
+        const selectedOption = voiceSelect.selectedOptions[0].getAttribute('data-name');
         
-        let utter = new SpeechSynthesisUtterance(text);
-        utter.voice = voices[voiceSelect.value];
-        utter.rate = document.getElementById('rate').value;
-        
+        voices.forEach(v => {
+            if(v.name === selectedOption) utter.voice = v;
+        });
+
         synth.speak(utter);
-        document.getElementById('p-text').innerText = text; // For PDF
     }
 
     function stop() { synth.cancel(); }
+
+    function downloadTXT() {
+        const text = document.querySelector('#text-input').value;
+        if(!text) return;
+        const blob = new Blob([text], {type: 'text/plain'});
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = 'RMV_APEX_Script.txt';
+        a.click();
+    }
+
+    function generatePDF() {
+        const text = document.querySelector('#text-input').value;
+        if(!text) return alert("पहले टेक्स्ट लिखें!");
+        document.getElementById('p-text').innerText = text;
+        window.print();
+    }
 </script>
 </body>
 </html>
