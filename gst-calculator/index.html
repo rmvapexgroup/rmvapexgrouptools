@@ -7,40 +7,56 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        :root { --p: #6366f1; --s: #f43f5e; --d: #0f172a; --bg: #f8fafc; }
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; user-select: none; padding: 20px; position: relative; overflow-x: hidden; }
+        :root { --p: #6366f1; --s: #f43f5e; --d: #0f172a; --bg: #f8fafc; --success: #10b981; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; user-select: none; padding: 20px; position: relative; }
         
-        /* Premium Background Watermark */
-        .watermark { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-30deg); font-size: clamp(3rem, 10vw, 5rem); font-weight: 900; color: rgba(99, 102, 241, 0.04); z-index: -1; white-space: nowrap; pointer-events: none; text-transform: uppercase; letter-spacing: 8px; }
+        /* Watermark */
+        .watermark { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-30deg); font-size: clamp(3rem, 10vw, 5rem); font-weight: 900; color: rgba(99, 102, 241, 0.04); z-index: -1; pointer-events: none; text-transform: uppercase; letter-spacing: 8px; }
 
-        .card { background: white; padding: 40px; border-radius: 35px; box-shadow: 0 25px 60px rgba(0,0,0,0.1); width: 100%; max-width: 450px; border: 1px solid #eee; position: relative; overflow: hidden; z-index: 1; }
+        .card { background: white; padding: 40px; border-radius: 35px; box-shadow: 0 25px 60px rgba(0,0,0,0.1); width: 100%; max-width: 480px; border: 1px solid #eee; position: relative; overflow: hidden; }
         .card::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 8px; background: linear-gradient(90deg, var(--p), var(--s)); }
         
-        h2 { color: var(--d); margin-bottom: 25px; font-size: 1.8rem; font-weight: 800; text-align: center; }
+        .back-nav { position: absolute; top: 20px; left: 20px; }
+        .back-link { text-decoration: none; color: var(--d); font-weight: 800; font-size: 0.8rem; display: flex; align-items: center; gap: 5px; opacity: 0.6; transition: 0.3s; }
+        .back-link:hover { opacity: 1; color: var(--p); }
+
+        h2 { color: var(--d); margin: 20px 0 25px; font-size: 1.8rem; font-weight: 800; text-align: center; }
         .input-group { margin-bottom: 20px; }
-        label { display: block; margin-bottom: 10px; font-weight: 600; color: #64748b; font-size: 0.9rem; }
-        input, select { width: 100%; padding: 15px; border: 2px solid #f1f5f9; border-radius: 15px; font-size: 1rem; outline: none; transition: 0.3s; }
+        label { display: block; margin-bottom: 10px; font-weight: 700; color: #64748b; font-size: 0.85rem; }
+        input, select { width: 100%; padding: 15px; border: 2px solid #f1f5f9; border-radius: 15px; font-size: 1rem; outline: none; transition: 0.3s; font-weight: 600; box-sizing: border-box; }
         input:focus { border-color: var(--p); box-shadow: 0 0 15px rgba(99, 102, 241, 0.1); }
         
-        #customRateInput { margin-top: 10px; display: none; }
+        #customRateInput { margin-top: 10px; display: none; border-color: #e0e7ff; background: #f8faff; }
+
         .btn-group { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 25px; }
-        button { padding: 15px; border: none; border-radius: 15px; font-weight: 700; cursor: pointer; transition: 0.3s; font-size: 1rem; }
+        button { padding: 15px; border: none; border-radius: 15px; font-weight: 800; cursor: pointer; transition: 0.3s; font-size: 0.9rem; display: flex; align-items: center; justify-content: center; gap: 8px; }
         .btn-add { background: var(--p); color: white; }
         .btn-sub { background: #e0e7ff; color: var(--p); }
         .btn-clear { background: #f1f5f9; color: #64748b; grid-column: span 2; margin-top: 5px; }
-        button:hover { transform: translateY(-3px); opacity: 0.9; }
+        button:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
         
-        .result-box { background: #f8faff; padding: 25px; border-radius: 20px; margin-top: 30px; border: 2px dashed #eef2ff; display: none; }
-        .res-row { display: flex; justify-content: space-between; margin-bottom: 10px; font-weight: 600; color: #475569; }
-        .total { font-size: 1.4rem; color: var(--p); font-weight: 800; border-top: 1px solid #ddd; padding-top: 10px; margin-top: 10px; }
+        .result-box { background: #f8faff; padding: 25px; border-radius: 25px; margin-top: 30px; border: 2px dashed #eef2ff; display: none; animation: fadeIn 0.4s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        
+        .res-row { display: flex; justify-content: space-between; margin-bottom: 12px; font-weight: 700; color: #475569; font-size: 0.95rem; }
+        .total { font-size: 1.5rem; color: var(--p); font-weight: 800; border-top: 2px solid #eef2ff; padding-top: 15px; margin-top: 10px; }
+
+        .btn-download { width: 100%; margin-top: 20px; background: var(--success); color: white; padding: 12px; font-size: 0.85rem; }
+        .btn-download:hover { transform: scale(1.02); box-shadow: 0 10px 20px rgba(16, 185, 129, 0.2); }
 
         .support-section { margin-top: 35px; padding-top: 20px; border-top: 1px solid #eee; text-align: center; }
-        .support-text { font-size: 0.85rem; color: #64748b; margin-bottom: 15px; font-weight: 600; }
-        .support-btns { display: flex; justify-content: center; gap: 12px; }
-        .support-btn { padding: 10px 15px; border-radius: 12px; text-decoration: none; font-size: 0.75rem; font-weight: 700; display: flex; align-items: center; gap: 8px; transition: 0.3s; }
+        .support-btns { display: flex; justify-content: center; gap: 12px; margin-top: 10px; }
+        .support-btn { padding: 10px 15px; border-radius: 12px; text-decoration: none; font-size: 0.75rem; font-weight: 700; display: flex; align-items: center; gap: 8px; }
         .bmc-btn { background: #FFDD00; color: #000; }
         .kofi-btn { background: #29abe0; color: #fff; }
-        .footer-tag { text-align: center; margin-top: 25px; font-size: 0.75rem; color: #94a3b8; font-weight: 700; }
+
+        .footer-tag { text-align: center; margin-top: 25px; font-size: 0.75rem; color: #94a3b8; font-weight: 800; }
+
+        @media print {
+            .btn-group, .back-nav, .support-section, .btn-download, .footer-tag, .input-group { display: none !important; }
+            .card { border: none; box-shadow: none; width: 100%; max-width: 100%; }
+            .result-box { display: block !important; background: white; border: 1px solid #ddd; }
+        }
     </style>
 </head>
 <body oncontextmenu="return false;">
@@ -48,56 +64,98 @@
 <div class="watermark">RMV APEX GROUP</div>
 
 <div class="card">
+    <div class="back-nav">
+        <a href="../index.html" class="back-link"><i class="fas fa-arrow-left"></i> DASHBOARD</a>
+    </div>
+
     <h2>📊 GST Master Pro</h2>
+
     <div class="input-group">
         <label>Amount (मूल राशि)</label>
-        <input type="number" id="amount" placeholder="₹ 0.00">
+        <input type="number" id="amount" placeholder="₹ 0.00" step="any">
     </div>
+
     <div class="input-group">
         <label>GST Rate (%)</label>
         <select id="rate" onchange="toggleCustomRate()">
-            <option value="5">5%</option><option value="12">12%</option>
-            <option value="18" selected>18%</option><option value="28">28%</option>
+            <option value="5">5%</option>
+            <option value="12">12%</option>
+            <option value="18" selected>18%</option>
+            <option value="28">28%</option>
             <option value="custom">Custom</option>
         </select>
         <input type="number" id="customRateInput" placeholder="Enter custom GST %">
     </div>
+
     <div class="btn-group">
-        <button class="btn-add" onclick="calculate(true)">GST Extra (+)</button>
-        <button class="btn-sub" onclick="calculate(false)">GST Inclusive (-)</button>
-        <button class="btn-clear" onclick="clearFields()">Clear All</button>
+        <button class="btn-add" onclick="calculate(true)"><i class="fas fa-plus-circle"></i> GST Extra</button>
+        <button class="btn-sub" onclick="calculate(false)"><i class="fas fa-minus-circle"></i> GST Incl.</button>
+        <button class="btn-clear" onclick="clearFields()"><i class="fas fa-undo"></i> Reset All</button>
     </div>
+
     <div class="result-box" id="resultBox">
         <div class="res-row"><span>Net Amount:</span> <span id="netAmt">₹0.00</span></div>
-        <div class="res-row"><span>CGST/SGST:</span> <span id="cgst">₹0.00</span></div>
+        <div class="res-row"><span>CGST (50%):</span> <span id="cgst">₹0.00</span></div>
+        <div class="res-row"><span>SGST (50%):</span> <span id="sgst">₹0.00</span></div>
         <div class="res-row total"><span>Total Amount:</span> <span id="totalAmt">₹0.00</span></div>
+        
+        <button class="btn-download" onclick="downloadPDF()"><i class="fas fa-file-invoice"></i> Download GST Report</button>
     </div>
+
     <div class="support-section">
-        <div class="support-text">Support my work! ❤️</div>
         <div class="support-btns">
             <a href="https://buymeacoffee.com/rameshmewalalvishwakarma" class="support-btn bmc-btn" target="_blank"><i class="fas fa-coffee"></i> Coffee</a>
             <a href="https://ko-fi.com/rameshmewalalvishwakarma" class="support-btn kofi-btn" target="_blank"><i class="fas fa-mug-hot"></i> Ko-fi</a>
         </div>
     </div>
-    <div class="footer-tag">© 2026 RMV APEX GROUP 🚩</div>
+    <div class="footer-tag">Crafted by Ramesh Mewalal Vishwakarma 🚩</div>
 </div>
 
 <script>
-    function toggleCustomRate() { const rs = document.getElementById('rate'); const ci = document.getElementById('customRateInput'); ci.style.display = (rs.value === 'custom') ? 'block' : 'none'; }
+    function toggleCustomRate() { 
+        const rs = document.getElementById('rate'); 
+        const ci = document.getElementById('customRateInput'); 
+        ci.style.display = (rs.value === 'custom') ? 'block' : 'none'; 
+    }
+
     function calculate(isExtra) {
         let amt = parseFloat(document.getElementById('amount').value);
         let rs = document.getElementById('rate').value;
         let rate = (rs === 'custom') ? parseFloat(document.getElementById('customRateInput').value) : parseFloat(rs);
-        if (isNaN(amt) || isNaN(rate)) { alert("Please enter valid values!"); return; }
+
+        if (isNaN(amt) || isNaN(rate)) { 
+            alert("महत्वपूर्ण: कृपया सही राशि और GST दर दर्ज करें!"); 
+            return; 
+        }
+
         let gstAmt, total, net;
-        if (isExtra) { gstAmt = (amt * rate) / 100; total = amt + gstAmt; net = amt; } 
-        else { net = amt / (1 + (rate / 100)); gstAmt = amt - net; total = amt; }
-        document.getElementById('netAmt').innerText = "₹ " + net.toLocaleString('en-IN', {minimumFractionDigits: 2});
-        document.getElementById('cgst').innerText = "₹ " + (gstAmt / 2).toLocaleString('en-IN', {minimumFractionDigits: 2});
-        document.getElementById('totalAmt').innerText = "₹ " + total.toLocaleString('en-IN', {minimumFractionDigits: 2});
+        if (isExtra) { 
+            gstAmt = (amt * rate) / 100; 
+            total = amt + gstAmt; 
+            net = amt; 
+        } else { 
+            net = amt / (1 + (rate / 100)); 
+            gstAmt = amt - net; 
+            total = amt; 
+        }
+
+        document.getElementById('netAmt').innerText = "₹ " + net.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+        document.getElementById('cgst').innerText = "₹ " + (gstAmt / 2).toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+        document.getElementById('sgst').innerText = "₹ " + (gstAmt / 2).toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+        document.getElementById('totalAmt').innerText = "₹ " + total.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+        
         document.getElementById('resultBox').style.display = "block";
     }
-    function clearFields() { document.getElementById('amount').value = ""; document.getElementById('resultBox').style.display = "none"; }
+
+    function clearFields() { 
+        document.getElementById('amount').value = ""; 
+        document.getElementById('customRateInput').value = "";
+        document.getElementById('resultBox').style.display = "none"; 
+    }
+
+    function downloadPDF() {
+        window.print();
+    }
 </script>
 </body>
 </html>
