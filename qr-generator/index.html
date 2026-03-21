@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR Generator Pro | RMV APEX GROUP</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <style>
+        :root { --p: #1e293b; --s: #64748b; --d: #0f172a; --bg: #f8fafc; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; user-select: none; padding: 20px; position: relative; overflow: hidden; }
+        
+        /* Premium Background Watermark */
+        .watermark { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-30deg); font-size: clamp(3rem, 10vw, 5rem); font-weight: 900; color: rgba(30, 41, 59, 0.04); z-index: -1; white-space: nowrap; pointer-events: none; text-transform: uppercase; letter-spacing: 8px; }
+
+        .card { background: white; padding: 40px; border-radius: 35px; box-shadow: 0 25px 60px rgba(0,0,0,0.1); width: 100%; max-width: 450px; border: 1px solid #eee; position: relative; overflow: hidden; z-index: 1; text-align: center; }
+        .card::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 8px; background: linear-gradient(90deg, var(--p), var(--s)); }
+        
+        h2 { color: var(--d); margin-bottom: 25px; font-size: 1.8rem; font-weight: 800; }
+        .input-group { margin-bottom: 25px; text-align: left; }
+        label { display: block; margin-bottom: 8px; font-weight: 600; color: #64748b; font-size: 0.9rem; }
+        input { width: 100%; padding: 14px; border: 2px solid #f1f5f9; border-radius: 12px; font-size: 1rem; outline: none; transition: 0.3s; box-sizing: border-box; }
+        input:focus { border-color: var(--p); box-shadow: 0 0 15px rgba(30, 41, 59, 0.1); }
+        
+        .btn-gen { width: 100%; padding: 15px; border: none; border-radius: 15px; font-weight: 700; cursor: pointer; background: var(--p); color: white; font-size: 1rem; margin-top: 10px; transition: 0.3s; }
+        .btn-gen:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
+
+        #qrcode { margin: 30px auto; display: flex; justify-content: center; padding: 15px; background: white; border-radius: 20px; border: 2px solid #f1f5f9; width: fit-content; display: none; }
+
+        /* SUPPORT SECTION */
+        .support-section { margin-top: 35px; padding-top: 20px; border-top: 1px solid #eee; }
+        .support-btns { display: flex; justify-content: center; gap: 12px; margin-top: 10px; }
+        .support-btn { padding: 10px 15px; border-radius: 12px; text-decoration: none; font-size: 0.75rem; font-weight: 700; display: flex; align-items: center; gap: 8px; }
+        .bmc-btn { background: #FFDD00; color: #000; }
+        .kofi-btn { background: #29abe0; color: #fff; }
+
+        .footer-tag { text-align: center; margin-top: 25px; font-size: 0.75rem; color: #94a3b8; font-weight: 700; }
+    </style>
+</head>
+<body oncontextmenu="return false;">
+
+<div class="watermark">RMV APEX GROUP</div>
+
+<div class="card">
+    <h2>🔳 QR Generator Pro</h2>
+    
+    <div class="input-group">
+        <label>Enter URL or Text (लिंक या टेक्स्ट डालें)</label>
+        <input type="text" id="qrText" placeholder="https://example.com">
+    </div>
+    
+    <button class="btn-gen" onclick="generateQR()">Generate QR Code</button>
+
+    <div id="qrcode"></div>
+
+    <div class="support-section">
+        <div class="support-btns">
+            <a href="https://buymeacoffee.com/rameshmewalalvishwakarma" class="support-btn bmc-btn" target="_blank"><i class="fas fa-coffee"></i> Coffee</a>
+            <a href="https://ko-fi.com/rameshmewalalvishwakarma" class="support-btn kofi-btn" target="_blank"><i class="fas fa-mug-hot"></i> Ko-fi</a>
+        </div>
+    </div>
+    <div class="footer-tag">© 2026 RMV APEX GROUP 🚩</div>
+</div>
+
+<script>
+    let qrcodeContainer = document.getElementById("qrcode");
+    let qrcode = new QRCode(qrcodeContainer, {
+        width: 180,
+        height: 180
+    });
+
+    function generateQR() {
+        let text = document.getElementById('qrText').value;
+        if (!text) {
+            alert("कृपया कुछ टेक्स्ट या लिंक दर्ज करें!");
+            return;
+        }
+        qrcode.makeCode(text);
+        qrcodeContainer.style.display = "flex";
+    }
+</script>
+</body>
+</html>
