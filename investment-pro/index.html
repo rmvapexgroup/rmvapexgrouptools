@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Investment Pro | RMV APEX GROUP</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root { --p: #6366f1; --s: #a855f7; --d: #0f172a; --bg: #000000; --panel: #ffffff; }
+        
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 20px; color: #fff; position: relative; overflow-x: hidden; }
+        
+        /* Fixed Watermark */
+        .watermark { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-30deg); font-size: clamp(3rem, 12vw, 6rem); font-weight: 900; color: rgba(255, 255, 255, 0.03); z-index: 0; pointer-events: none; text-transform: uppercase; letter-spacing: 12px; white-space: nowrap; }
+
+        .card { background: var(--panel); padding: 35px; border-radius: 30px; box-shadow: 0 25px 60px rgba(0,0,0,0.5); width: 100%; max-width: 480px; position: relative; z-index: 1; color: var(--d); }
+        .card::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 8px; background: linear-gradient(90deg, #f59e0b, #d97706); border-radius: 30px 30px 0 0; }
+        
+        h2 { font-weight: 800; font-size: 1.6rem; text-align: center; margin-bottom: 5px; color: var(--d); }
+        .tagline { display: block; text-align: center; color: #64748b; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; margin-bottom: 25px; letter-spacing: 1px; }
+
+        .input-group { margin-bottom: 18px; }
+        label { display: block; margin-bottom: 8px; font-weight: 800; color: #64748b; font-size: 0.75rem; text-transform: uppercase; }
+        input, select { width: 100%; padding: 14px; border: 2px solid #f1f5f9; border-radius: 12px; font-size: 1rem; outline: none; transition: 0.3s; font-weight: 700; color: var(--d); box-sizing: border-box; }
+        input:focus { border-color: #f59e0b; background: #fffcf5; }
+
+        .res-container { background: #f8fafc; padding: 20px; border-radius: 20px; border: 2px dashed #e2e8f0; margin: 20px 0; display: none; animation: slideIn 0.3s ease; }
+        .res-row { display: flex; justify-content: space-between; margin-bottom: 10px; font-weight: 700; color: #475569; }
+        .total-profit { border-top: 2px solid #e2e8f0; padding-top: 10px; color: #10b981; font-size: 1.3rem; font-weight: 900; }
+
+        /* Power Buttons */
+        .btn-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .btn { padding: 14px; border: none; border-radius: 15px; font-weight: 800; cursor: pointer; transition: 0.3s; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 0.85rem; }
+        .btn-calc { background: #0f172a; color: #fff; grid-column: span 2; margin-bottom: 5px; }
+        .btn-copy { background: #f1f5f9; color: #475569; }
+        .btn-save { background: #fef3c7; color: #d97706; }
+        .btn-down { background: #ecfdf5; color: #10b981; }
+        .btn-clear { background: #fff1f2; color: #e11d48; }
+        .btn:hover { transform: translateY(-2px); opacity: 0.9; }
+
+        #history { margin-top: 25px; padding-top: 15px; border-top: 1px solid #eee; display: none; }
+        .hist-item { font-size: 0.8rem; font-weight: 700; padding: 8px; background: #f8fafc; border-radius: 8px; margin-bottom: 5px; color: #64748b; }
+
+        @keyframes slideIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .footer { text-align: center; margin-top: 25px; font-size: 0.7rem; color: #94a3b8; font-weight: 800; }
+    </style>
+</head>
+<body oncontextmenu="return false;">
+
+<div class="watermark">RMV APEX GROUP</div>
+
+<div class="card">
+    <h2>📈 Investment & Profit Pro</h2>
+    <span class="tagline">Strategic Wealth Management Tool</span>
+
+    <div class="input-group">
+        <label>Principal Amount (निवेश राशि)</label>
+        <input type="number" id="principal" placeholder="₹ 0.00">
+    </div>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+        <div class="input-group">
+            <label>Return Rate (%)</label>
+            <input type="number" id="interest" placeholder="12%">
+        </div>
+        <div class="input-group">
+            <label>Duration (Years)</label>
+            <input type="number" id="time" placeholder="5">
+        </div>
+    </div>
+
+    <button class="btn btn-calc" onclick="calculate()"><i class="fas fa-chart-line"></i> Calculate Returns</button>
+
+    <div class="res-container" id="res-box">
+        <div class="res-row"><span>Invested:</span> <span id="out-p">₹0</span></div>
+        <div class="res-row"><span>Interest:</span> <span id="out-i">₹0</span></div>
+        <div class="res-row total-profit"><span>Net Wealth:</span> <span id="out-t">₹0</span></div>
+    </div>
+
+    <div class="btn-grid">
+        <button class="btn btn-copy" onclick="copy()"><i class="fas fa-copy"></i> Copy</button>
+        <button class="btn btn-save" onclick="save()"><i class="fas fa-save"></i> Save</button>
+        <button class="btn btn-down" onclick="download()"><i class="fas fa-download"></i> PDF</button>
+        <button class="btn btn-clear" onclick="clearAll()"><i class="fas fa-eraser"></i> Clear</button>
+    </div>
+
+    <div id="history">
+        <label>Recent Saved Reports</label>
+        <div id="hist-list"></div>
+    </div>
+
+    <div class="footer">CRAFTED BY RAMESH VISHWAKARMA 🚩</div>
+</div>
+
+<script>
+    function calculate() {
+        const p = parseFloat(document.getElementById('principal').value);
+        const r = parseFloat(document.getElementById('interest').value);
+        const t = parseFloat(document.getElementById('time').value);
+        const box = document.getElementById('res-box');
+
+        if (isNaN(p) || isNaN(r) || isNaN(t)) return;
+
+        const interest = (p * r * t) / 100;
+        const total = p + interest;
+
+        document.getElementById('out-p').innerText = "₹ " + p.toLocaleString('en-IN');
+        document.getElementById('out-i').innerText = "₹ " + interest.toLocaleString('en-IN');
+        document.getElementById('out-t').innerText = "₹ " + total.toLocaleString('en-IN');
+        box.style.display = "block";
+    }
+
+    function copy() {
+        const txt = `Invested: ${document.getElementById('out-p').innerText}, Net Wealth: ${document.getElementById('out-t').innerText}`;
+        navigator.clipboard.writeText(txt);
+        alert("Report Copied! 🚩");
+    }
+
+    function save() {
+        const h = document.getElementById('history');
+        const l = document.getElementById('hist-list');
+        const entry = document.createElement('div');
+        entry.className = "hist-item";
+        entry.innerText = `Wealth: ${document.getElementById('out-t').innerText} (${new Date().toLocaleTimeString()})`;
+        h.style.display = "block";
+        l.prepend(entry);
+    }
+
+    function download() {
+        const content = `RMV APEX INVESTMENT REPORT\nInvested: ${document.getElementById('out-p').innerText}\nReturns: ${document.getElementById('out-i').innerText}\nTotal: ${document.getElementById('out-t').innerText}\nGenerated by Ramesh Vishwakarma 🚩`;
+        const blob = new Blob([content], {type: 'text/plain'});
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = `Investment_Report_RMV.txt`;
+        a.click();
+    }
+
+    function clearAll() {
+        document.getElementById('principal').value = "";
+        document.getElementById('interest').value = "";
+        document.getElementById('time').value = "";
+        document.getElementById('res-box').style.display = "none";
+    }
+</script>
+</body>
+</html>
