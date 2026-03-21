@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Land Master Pro | RMV APEX GROUP</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root { --p: #10b981; --s: #059669; --d: #0f172a; --bg: #f8fafc; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 20px; position: relative; overflow-x: hidden; }
+        
+        /* Fixed Watermark */
+        .watermark { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-30deg); font-size: clamp(3rem, 12vw, 6rem); font-weight: 900; color: rgba(16, 185, 129, 0.05); z-index: -1; white-space: nowrap; pointer-events: none; text-transform: uppercase; letter-spacing: 10px; }
+
+        .card { background: white; padding: 40px; border-radius: 35px; box-shadow: 0 25px 60px rgba(0,0,0,0.08); width: 100%; max-width: 480px; border: 1px solid #f1f5f9; position: relative; z-index: 1; }
+        .card::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 8px; background: linear-gradient(90deg, var(--p), var(--s)); border-radius: 35px 35px 0 0; }
+        
+        h2 { color: var(--d); margin-bottom: 5px; font-size: 1.8rem; font-weight: 800; text-align: center; }
+        .tagline { display: block; text-align: center; color: #94a3b8; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; margin-bottom: 25px; letter-spacing: 1px; }
+
+        .input-group { margin-bottom: 20px; }
+        label { display: block; margin-bottom: 8px; font-weight: 800; color: #64748b; font-size: 0.75rem; text-transform: uppercase; }
+        select, input { width: 100%; padding: 14px; border: 2px solid #f1f5f9; border-radius: 15px; font-size: 1rem; outline: none; transition: 0.3s; font-weight: 700; box-sizing: border-box; }
+        input:focus, select:focus { border-color: var(--p); box-shadow: 0 0 15px rgba(16, 185, 129, 0.1); }
+        
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px; }
+
+        /* Result Area */
+        #result-display { background: linear-gradient(135deg, var(--p), var(--s)); padding: 25px; border-radius: 20px; text-align: center; color: white; margin-bottom: 25px; display: none; box-shadow: 0 10px 20px rgba(16, 185, 129, 0.2); animation: slideUp 0.3s ease; }
+        #res-val { font-size: 2rem; font-weight: 900; }
+        #res-unit { font-size: 0.85rem; font-weight: 700; opacity: 0.9; }
+
+        /* Multi-Action Buttons */
+        .btn-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .btn { padding: 14px; border: none; border-radius: 15px; font-weight: 800; cursor: pointer; transition: 0.3s; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 0.9rem; color: white; }
+        .btn-copy { background: #6366f1; }
+        .btn-save { background: #a855f7; }
+        .btn-down { background: #0f172a; }
+        .btn-clear { background: #f1f5f9; color: #64748b; }
+        .btn:hover { transform: translateY(-3px); opacity: 0.95; }
+
+        /* History Section */
+        #history-box { margin-top: 30px; border-top: 1px solid #f1f5f9; padding-top: 15px; display: none; }
+        .hist-item { padding: 10px; border-bottom: 1px solid #f8fafc; font-size: 0.85rem; font-weight: 700; color: #475569; display: flex; justify-content: space-between; }
+
+        @keyframes slideUp { from { transform: translateY(10px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        .footer { text-align: center; margin-top: 30px; font-size: 0.75rem; color: #94a3b8; font-weight: 800; }
+    </style>
+</head>
+<body oncontextmenu="return false;">
+
+<div class="watermark">RMV APEX GROUP</div>
+
+<div class="card">
+    <h2>📏 Land Master Pro</h2>
+    <span class="tagline">All-India Land Measurement Solution</span>
+    
+    <div class="input-group">
+        <label>Select Region (राज्य/क्षेत्र)</label>
+        <select id="region" onchange="loadUnits()">
+            <option value="metric">Standard (Acre/Hectare/Sq.Ft)</option>
+            <option value="up">Uttar Pradesh (Bigha/Biswa)</option>
+            <option value="mh">Maharashtra & Gujarat (Guntha/Vigha)</option>
+            <option value="pb">Punjab & Haryana (Kanal/Marla)</option>
+        </select>
+    </div>
+
+    <div class="input-group">
+        <label>Enter Value (संख्या डालें)</label>
+        <input type="number" id="area-val" placeholder="0.00" oninput="calculate()">
+    </div>
+
+    <div class="grid-2">
+        <div class="input-group">
+            <label>From</label>
+            <select id="from-unit" onchange="calculate()"></select>
+        </div>
+        <div class="input-group">
+            <label>To</label>
+            <select id="to-unit" onchange="calculate()"></select>
+        </div>
+    </div>
+
+    <div id="result-display">
+        <div id="res-val">0.00</div>
+        <div id="res-unit">Units</div>
+    </div>
+
+    <div class="btn-grid">
+        <button class="btn btn-copy" onclick="copyResult()"><i class="fas fa-copy"></i> Copy</button>
+        <button class="btn btn-save" onclick="saveRecord()"><i class="fas fa-save"></i> Save</button>
+        <button class="btn btn-down" onclick="downloadData()"><i class="fas fa-download"></i> Download</button>
+        <button class="btn btn-clear" onclick="clearFields()"><i class="fas fa-eraser"></i> Clear</button>
+    </div>
+
+    <div id="history-box">
+        <label>Recent History</label>
+        <div id="history-list"></div>
+    </div>
+
+    <div class="footer">RMV APEX GROUP • BY RAMESH VISHWAKARMA 🚩</div>
+</div>
+
+<script>
+    const data = {
+        metric: { "Sq. Foot": 1, "Sq. Meter": 10.7639, "Acre": 43560, "Hectare": 107639, "Sq. Yard": 9 },
+        up: { "Bigha (Pukka)": 27225, "Bigha (Kancha)": 9075, "Biswa (P)": 1361.25, "Biswani": 68.06 },
+        mh: { "Guntha": 1089, "Vigha": 17424, "Are": 1076.39 },
+        pb: { "Kanal": 5445, "Marla": 272.25, "Killa": 43560 }
+    };
+
+    function loadUnits() {
+        const reg = document.getElementById('region').value;
+        const f = document.getElementById('from-unit'), t = document.getElementById('to-unit');
+        f.innerHTML = ""; t.innerHTML = "";
+        Object.keys(data[reg]).forEach(u => {
+            f.add(new Option(u, u));
+            t.add(new Option(u, u));
+        });
+        t.selectedIndex = 1;
+        calculate();
+    }
+
+    function calculate() {
+        const val = parseFloat(document.getElementById('area-val').value);
+        const reg = document.getElementById('region').value;
+        const from = document.getElementById('from-unit').value, to = document.getElementById('to-unit').value;
+        const box = document.getElementById('result-display');
+        
+        if (isNaN(val) || val <= 0) { box.style.display = "none"; return; }
+        
+        const res = (val * data[reg][from]) / data[reg][to];
+        document.getElementById('res-val').innerText = res.toLocaleString(undefined, {maximumFractionDigits: 4});
+        document.getElementById('res-unit').innerText = to;
+        box.style.display = "block";
+    }
+
+    function copyResult() {
+        const txt = document.getElementById('res-val').innerText + " " + document.getElementById('res-unit').innerText;
+        navigator.clipboard.writeText(txt);
+        alert("मापन कॉपी हो गया! 🚩");
+    }
+
+    function saveRecord() {
+        const val = document.getElementById('area-val').value;
+        const res = document.getElementById('res-val').innerText;
+        if(!val) return;
+        document.getElementById('history-box').style.display = "block";
+        const item = document.createElement('div');
+        item.className = "hist-item";
+        item.innerHTML = `<span>${val} ${document.getElementById('from-unit').value}</span> <span>➡️ ${res} ${document.getElementById('to-unit').value}</span>`;
+        document.getElementById('history-list').prepend(item);
+    }
+
+    function clearFields() {
+        document.getElementById('area-val').value = "";
+        document.getElementById('result-display').style.display = "none";
+    }
+
+    function downloadData() {
+        const val = document.getElementById('area-val').value;
+        const res = document.getElementById('res-val').innerText;
+        if(!val) return alert("पहले गणना करें!");
+        const content = `RMV APEX GROUP - LAND REPORT\n--------------------------\nInput: ${val} ${document.getElementById('from-unit').value}\nResult: ${res} ${document.getElementById('to-unit').value}\nDate: ${new Date().toLocaleString()}\nBy Ramesh Vishwakarma 🚩`;
+        const blob = new Blob([content], {type: 'text/plain'});
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = `Land_Report_RMV.txt`;
+        a.click();
+    }
+
+    loadUnits();
+</script>
+
+</body>
+</html>
