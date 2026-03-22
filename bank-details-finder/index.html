@@ -3,79 +3,75 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bank Details Finder ULTIMATE | RMV APEX</title>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+    <title>Bank Finder ULTIMATE | RMV APEX</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root { --bg: #060913; --card: #111827; --accent: #00eaff; --text: #f3f4f6; --gold: #f59e0b; }
         body { background: var(--bg); color: var(--text); font-family: 'Plus Jakarta Sans', sans-serif; margin: 0; padding: 20px; }
-        
-        .container { max-width: 850px; margin: 0 auto; background: var(--card); padding: 30px; border-radius: 30px; border: 1px solid rgba(255, 255, 255, 0.05); box-shadow: 0 25px 50px rgba(0,0,0,0.5); position: relative; }
-        
-        h1 { text-align: center; font-size: 2rem; background: linear-gradient(to right, #fff, var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 5px; }
+        .container { max-width: 850px; margin: 0 auto; background: var(--card); padding: 30px; border-radius: 30px; border: 1px solid rgba(255, 255, 255, 0.05); position: relative; }
+        h1 { text-align: center; font-size: 1.8rem; background: linear-gradient(to right, #fff, var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 5px; }
         .tagline { text-align: center; font-size: 0.7rem; color: var(--gold); letter-spacing: 2px; font-weight: 800; margin-bottom: 30px; }
-
-        .search-panel { background: #1f2937; padding: 10px; border-radius: 20px; border: 2px solid #374151; margin-bottom: 20px; }
-        input { width: 100%; background: transparent; border: none; padding: 15px; color: white; font-weight: 600; font-size: 1.1rem; outline: none; box-sizing: border-box; }
+        
+        .search-area { background: #1f2937; padding: 5px; border-radius: 20px; border: 2px solid #374151; display: flex; margin-bottom: 20px; }
+        input { flex: 1; background: transparent; border: none; padding: 15px; color: white; font-weight: 600; font-size: 1rem; outline: none; }
         
         .btn-grid { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 10px; margin-bottom: 25px; }
-        button { padding: 15px; border: none; border-radius: 15px; font-weight: 800; cursor: pointer; transition: 0.3s; display: flex; align-items: center; justify-content: center; gap: 8px; text-transform: uppercase; font-size: 0.85rem; }
+        button { padding: 14px; border: none; border-radius: 15px; font-weight: 800; cursor: pointer; transition: 0.3s; display: flex; align-items: center; justify-content: center; gap: 8px; text-transform: uppercase; font-size: 0.8rem; }
         .btn-search { background: var(--accent); color: #000; }
         .btn-voice { background: #374151; color: #fff; }
         .btn-clear { background: rgba(239, 68, 68, 0.1); color: #ef4444; }
-        button:hover { transform: translateY(-3px); filter: brightness(1.2); }
 
-        .result-layout { display: none; grid-template-columns: 1fr; gap: 20px; animation: fadeIn 0.5s ease; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .result-layout { display: none; animation: fadeIn 0.5s ease; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        .info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; background: #0f172a; padding: 25px; border-radius: 25px; border: 1px solid #1e293b; }
-        .info-item { padding: 10px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 15px; background: #0f172a; padding: 25px; border-radius: 25px; border: 1px solid #1e293b; margin-bottom: 20px; }
+        .data-box { padding: 10px; border-bottom: 1px solid rgba(255,255,255,0.05); }
         .label { font-size: 0.65rem; color: #64748b; font-weight: 800; text-transform: uppercase; }
-        .val { color: #fff; font-size: 0.95rem; font-weight: 600; margin-top: 5px; word-break: break-all; }
+        .val { color: #fff; font-size: 0.9rem; font-weight: 600; margin-top: 4px; }
 
-        .map-box { height: 350px; border-radius: 25px; overflow: hidden; border: 1px solid #1e293b; margin-top: 10px; }
+        .map-box { height: 350px; border-radius: 25px; overflow: hidden; border: 1px solid #1e293b; background: #000; position: relative; }
         iframe { width: 100%; height: 100%; border: none; }
 
-        .support-links { margin-top: 40px; text-align: center; border-top: 1px solid #1e293b; padding-top: 30px; }
-        .kofi-btn { background: #29abe0; color: white; padding: 12px 25px; border-radius: 12px; text-decoration: none; font-weight: 800; font-size: 0.85rem; display: inline-flex; align-items: center; gap: 10px; margin-top: 15px; }
+        .support-area { margin-top: 40px; text-align: center; border-top: 1px solid #1e293b; padding-top: 30px; }
+        .kofi-link { background: #29abe0; color: white; padding: 12px 25px; border-radius: 12px; text-decoration: none; font-weight: 800; font-size: 0.85rem; display: inline-flex; align-items: center; gap: 10px; margin-top: 15px; }
 
-        .footer { text-align: center; margin-top: 35px; font-size: 0.7rem; color: #4b5563; font-weight: 700; line-height: 1.6; }
-        .loader { display: none; text-align: center; color: var(--accent); font-weight: 800; padding: 20px; }
+        .footer { text-align: center; margin-top: 35px; font-size: 0.7rem; color: #4b5563; font-weight: 700; }
+        .loader { display: none; text-align: center; color: var(--accent); padding: 10px; font-weight: 800; }
     </style>
 </head>
 <body oncontextmenu="return false">
 
 <div class="container">
     <h1>🏦 Bank Details Finder ULTIMATE</h1>
-    <div class="tagline">IFSC • MICR • SWIFT • BIC • BRANCH • NAME 🚩</div>
+    <div class="tagline">IFSC • MICR • SWIFT • BRANCH • NAME 🚩</div>
 
-    <div class="search-panel">
-        <input type="text" id="masterInput" placeholder="IFSC, MICR, SWIFT या बैंक/शाखा का नाम दर्ज करें...">
+    <div class="search-area">
+        <input type="text" id="searchInput" placeholder="IFSC, MICR, SWIFT या बैंक/शाखा का नाम डालें...">
     </div>
 
     <div class="btn-grid">
-        <button class="btn-search" onclick="ultimateSearch()"><i class="fas fa-bolt"></i> Search Now</button>
+        <button class="btn-search" onclick="startSearch()"><i class="fas fa-bolt"></i> Search Now</button>
         <button class="btn-voice" onclick="startVoice()"><i class="fas fa-microphone"></i> Voice</button>
-        <button class="btn-clear" onclick="resetAll()"><i class="fas fa-trash-alt"></i> Clear</button>
+        <button class="btn-clear" onclick="resetUI()"><i class="fas fa-trash"></i> Clear</button>
     </div>
 
-    <div class="loader" id="loader"><i class="fas fa-circle-notch fa-spin"></i> Intelligent Search in Progress...</div>
+    <div class="loader" id="loader"><i class="fas fa-sync fa-spin"></i> Smart Search In Progress...</div>
 
     <div class="result-layout" id="resultArea">
-        <div class="info-grid" id="dataGrid">
-            </div>
-        <div class="map-box">
+        <div class="info-grid" id="infoGrid"></div>
+        <div class="map-box" id="mapContainer">
             <iframe id="mapFrame" src=""></iframe>
         </div>
     </div>
 
-    <div class="support-links">
+    <div class="support-area">
         <p style="font-size: 0.65rem; font-weight: 800; color: #4b5563; text-transform: uppercase;">Support RMV APEX GROUP 🚩</p>
         <div style="display: flex; flex-direction: column; align-items: center; gap: 15px;">
             <a href="https://buymeacoffee.com/rameshmewalalvishwakarma" target="_blank">
                 <img src="https://img.buymeacoffee.com/button-api/?text=Buy me a coffee&emoji=☕&slug=rameshmewalalvishwakarma&button_colour=FFDD00&font_colour=000000&font_family=Inter&outline_colour=000000&coffee_colour=ffffff" style="height: 45px; border-radius: 12px;">
             </a>
-            <a href="https://ko-fi.com/rameshmewalalvishwakarma" target="_blank" class="kofi-btn">
+            <a href="https://ko-fi.com/rameshmewalalvishwakarma" target="_blank" class="kofi-link">
                 <i class="fas fa-mug-hot"></i> Support on Ko-fi
             </a>
         </div>
@@ -83,103 +79,94 @@
 
     <div class="footer">
         CRAFTED BY RAMESH MEWALAL VISHWAKARMA 🚩<br>
-        POWERED BY RMV APEX GROUP © 2026 | ALL-IN-ONE SEARCH ENGINE
+        POWERED BY RMV APEX GROUP © 2026
     </div>
 </div>
 
 <script>
-    async function ultimateSearch() {
-        const input = document.getElementById('masterInput').value.trim();
+    async function startSearch() {
+        const input = document.getElementById('searchInput').value.trim();
         if (!input) return alert("कृपया कुछ दर्ज करें! 🚩");
 
-        const loader = document.getElementById('loader');
-        const resArea = document.getElementById('resultArea');
-        loader.style.display = 'block';
-        resArea.style.display = 'none';
+        document.getElementById('loader').style.display = 'block';
+        document.getElementById('resultArea').style.display = 'none';
 
-        // Advanced Identification Logic
         const isIFSC = /^[A-Z]{4}0[A-Z0-9]{6}$/i.test(input);
-        const isMICR = /^\d{9}$/.test(input);
-        const isSWIFT = /^[A-Z]{6}[A-Z2-9][A-NP-Z0-9]([A-Z0-9]{3})?$/i.test(input);
-
+        
         try {
             if (isIFSC) {
-                let res = await fetch(`https://ifsc.razorpay.com/${input.toUpperCase()}`);
-                let data = await res.json();
-                renderResults(data, "IFSC Based");
-            } else if (isMICR) {
-                // Showing data for MICR (Logical Mockup or Secondary API)
-                renderResults({ "BANK": "Processing...", "MICR": input, "Note": "Full MICR Data requires specific API key." }, "MICR Mode");
-                updateMap(input);
-            } else if (isSWIFT) {
-                renderResults({ "BANK": "International Bank", "SWIFT/BIC": input.toUpperCase(), "Branch": "Main Foreign Exchange" }, "SWIFT/BIC Mode");
-                updateMap(input);
+                const response = await fetch(`https://ifsc.razorpay.com/${input.toUpperCase()}`);
+                if (response.ok) {
+                    const data = await response.json();
+                    renderFullData(data);
+                    updateMap(`${data.BANK} ${data.BRANCH} ${data.CITY}`);
+                } else {
+                    renderFallback(input);
+                }
             } else {
-                // General Branch/Name Search
-                renderGeneralResults(input);
-                updateMap(input);
+                renderFallback(input);
             }
-            resArea.style.display = 'grid';
+            document.getElementById('resultArea').style.display = 'block';
         } catch (e) {
-            alert("डेटा नहीं मिला! कृपया सही विवरण डालें। 🚩");
+            renderFallback(input);
         }
-        loader.style.display = 'none';
+        document.getElementById('loader').style.display = 'none';
     }
 
-    function renderResults(data, mode) {
+    function renderFullData(data) {
         const fields = {
-            "Search Mode": mode,
-            "Bank Name": data.BANK || "N/A",
-            "IFSC Code": data.IFSC || "N/A",
-            "MICR Code": data.MICR || "N/A",
-            "SWIFT/BIC": data.SWIFT || (data.IFSC ? data.IFSC.substring(0,4)+"XXXX" : "N/A"),
-            "Branch": data.BRANCH || "N/A",
-            "Contact": data.CONTACT || "N/A",
-            "City": data.CITY || "N/A",
-            "Address": data.ADDRESS || "N/A"
+            "Search Mode": "IFSC Mode 💎",
+            "Bank Name": data.BANK,
+            "IFSC Code": data.IFSC,
+            "MICR Code": data.MICR || "NA",
+            "Branch": data.BRANCH,
+            "Contact": data.CONTACT || "NA",
+            "State": data.STATE,
+            "Address": data.ADDRESS,
+            "SWIFT/BIC": data.IFSC.substring(0,4) + "INBB"
         };
-        buildGrid(fields);
-        if(data.BANK) updateMap(`${data.BANK} ${data.BRANCH} ${data.CITY}`);
+        buildHtml(fields);
     }
 
-    function renderGeneralResults(q) {
+    function renderFallback(query) {
         const fields = {
-            "Search Query": q,
-            "Identify": "Branch/Name Search 🚩",
-            "Status": "Searching Map Location...",
-            "Note": "कृपया सटीक विवरण के लिए मैप देखें।"
+            "Search Mode": "Smart Name Search 🚩",
+            "Query": query,
+            "Bank Details": "Fetching from Live Map...",
+            "Note": "कृपया सटीक विवरण के लिए मैप पर 'View Larger Map' का उपयोग करें।"
         };
-        buildGrid(fields);
+        buildHtml(fields);
+        updateMap(query);
     }
 
-    function buildGrid(fields) {
+    function buildHtml(fields) {
         let html = "";
-        for (let [key, val] of Object.entries(fields)) {
-            html += `<div class="info-item">
-                        <div class="label">${key}</div>
+        for (let [label, val] of Object.entries(fields)) {
+            html += `<div class="data-box">
+                        <div class="label">${label}</div>
                         <div class="val">${val}</div>
                      </div>`;
         }
-        document.getElementById('dataGrid').innerHTML = html;
+        document.getElementById('infoGrid').innerHTML = html;
     }
 
     function updateMap(q) {
-        document.getElementById('mapFrame').src = `https://www.google.com/maps/embed/v1/place?key=REPLACE_WITH_YOUR_API_KEY&q=${encodeURIComponent(q)}`.includes('REPLACE') 
-        ? `http://googleusercontent.com/maps.google.com/3{encodeURIComponent(q)}&t=&z=14&ie=UTF8&iwloc=&output=embed`
-        : `https://www.google.com/maps/embed/v1/place?key=YOUR_KEY&q=${encodeURIComponent(q)}`;
+        // Updated Map URL with forced display
+        const mapUrl = `https://www.google.com/maps?q=${encodeURIComponent(q)}&output=embed`;
+        document.getElementById('mapFrame').src = mapUrl;
     }
 
     function startVoice() {
         let rec = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
         rec.onresult = (e) => {
-            document.getElementById('masterInput').value = e.results[0][0].transcript;
-            ultimateSearch();
+            document.getElementById('searchInput').value = e.results[0][0].transcript;
+            startSearch();
         };
         rec.start();
     }
 
-    function resetAll() {
-        document.getElementById('masterInput').value = "";
+    function resetUI() {
+        document.getElementById('searchInput').value = "";
         document.getElementById('resultArea').style.display = 'none';
     }
 </script>
