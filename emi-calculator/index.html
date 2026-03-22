@@ -8,50 +8,116 @@
     <style>
         :root { --p: #0ea5e9; --d: #0f172a; --bg: #f8fafc; --gold: #f59e0b; }
         @media print { body * { visibility: hidden; } #print-area, #print-area * { visibility: visible; } #print-area { position: absolute; left: 0; top: 0; width: 100%; display: block !important; padding: 40px; } .no-print { display: none !important; } }
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 20px; position: relative; overflow-x: hidden; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 20px; position: relative; overflow-x: hidden; user-select: none; }
+        
         .watermark { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-30deg); font-size: 5rem; font-weight: 900; color: rgba(15, 23, 42, 0.03); z-index: 0; pointer-events: none; text-transform: uppercase; white-space: nowrap; }
-        .card { background: white; padding: 35px; border-radius: 35px; box-shadow: 0 20px 50px rgba(0,0,0,0.05); width: 100%; max-width: 400px; border: 1px solid #f1f5f9; position: relative; z-index: 10; }
+        
+        .card { background: white; padding: 35px; border-radius: 35px; box-shadow: 0 20px 50px rgba(0,0,0,0.05); width: 100%; max-width: 400px; border: 1px solid #f1f5f9; position: relative; z-index: 10; margin: 20px; }
         .card::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 8px; background: linear-gradient(90deg, var(--p), var(--gold)); border-radius: 35px 35px 0 0; }
+        
         .back-nav { position: absolute; top: 20px; left: 20px; }
-        input { width: 100%; padding: 14px; border-radius: 12px; border: 2px solid #f1f5f9; font-weight: 700; margin-bottom: 15px; box-sizing: border-box; outline: none; }
-        #res-box { background: #f0f9ff; padding: 20px; border-radius: 20px; border: 2px dashed var(--p); text-align: center; display: none; margin-bottom: 20px; }
-        .btn { width: 100%; padding: 15px; border-radius: 12px; border: none; font-weight: 800; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 10px; }
+        .back-link { text-decoration: none; color: var(--gold); font-weight: 800; font-size: 0.7rem; display: flex; align-items: center; gap: 5px; transition: 0.3s; }
+        .back-link:hover { transform: translateX(-3px); }
+
+        h2 { color: var(--d); margin: 20px 0 25px; font-weight: 800; text-align: center; }
+        
+        input { width: 100%; padding: 14px; border-radius: 12px; border: 2px solid #f1f5f9; font-weight: 700; margin-bottom: 15px; box-sizing: border-box; outline: none; transition: 0.3s; font-size: 1rem; }
+        input:focus { border-color: var(--p); box-shadow: 0 0 10px rgba(14, 165, 233, 0.1); }
+        
+        #res-box { background: #f0f9ff; padding: 20px; border-radius: 20px; border: 2px dashed var(--p); text-align: center; display: none; margin-bottom: 20px; animation: slideUp 0.4s ease; }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .btn { width: 100%; padding: 15px; border-radius: 12px; border: none; font-weight: 800; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 10px; transition: 0.3s; font-size: 0.9rem; }
         .btn-calc { background: var(--d); color: white; }
+        .btn-calc:hover { background: #1e293b; transform: translateY(-2px); }
         .btn-down { background: #ecfdf5; color: #10b981; }
+        .btn-down:hover { background: #d1fae5; }
+
+        /* Support Section */
+        .support-section { margin-top: 30px; padding-top: 25px; border-top: 1px solid #f1f5f9; text-align: center; }
+        .support-btns { display: flex; flex-direction: column; align-items: center; gap: 12px; margin-top: 15px; }
+        .kofi-btn { background: #29abe0; color: white; padding: 10px 20px; border-radius: 10px; font-weight: 800; font-size: 0.8rem; text-decoration: none; display: flex; align-items: center; gap: 8px; box-shadow: 0 4px 15px rgba(41,171,224,0.2); transition: 0.3s; width: fit-content; }
+        .kofi-btn:hover { transform: scale(1.05); }
+
+        .footer-tag { text-align: center; margin-top: 25px; font-size: 0.65rem; color: #94a3b8; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; }
+
         #print-area { display: none; }
     </style>
 </head>
-<body>
+<body oncontextmenu="return false;">
+
 <div class="watermark">RMV APEX GROUP</div>
+
 <div class="card no-print">
-    <div class="back-nav"><a href="../index.html" style="text-decoration:none; color:var(--gold); font-weight:800; font-size:0.7rem;">← DASHBOARD</a></div>
-    <h2 style="text-align:center;">💰 EMI Calculator</h2>
+    <div class="back-nav">
+        <a href="../index.html" class="back-link"><i class="fas fa-arrow-left"></i> DASHBOARD</a>
+    </div>
+    
+    <h2>💰 EMI Calculator</h2>
+    
     <input type="number" id="loan" placeholder="Loan Amount (₹)" oninput="calc()">
     <input type="number" id="rate" placeholder="Interest Rate %" oninput="calc()">
     <input type="number" id="months" placeholder="Months (समय)" oninput="calc()">
+    
     <div id="res-box">
-        <p style="margin:0; font-size:0.8rem; font-weight:700;">Monthly EMI</p>
-        <h2 style="margin:5px 0; color:var(--p);">₹<span id="emi-val">0</span></h2>
+        <p style="margin:0; font-size:0.8rem; font-weight:700; color: #64748b;">Monthly EMI</p>
+        <h2 style="margin:5px 0; color:var(--p); font-size: 1.8rem;">₹<span id="emi-val">0</span></h2>
     </div>
-    <button class="btn btn-calc" onclick="calc()">CALCULATE</button>
-    <button class="btn btn-down" onclick="window.print()">LOAN REPORT</button>
+
+    <button class="btn btn-calc" onclick="calc()"><i class="fas fa-calculator"></i> CALCULATE</button>
+    <button class="btn btn-down" onclick="window.print()"><i class="fas fa-file-pdf"></i> LOAN REPORT</button>
+
+    <div class="support-section">
+        <p style="font-size: 0.65rem; font-weight: 800; color: #94a3b8; text-transform: uppercase;">Support RMV APEX GROUP 🚩</p>
+        <div class="support-btns">
+            <a href="https://buymeacoffee.com/rameshmewalalvishwakarma" target="_blank">
+                <img src="https://img.buymeacoffee.com/button-api/?text=Buy me a coffee&emoji=☕&slug=rameshmewalalvishwakarma&button_colour=FFDD00&font_colour=000000&font_family=Inter&outline_colour=000000&coffee_colour=ffffff" style="height: 38px; border-radius: 8px; box-shadow: 0 4px 15px rgba(255, 221, 0, 0.2);">
+            </a>
+
+            <a href="https://ko-fi.com/rameshmewalalvishwakarma" target="_blank" class="kofi-btn">
+                <i class="fas fa-mug-hot"></i> Support on Ko-fi
+            </a>
+        </div>
+    </div>
+
+    <div class="footer-tag">Crafted by Ramesh Mewalal Vishwakarma 🚩</div>
 </div>
+
 <div id="print-area">
-    <h1>RMV APEX GROUP</h1><hr><h2>EMI ANALYSIS REPORT</h2>
-    <p>Loan: ₹<span id="p-loan"></span> | Rate: <span id="p-rate"></span>% | Tenure: <span id="p-months"></span> Mos</p>
+    <h1>RMV APEX GROUP</h1><hr>
+    <h2>EMI ANALYSIS REPORT</h2>
+    <p>Loan Amount: ₹<span id="p-loan"></span></p>
+    <p>Interest Rate: <span id="p-rate"></span>%</p>
+    <p>Tenure: <span id="p-months"></span> Months</p>
     <h2 style="color:var(--p);">Monthly EMI: ₹<span id="p-emi"></span></h2>
-    <p>Generated by Ramesh Mewalal Vishwakarma 🚩</p>
+    <br>
+    <p style="font-size: 0.8rem;">Generated by Ramesh Mewalal Vishwakarma 🚩</p>
 </div>
+
 <script>
     function calc() {
-        let p = document.getElementById('loan').value, r = document.getElementById('rate').value/1200, n = document.getElementById('months').value;
-        if(!p || !r || !n) return;
+        let p = parseFloat(document.getElementById('loan').value);
+        let r = parseFloat(document.getElementById('rate').value) / 1200;
+        let n = parseFloat(document.getElementById('months').value);
+        
+        if(!p || !r || !n) {
+            document.getElementById('res-box').style.display = "none";
+            return;
+        }
+        
         let emi = (p * r * Math.pow(1+r, n)) / (Math.pow(1+r, n)-1);
-        document.getElementById('emi-val').innerText = Math.round(emi).toLocaleString();
+        let finalEmi = Math.round(emi);
+        
+        document.getElementById('emi-val').innerText = finalEmi.toLocaleString('en-IN');
         document.getElementById('res-box').style.display = "block";
-        document.getElementById('p-loan').innerText = p; document.getElementById('p-rate').innerText = r*1200;
-        document.getElementById('p-months').innerText = n; document.getElementById('p-emi').innerText = Math.round(emi).toLocaleString();
+        
+        // Update Print Area
+        document.getElementById('p-loan').innerText = p.toLocaleString('en-IN');
+        document.getElementById('p-rate').innerText = r * 1200;
+        document.getElementById('p-months').innerText = n;
+        document.getElementById('p-emi').innerText = finalEmi.toLocaleString('en-IN');
     }
 </script>
+
 </body>
 </html>
