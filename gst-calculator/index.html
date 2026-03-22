@@ -13,12 +13,12 @@
         /* Watermark */
         .watermark { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-30deg); font-size: clamp(3rem, 10vw, 5rem); font-weight: 900; color: rgba(99, 102, 241, 0.04); z-index: -1; pointer-events: none; text-transform: uppercase; letter-spacing: 8px; }
 
-        .card { background: white; padding: 40px; border-radius: 35px; box-shadow: 0 25px 60px rgba(0,0,0,0.1); width: 100%; max-width: 480px; border: 1px solid #eee; position: relative; overflow: hidden; }
+        .card { background: white; padding: 40px; border-radius: 35px; box-shadow: 0 25px 60px rgba(0,0,0,0.1); width: 100%; max-width: 480px; border: 1px solid #eee; position: relative; overflow: hidden; margin: 20px 0; }
         .card::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 8px; background: linear-gradient(90deg, var(--p), var(--s)); }
         
         .back-nav { position: absolute; top: 20px; left: 20px; }
         .back-link { text-decoration: none; color: var(--d); font-weight: 800; font-size: 0.8rem; display: flex; align-items: center; gap: 5px; opacity: 0.6; transition: 0.3s; }
-        .back-link:hover { opacity: 1; color: var(--p); }
+        .back-link:hover { opacity: 1; color: var(--p); transform: translateX(-3px); }
 
         h2 { color: var(--d); margin: 20px 0 25px; font-size: 1.8rem; font-weight: 800; text-align: center; }
         .input-group { margin-bottom: 20px; }
@@ -41,19 +41,19 @@
         .res-row { display: flex; justify-content: space-between; margin-bottom: 12px; font-weight: 700; color: #475569; font-size: 0.95rem; }
         .total { font-size: 1.5rem; color: var(--p); font-weight: 800; border-top: 2px solid #eef2ff; padding-top: 15px; margin-top: 10px; }
 
-        .btn-download { width: 100%; margin-top: 20px; background: var(--success); color: white; padding: 12px; font-size: 0.85rem; }
+        .btn-download { width: 100%; margin-top: 20px; background: var(--success); color: white; padding: 12px; font-size: 0.85rem; border-radius: 12px; font-weight: 800; border: none; cursor: pointer; }
         .btn-download:hover { transform: scale(1.02); box-shadow: 0 10px 20px rgba(16, 185, 129, 0.2); }
 
-        .support-section { margin-top: 35px; padding-top: 20px; border-top: 1px solid #eee; text-align: center; }
-        .support-btns { display: flex; justify-content: center; gap: 12px; margin-top: 10px; }
-        .support-btn { padding: 10px 15px; border-radius: 12px; text-decoration: none; font-size: 0.75rem; font-weight: 700; display: flex; align-items: center; gap: 8px; }
-        .bmc-btn { background: #FFDD00; color: #000; }
-        .kofi-btn { background: #29abe0; color: #fff; }
+        /* --- Updated Support Section --- */
+        .support-section { margin-top: 35px; padding-top: 25px; border-top: 1px solid #f1f5f9; text-align: center; }
+        .support-btns { display: flex; flex-direction: column; align-items: center; gap: 12px; margin-top: 15px; }
+        .kofi-btn { background: #29abe0; color: white; padding: 10px 20px; border-radius: 10px; font-weight: 800; font-size: 0.8rem; text-decoration: none; display: flex; align-items: center; gap: 8px; box-shadow: 0 4px 15px rgba(41,171,224,0.2); transition: 0.3s; width: fit-content; }
+        .kofi-btn:hover { transform: translateY(-2px); }
 
-        .footer-tag { text-align: center; margin-top: 25px; font-size: 0.75rem; color: #94a3b8; font-weight: 800; }
+        .footer-tag { text-align: center; margin-top: 25px; font-size: 0.7rem; color: #94a3b8; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; border-top: 1px solid #f8fafc; padding-top: 15px; }
 
         @media print {
-            .btn-group, .back-nav, .support-section, .btn-download, .footer-tag, .input-group { display: none !important; }
+            .no-print, .btn-group, .back-nav, .support-section, .btn-download, .footer-tag, .input-group { display: none !important; }
             .card { border: none; box-shadow: none; width: 100%; max-width: 100%; }
             .result-box { display: block !important; background: white; border: 1px solid #ddd; }
         }
@@ -64,18 +64,18 @@
 <div class="watermark">RMV APEX GROUP</div>
 
 <div class="card">
-    <div class="back-nav">
+    <div class="back-nav no-print">
         <a href="../index.html" class="back-link"><i class="fas fa-arrow-left"></i> DASHBOARD</a>
     </div>
 
     <h2>📊 GST Master Pro</h2>
 
-    <div class="input-group">
+    <div class="input-group no-print">
         <label>Amount (मूल राशि)</label>
         <input type="number" id="amount" placeholder="₹ 0.00" step="any">
     </div>
 
-    <div class="input-group">
+    <div class="input-group no-print">
         <label>GST Rate (%)</label>
         <select id="rate" onchange="toggleCustomRate()">
             <option value="5">5%</option>
@@ -87,7 +87,7 @@
         <input type="number" id="customRateInput" placeholder="Enter custom GST %">
     </div>
 
-    <div class="btn-group">
+    <div class="btn-group no-print">
         <button class="btn-add" onclick="calculate(true)"><i class="fas fa-plus-circle"></i> GST Extra</button>
         <button class="btn-sub" onclick="calculate(false)"><i class="fas fa-minus-circle"></i> GST Incl.</button>
         <button class="btn-clear" onclick="clearFields()"><i class="fas fa-undo"></i> Reset All</button>
@@ -99,15 +99,22 @@
         <div class="res-row"><span>SGST (50%):</span> <span id="sgst">₹0.00</span></div>
         <div class="res-row total"><span>Total Amount:</span> <span id="totalAmt">₹0.00</span></div>
         
-        <button class="btn-download" onclick="downloadPDF()"><i class="fas fa-file-invoice"></i> Download GST Report</button>
+        <button class="btn-download no-print" onclick="downloadPDF()"><i class="fas fa-file-invoice"></i> Download GST Report</button>
     </div>
 
-    <div class="support-section">
+    <div class="support-section no-print">
+        <p style="font-size: 0.65rem; font-weight: 800; color: #94a3b8; text-transform: uppercase;">Support RMV APEX GROUP 🚩</p>
         <div class="support-btns">
-            <a href="https://buymeacoffee.com/rameshmewalalvishwakarma" class="support-btn bmc-btn" target="_blank"><i class="fas fa-coffee"></i> Coffee</a>
-            <a href="https://ko-fi.com/rameshmewalalvishwakarma" class="support-btn kofi-btn" target="_blank"><i class="fas fa-mug-hot"></i> Ko-fi</a>
+            <a href="https://buymeacoffee.com/rameshmewalalvishwakarma" target="_blank">
+                <img src="https://img.buymeacoffee.com/button-api/?text=Buy me a coffee&emoji=☕&slug=rameshmewalalvishwakarma&button_colour=FFDD00&font_colour=000000&font_family=Inter&outline_colour=000000&coffee_colour=ffffff" style="height: 40px; border-radius: 10px; box-shadow: 0 4px 15px rgba(255, 221, 0, 0.2);">
+            </a>
+
+            <a href="https://ko-fi.com/rameshmewalalvishwakarma" target="_blank" class="kofi-btn">
+                <i class="fas fa-mug-hot"></i> Support on Ko-fi
+            </a>
         </div>
     </div>
+
     <div class="footer-tag">Crafted by Ramesh Mewalal Vishwakarma 🚩</div>
 </div>
 
@@ -121,20 +128,20 @@
     function calculate(isExtra) {
         let amt = parseFloat(document.getElementById('amount').value);
         let rs = document.getElementById('rate').value;
-        let rate = (rs === 'custom') ? parseFloat(document.getElementById('customRateInput').value) : parseFloat(rs);
+        let rateValue = (rs === 'custom') ? parseFloat(document.getElementById('customRateInput').value) : parseFloat(rs);
 
-        if (isNaN(amt) || isNaN(rate)) { 
+        if (isNaN(amt) || isNaN(rateValue)) { 
             alert("महत्वपूर्ण: कृपया सही राशि और GST दर दर्ज करें!"); 
             return; 
         }
 
         let gstAmt, total, net;
         if (isExtra) { 
-            gstAmt = (amt * rate) / 100; 
+            gstAmt = (amt * rateValue) / 100; 
             total = amt + gstAmt; 
             net = amt; 
         } else { 
-            net = amt / (1 + (rate / 100)); 
+            net = amt / (1 + (rateValue / 100)); 
             gstAmt = amt - net; 
             total = amt; 
         }
