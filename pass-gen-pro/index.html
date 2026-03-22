@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Secure Password Pro | RMV APEX GROUP</title>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root { --p: #6366f1; --s: #a855f7; --d: #0f172a; --bg: #f8fafc; --success: #10b981; }
@@ -22,14 +22,14 @@
 
         h2 { color: var(--d); margin: 20px 0 25px; font-size: 1.8rem; font-weight: 800; text-align: center; }
         
-        .pass-display { background: #f1f5f9; padding: 22px; border-radius: 20px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; border: 2px solid #e2e8f0; position: relative; }
-        #passwordText { font-family: 'JetBrains Mono', monospace; font-size: 1.1rem; font-weight: 800; color: var(--d); word-break: break-all; letter-spacing: 1px; }
+        .pass-display { background: #f1f5f9; padding: 22px; border-radius: 20px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; border: 2px solid #e2e8f0; position: relative; transition: 0.3s; }
+        #passwordText { font-family: 'JetBrains Mono', monospace; font-size: 1.1rem; font-weight: 700; color: var(--d); word-break: break-all; letter-spacing: 1px; }
         .copy-icon { cursor: pointer; color: var(--p); font-size: 1.4rem; transition: 0.3s; padding-left: 15px; }
         .copy-icon:hover { transform: scale(1.2); color: var(--s); }
 
         /* Strength Meter */
         .strength-container { height: 6px; width: 100%; background: #e2e8f0; border-radius: 10px; margin-bottom: 25px; overflow: hidden; }
-        #strengthBar { height: 100%; width: 0%; transition: 0.5s ease; border-radius: 10px; }
+        #strengthBar { height: 100%; width: 0%; transition: 0.5s cubic-bezier(0.4, 0, 0.2, 1); border-radius: 10px; }
 
         .settings { background: #f8fafc; padding: 20px; border-radius: 20px; border: 1px solid #f1f5f9; }
         .setting-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; font-weight: 700; color: #475569; font-size: 0.9rem; }
@@ -38,20 +38,19 @@
         input[type="range"] { width: 100%; height: 6px; background: #e2e8f0; border-radius: 5px; outline: none; accent-color: var(--p); cursor: pointer; }
         input[type="checkbox"] { width: 22px; height: 22px; accent-color: var(--p); cursor: pointer; border-radius: 6px; }
         
-        .btn-gen { width: 100%; padding: 16px; border: none; border-radius: 18px; font-weight: 800; cursor: pointer; background: var(--p); color: white; font-size: 1rem; margin-top: 25px; transition: 0.3s; display: flex; align-items: center; justify-content: center; gap: 10px; }
-        .btn-gen:hover { transform: translateY(-3px); box-shadow: 0 10px 25px rgba(99, 102, 241, 0.3); background: var(--s); }
+        .btn-gen { width: 100%; padding: 16px; border: none; border-radius: 18px; font-weight: 800; cursor: pointer; background: var(--p); color: white; font-size: 1rem; margin-top: 25px; transition: 0.3s; display: flex; align-items: center; justify-content: center; gap: 10px; border-bottom: 4px solid rgba(0,0,0,0.1); }
+        .btn-gen:active { transform: translateY(2px); border-bottom-width: 2px; }
+        .btn-gen:hover { background: var(--s); box-shadow: 0 10px 25px rgba(99, 102, 241, 0.3); }
 
-        /* --- Updated Support Section --- */
         .support-section { margin-top: 35px; padding-top: 25px; border-top: 1px solid #f1f5f9; text-align: center; }
         .support-btns { display: flex; flex-direction: column; align-items: center; gap: 12px; margin-top: 15px; }
-        .kofi-btn { background: #29abe0; color: white; padding: 10px 20px; border-radius: 10px; font-weight: 800; font-size: 0.8rem; text-decoration: none; display: flex; align-items: center; gap: 8px; box-shadow: 0 4px 15px rgba(41,171,224,0.2); transition: 0.3s; width: fit-content; }
-        .kofi-btn:hover { transform: translateY(-2px); }
+        .kofi-btn { background: #29abe0; color: white; padding: 10px 20px; border-radius: 10px; font-weight: 800; font-size: 0.8rem; text-decoration: none; display: flex; align-items: center; gap: 8px; transition: 0.3s; }
+        .kofi-btn:hover { transform: translateY(-2px); filter: brightness(1.1); }
 
         .footer-tag { text-align: center; margin-top: 25px; font-size: 0.7rem; color: #94a3b8; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; padding-top: 15px; border-top: 1px solid #f8fafc; }
 
-        /* Toast Alert */
-        .toast { position: fixed; bottom: 30px; background: var(--d); color: white; padding: 12px 25px; border-radius: 50px; font-size: 0.9rem; font-weight: 700; display: none; animation: slideUp 0.3s ease; z-index: 100; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
-        @keyframes slideUp { from { transform: translateY(100%); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        .toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: var(--d); color: white; padding: 12px 25px; border-radius: 50px; font-size: 0.9rem; font-weight: 700; display: none; z-index: 100; box-shadow: 0 10px 30px rgba(0,0,0,0.2); animation: fadeInUp 0.3s ease; }
+        @keyframes fadeInUp { from { opacity: 0; transform: translate(-50%, 20px); } to { opacity: 1; transform: translate(-50%, 0); } }
     </style>
 </head>
 <body oncontextmenu="return false;">
@@ -65,7 +64,7 @@
 
     <h2>🔐 Secure Password Pro</h2>
     
-    <div class="pass-display">
+    <div class="pass-display" id="displayBox">
         <span id="passwordText">Gen3rating...</span>
         <i class="fas fa-copy copy-icon" onclick="copyPassword()" title="Copy Password"></i>
     </div>
@@ -107,7 +106,6 @@
             <a href="https://buymeacoffee.com/rameshmewalalvishwakarma" target="_blank">
                 <img src="https://img.buymeacoffee.com/button-api/?text=Buy me a coffee&emoji=☕&slug=rameshmewalalvishwakarma&button_colour=FFDD00&font_colour=000000&font_family=Inter&outline_colour=000000&coffee_colour=ffffff" style="height: 40px; border-radius: 10px; box-shadow: 0 4px 15px rgba(255, 221, 0, 0.2);">
             </a>
-
             <a href="https://ko-fi.com/rameshmewalalvishwakarma" target="_blank" class="kofi-btn">
                 <i class="fas fa-mug-hot"></i> Support on Ko-fi
             </a>
@@ -125,35 +123,54 @@
         generatePassword();
     }
 
+    // Advanced Cryptographically Secure Generator
     function generatePassword() {
         const length = parseInt(document.getElementById('length').value);
         const hasUpper = document.getElementById('upper').checked;
         const hasNumber = document.getElementById('numbers').checked;
         const hasSymbol = document.getElementById('symbols').checked;
 
-        const lower = "abcdefghijklmnopqrstuvwxyz";
-        const upper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-        const nums = "0123456789";
-        const syms = "!@#$%^&*()_+~`|}{[]:;?><,./-=";
+        const types = {
+            lower: "abcdefghijklmnopqrstuvwxyz",
+            upper: "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+            nums: "0123456789",
+            syms: "!@#$%^&*()_+~`|}{[]:;?><,./-="
+        };
 
-        let charSet = lower;
-        if (hasUpper) charSet += upper;
-        if (hasNumber) charSet += nums;
-        if (hasSymbol) charSet += syms;
+        let charSet = types.lower;
+        let guaranteedChars = [];
 
-        if (charSet === "") {
-            document.getElementById('passwordText').innerText = "Select Options!";
-            return;
+        if (hasUpper) { charSet += types.upper; guaranteedChars.push(getRandomChar(types.upper)); }
+        if (hasNumber) { charSet += types.nums; guaranteedChars.push(getRandomChar(types.nums)); }
+        if (hasSymbol) { charSet += types.syms; guaranteedChars.push(getRandomChar(types.syms)); }
+
+        let password = [...guaranteedChars];
+        const remainingLength = length - guaranteedChars.length;
+
+        for (let i = 0; i < remainingLength; i++) {
+            password.push(getRandomChar(charSet));
         }
 
-        let generatedPassword = "";
-        for (let i = 0; i < length; i++) {
-            const randomIndex = Math.floor(Math.random() * charSet.length);
-            generatedPassword += charSet[randomIndex];
+        // Shuffle the password array using Fisher-Yates for better security
+        for (let i = password.length - 1; i > 0; i--) {
+            const j = Math.floor(cryptoRandom() * (i + 1));
+            [password[i], password[j]] = [password[j], password[i]];
         }
 
-        document.getElementById('passwordText').innerText = generatedPassword;
+        const finalPass = password.join('');
+        document.getElementById('passwordText').innerText = finalPass;
         calculateStrength(length, hasUpper, hasNumber, hasSymbol);
+    }
+
+    // Secure Random Generator
+    function cryptoRandom() {
+        const array = new Uint32Array(1);
+        window.crypto.getRandomValues(array);
+        return array[0] / (0xFFFFFFFF + 1);
+    }
+
+    function getRandomChar(str) {
+        return str[Math.floor(cryptoRandom() * str.length)];
     }
 
     function calculateStrength(len, u, n, s) {
@@ -167,18 +184,21 @@
         const bar = document.getElementById('strengthBar');
         bar.style.width = score + "%";
 
-        if (score <= 40) bar.style.background = "#ef4444"; // Weak
-        else if (score <= 70) bar.style.background = "#f59e0b"; // Medium
-        else bar.style.background = "#10b981"; // Strong
+        if (score <= 40) bar.style.background = "#ef4444"; 
+        else if (score <= 75) bar.style.background = "#f59e0b"; 
+        else bar.style.background = "#10b981"; 
     }
 
     async function copyPassword() {
         const text = document.getElementById('passwordText').innerText;
-        if (text === "Select Options!" || text === "Gen3rating...") return;
+        if (text === "Select Options!") return;
         
         try {
             await navigator.clipboard.writeText(text);
             showToast();
+            const box = document.getElementById('displayBox');
+            box.style.borderColor = "var(--success)";
+            setTimeout(() => box.style.borderColor = "#e2e8f0", 1000);
         } catch (err) {
             console.error("Failed to copy!");
         }
@@ -190,7 +210,6 @@
         setTimeout(() => { toast.style.display = "none"; }, 2000);
     }
 
-    // Initial Generate
     window.onload = generatePassword;
 </script>
 </body>
