@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RMV APEX GROUP | V8 Ultimate 🚩</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <style>
+        :root { --bg: #05070a; --accent: #00d2ff; --glass: rgba(255, 255, 255, 0.05); --gradient: linear-gradient(135deg, #00d2ff 0%, #3a7bd5 100%); --save: #238636; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: #fff; min-height: 100vh; overflow-x: hidden; }
+
+        #bg-video { position: fixed; inset: 0; min-width: 100%; min-height: 100%; z-index: -1; filter: brightness(0.2); object-fit: cover; }
+
+        /* Secure Login */
+        #login-layer { position: fixed; inset: 0; background: rgba(0,0,0,0.98); z-index: 2000; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(25px); }
+        .login-card { width: 340px; padding: 40px; background: var(--glass); border: 1px solid rgba(0,210,255,0.2); border-radius: 30px; text-align: center; border-bottom: 5px solid var(--accent); }
+        input[type="password"] { width: 100%; background: #000; border: 1px solid #333; padding: 15px; border-radius: 12px; color: var(--accent); text-align: center; margin: 25px 0; outline: none; font-weight: 800; border-bottom: 2px solid var(--accent); }
+        .btn-main { width: 100%; padding: 15px; border: none; border-radius: 12px; background: var(--gradient); color: #fff; font-weight: 800; cursor: pointer; text-transform: uppercase; }
+
+        /* Dashboard */
+        #main-hub { display: none; padding: 20px; flex-direction: column; align-items: center; }
+        .container { background: var(--glass); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.1); width: 100%; max-width: 650px; padding: 30px; border-radius: 30px; box-shadow: 0 30px 60px rgba(0,0,0,0.8); }
+        
+        .header { text-align: center; margin-bottom: 20px; }
+        .header h1 { color: var(--accent); font-weight: 800; font-size: 1.5rem; letter-spacing: 2px; }
+
+        .section-title { font-size: 10px; color: var(--accent); font-weight: 800; margin: 15px 0 10px; text-transform: uppercase; border-left: 3px solid var(--accent); padding-left: 10px; }
+        
+        .input-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+        .input-box { background: rgba(0,0,0,0.5); border: 1px solid #333; border-radius: 12px; padding: 10px; text-align: center; }
+        .input-box label { font-size: 8px; color: #8b949e; display: block; margin-bottom: 4px; }
+        .input-box input { background: transparent; border: none; color: #fff; width: 100%; outline: none; font-size: 14px; text-align: center; font-weight: 700; }
+
+        /* Pre-payment Panel */
+        .prepay-panel { background: rgba(35, 134, 54, 0.05); border: 1px dashed var(--save); border-radius: 15px; padding: 15px; margin-top: 15px; }
+
+        /* Action Buttons */
+        .action-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 20px; }
+        .btn-act { padding: 12px; border-radius: 10px; border: none; font-weight: 800; font-size: 10px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; color: #fff; }
+        .btn-wa { background: #238636; }
+        .btn-pdf { background: #c53030; }
+
+        #results { margin-top: 25px; display: none; text-align: center; animation: slideUp 0.5s ease; }
+        @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+        .stat-card { background: rgba(0,0,0,0.3); border-radius: 15px; padding: 15px; margin-bottom: 15px; }
+        .emi-val { font-size: 2.2rem; color: var(--accent); font-weight: 800; }
+        .save-val { color: #92fe9d; font-weight: 800; font-size: 1.2rem; }
+
+        .ticker { position: fixed; bottom: 0; width: 100%; background: #000; padding: 10px; font-size: 10px; color: var(--accent); border-top: 1px solid var(--accent); }
+    </style>
+</head>
+<body onload="initApp()">
+
+    <video autoplay muted loop playsinline id="bg-video">
+        <source src="https://assets.mixkit.co/videos/preview/mixkit-matrix-style-code-animation-9121-large.mp4" type="video/mp4">
+    </video>
+
+    <div id="login-layer">
+        <div class="login-card">
+            <i class="fas fa-gem" style="font-size: 3rem; color: var(--accent);"></i>
+            <h2 style="margin-top:15px;">RMV APEX GROUP</h2>
+            <p style="font-size: 9px; color: #8b949e;">ULTIMATE SAVER V8.0</p>
+            <input type="password" id="pass" placeholder="••••••••">
+            <button class="btn-main" onclick="unlock()">ACCESS HUB</button>
+        </div>
+    </div>
+
+    <div id="main-hub">
+        <div class="container" id="report-area">
+            <div class="header">
+                <h1>RMV APEX GROUP 🚩</h1>
+                <span style="font-size: 9px; opacity: 0.6;">FINANCIAL FREEDOM ENGINE • RAMESH MEWALAL VISHWAKARMA</span>
+            </div>
+
+            <div class="section-title">Loan Parameters</div>
+            <div class="input-grid">
+                <div class="input-box"><label>Loan Amount</label><input type="number" id="loan" placeholder="0"></div>
+                <div class="input-box"><label>Int. Rate %</label><input type="number" id="rate" placeholder="0"></div>
+                <div class="input-box"><label>Tenure (M)</label><input type="number" id="months" placeholder="0"></div>
+            </div>
+
+            <div class="section-title" style="color:var(--save); border-color:var(--save);">Pre-payment Strategy</div>
+            <div class="prepay-panel">
+                <div class="input-grid">
+                    <div class="input-box" style="grid-column: span 2; border-color: var(--save);"><label>One-time Pre-payment (₹)</label><input type="number" id="prepay" value="0"></div>
+                    <div class="input-box" style="border-color: var(--save);"><label>Paid At Month</label><input type="number" id="prepayMonth" value="12"></div>
+                </div>
+            </div>
+
+            <button class="btn-main" style="margin-top:20px;" onclick="calculateSaving()"><i class="fas fa-piggy-bank"></i> ANALYZE SAVINGS</button>
+
+            <div class="action-row">
+                <button class="btn-act btn-pdf" onclick="downloadPDF()"><i class="fas fa-file-pdf"></i> EXPORT PDF</button>
+                <button class="btn-act btn-wa" onclick="shareWA()"><i class="fab fa-whatsapp"></i> WHATSAPP SHARE</button>
+            </div>
+
+            <div id="results">
+                <div class="stat-card">
+                    <p style="font-size: 9px; opacity: 0.6;">MONTHLY EMI</p>
+                    <div class="emi-val" id="emiVal">₹0</div>
+                </div>
+                
+                <div class="stat-card" style="border: 1px solid var(--save);">
+                    <p style="font-size: 10px; color: #92fe9d; font-weight: 800;">YOU WILL SAVE (INTEREST)</p>
+                    <div class="save-val" id="saveVal">₹0</div>
+                </div>
+
+                <div style="height: 180px;"><canvas id="chart"></canvas></div>
+            </div>
+        </div>
+
+        <div class="ticker"><marquee>🚩 RMV APEX GROUP: TENURE SAVER V8 ACTIVE | REDUCE YOUR DEBT | CRAFTED BY RAMESH JI 🚩</marquee></div>
+    </div>
+
+    <script>
+        const KEY = "RMV@2026";
+        let myChart = null;
+
+        function unlock() {
+            if(document.getElementById('pass').value === KEY) {
+                document.getElementById('login-layer').style.display = "none";
+                document.getElementById('main-hub').style.display = "flex";
+            } else { alert("ACCESS DENIED 🚩"); }
+        }
+
+        function calculateSaving() {
+            let P = parseFloat(document.getElementById('loan').value);
+            let R_annual = parseFloat(document.getElementById('rate').value);
+            let R = R_annual / 12 / 100;
+            let N = parseInt(document.getElementById('months').value);
+            let prepayAmt = parseFloat(document.getElementById('prepay').value) || 0;
+            
+            if(!P || !R_annual || !N) return alert("Fill all details! 🚩");
+
+            // Normal EMI & Total Interest
+            let emi = (P * R * Math.pow(1 + R, N)) / (Math.pow(1 + R, N) - 1);
+            let totalIntNormal = (emi * N) - P;
+
+            // Interest Saving Calculation (Rough estimate for UI)
+            // Simplified logic: prepayAmt reduces principal, saving future interest
+            let saving = prepayAmt * (R_annual/100) * ((N - 12)/12); // Approximate saving
+            if(saving < 0) saving = 0;
+
+            document.getElementById('emiVal').innerText = "₹" + Math.round(emi).toLocaleString('en-IN');
+            document.getElementById('saveVal').innerText = "₹" + Math.round(saving).toLocaleString('en-IN');
+            document.getElementById('results').style.display = 'block';
+
+            updateChart(P, totalIntNormal - saving, saving);
+        }
+
+        function updateChart(p, i, s) {
+            const ctx = document.getElementById('chart').getContext('2d');
+            if(myChart) myChart.destroy();
+            myChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Principal', 'Reduced Interest', 'Savings'],
+                    datasets: [{ data: [p, i, s], backgroundColor: ['#3a7bd5', '#00d2ff', '#238636'], borderWidth: 0 }]
+                },
+                options: { plugins: { legend: { display: false } }, cutout: '75%' }
+            });
+        }
+
+        function downloadPDF() {
+            const el = document.getElementById('report-area');
+            html2pdf().from(el).set({filename:'RMV_TENURE_SAVER.pdf', html2canvas:{backgroundColor:'#05070a'}}).save();
+        }
+
+        function shareWA() {
+            const save = document.getElementById('saveVal').innerText;
+            const text = `*RMV APEX GROUP SAVER REPORT* 🚩\nGood News! You can save *${save}* on your loan interest by using our strategy.\n\n_Calculated by RMV APEX GROUP_`;
+            window.open(`https://wa.me/?text=${encodeURIComponent(text)}`);
+        }
+
+        function initApp() { console.log("RMV GROUP V8 READY"); }
+    </script>
+</body>
+</html>
