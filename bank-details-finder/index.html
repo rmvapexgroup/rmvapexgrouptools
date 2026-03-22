@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bank Finder Pro | RMV APEX</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root { --bg: #0d1117; --card: #161b22; --accent: #58a6ff; --text: #c9d1d9; }
+        body { background: var(--bg); color: var(--text); font-family: 'Plus Jakarta Sans', sans-serif; margin: 0; padding: 15px; }
+        .container { max-width: 500px; margin: auto; background: var(--card); padding: 25px; border-radius: 20px; border: 1px solid #30363d; box-shadow: 0 10px 40px rgba(0,0,0,0.5); }
+        
+        h1 { text-align: center; color: var(--accent); font-size: 1.4rem; }
+        .search-area { background: #010409; border-radius: 12px; border: 1px solid #30363d; padding: 5px; margin: 15px 0; display: flex; }
+        input { flex: 1; background: transparent; border: none; padding: 12px; color: #fff; font-size: 16px; outline: none; }
+        
+        .btn-main { background: var(--accent); color: #0d1117; border: none; padding: 14px; border-radius: 10px; font-weight: 800; cursor: pointer; width: 100%; text-transform: uppercase; font-size: 14px; transition: 0.2s; }
+        .btn-main:active { transform: scale(0.95); }
+
+        #results { display: none; margin-top: 20px; border-top: 1px solid #30363d; padding-top: 15px; }
+        .info-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 13px; }
+        .label { color: #8b949e; font-weight: 600; }
+        .val { color: #fff; text-align: right; width: 60%; font-weight: 700; word-wrap: break-word; }
+
+        .action-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 20px; }
+        .btn-link { background: #238636; color: white; text-align: center; padding: 12px; text-decoration: none; border-radius: 8px; font-size: 12px; font-weight: 800; }
+        .btn-blue { background: #1f6feb; }
+
+        .footer { text-align: center; margin-top: 30px; font-size: 10px; color: #484f58; line-height: 1.5; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>🏦 Bank Details Finder</h1>
+    <p style="font-size: 10px; text-align: center; color: #8b949e; margin-top: -10px;">RMV APEX GROUP PRO TOOL 🚩</p>
+    
+    <div class="search-area">
+        <input type="text" id="userInput" placeholder="IFSC या बैंक का नाम डालें...">
+    </div>
+
+    <button class="btn-main" onclick="getBankInfo()">Find Details</button>
+
+    <div id="results">
+        <div id="dataRows"></div>
+        
+        <div class="action-btns">
+            <a id="mapLink" target="_blank" class="btn-link btn-blue"><i class="fas fa-map-marked-alt"></i> Open in Maps</a>
+            <a id="searchLink" target="_blank" class="btn-link"><i class="fas fa-search"></i> Google Details</a>
+        </div>
+    </div>
+
+    <div class="footer">
+        CRAFTED BY RAMESH MEWALAL VISHWAKARMA 🚩<br>
+        DESIGNED FOR SPEED & ACCURACY © 2026
+    </div>
+</div>
+
+<script>
+    async function getBankInfo() {
+        const input = document.getElementById('userInput').value.trim();
+        if (!input) return alert("Please enter something!");
+
+        const isIFSC = /^[A-Z]{4}0[A-Z0-9]{6}$/i.test(input);
+        const dataRows = document.getElementById('dataRows');
+        const results = document.getElementById('results');
+
+        try {
+            let info = ``;
+            if (isIFSC) {
+                const res = await fetch(`https://ifsc.razorpay.com/${input.toUpperCase()}`);
+                if (res.ok) {
+                    const data = await res.json();
+                    info = `
+                        <div class="info-row"><span class="label">Bank</span><span class="val">${data.BANK}</span></div>
+                        <div class="info-row"><span class="label">Branch</span><span class="val">${data.BRANCH}</span></div>
+                        <div class="info-row"><span class="label">IFSC</span><span class="val">${data.IFSC}</span></div>
+                        <div class="info-row"><span class="label">MICR</span><span class="val">${data.MICR || 'N/A'}</span></div>
+                        <div class="info-row"><span class="label">State</span><span class="val">${data.STATE}</span></div>
+                        <div class="info-row"><span class="label">Address</span><span class="val">${data.ADDRESS}</span></div>
+                    `;
+                    document.getElementById('mapLink').href = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(data.BANK + " " + data.BRANCH)}`;
+                }
+            } else {
+                info = `<div class="info-row" style="text-align:center; color:#e6edf3">Search results for: <b>${input}</b></div>`;
+                document.getElementById('mapLink').href = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(input + " bank")}`;
+            }
+
+            document.getElementById('searchLink').href = `https://www.google.com/search?q=${encodeURIComponent(input + " bank swift micr code details")}`;
+            dataRows.innerHTML = info || `<div class="info-row">No direct data found. Use Google links below.</div>`;
+            results.style.display = 'block';
+
+        } catch (e) {
+            alert("Connection Error! 🚩");
+        }
+    }
+</script>
+
+</body>
+</html>
