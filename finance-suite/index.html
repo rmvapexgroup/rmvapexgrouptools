@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Finance Suite Pro | RMV APEX GROUP</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root { --p: #0070f3; --d: #0f172a; --bg: #f8fafc; --gold: #f59e0b; --success: #10b981; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); margin: 0; padding: 20px; position: relative; overflow-x: hidden; user-select: none; }
+        .watermark { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-30deg); font-size: 5rem; font-weight: 900; color: rgba(15, 23, 42, 0.03); z-index: 0; pointer-events: none; text-transform: uppercase; white-space: nowrap; }
+        
+        .container { max-width: 500px; margin: 0 auto; position: relative; z-index: 10; }
+        .card { background: white; padding: 30px; border-radius: 35px; box-shadow: 0 20px 50px rgba(0,0,0,0.05); border: 1px solid #f1f5f9; position: relative; }
+        .card::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 8px; background: linear-gradient(90deg, var(--p), var(--gold)); border-radius: 35px 35px 0 0; }
+        
+        /* Tab Styling */
+        .nav-tabs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 25px; }
+        .tab-btn { padding: 10px; border: none; border-radius: 12px; background: #f1f5f9; color: #64748b; font-weight: 800; font-size: 0.65rem; cursor: pointer; transition: 0.3s; text-transform: uppercase; }
+        .tab-btn.active { background: var(--d); color: white; }
+
+        .tool-content { display: none; animation: fadeIn 0.4s ease; }
+        .tool-content.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        input { width: 100%; padding: 14px; border-radius: 12px; border: 2px solid #f1f5f9; font-weight: 700; margin-bottom: 12px; box-sizing: border-box; outline: none; transition: 0.3s; }
+        input:focus { border-color: var(--p); background: #fdfdfd; }
+
+        .btn-calc { width: 100%; padding: 15px; border: none; border-radius: 12px; background: var(--p); color: white; font-weight: 800; cursor: pointer; transition: 0.3s; margin-top: 5px; }
+        .btn-calc:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0,112,243,0.3); }
+
+        .result-box { margin-top: 20px; padding: 20px; border-radius: 20px; background: #f0f9ff; border: 2px dashed #bae6fd; text-align: center; display: none; }
+        .result-box h3 { margin: 0; color: var(--d); font-size: 1.2rem; }
+        .result-box p { margin: 5px 0 0; font-size: 0.7rem; font-weight: 800; color: var(--p); text-transform: uppercase; }
+
+        .footer { text-align: center; margin-top: 25px; font-size: 0.65rem; color: #94a3b8; font-weight: 800; line-height: 1.5; }
+        .support-links { display: flex; justify-content: center; gap: 10px; margin-top: 15px; }
+        .support-links a { text-decoration: none; font-size: 0.7rem; background: #fff; padding: 8px 12px; border-radius: 10px; color: var(--d); font-weight: 800; border: 1px solid #f1f5f9; }
+    </style>
+</head>
+<body oncontextmenu="return false">
+
+<div class="watermark">RMV APEX GROUP</div>
+
+<div class="container">
+    <div class="card">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <a href="../index.html" style="text-decoration:none; color:var(--gold); font-weight:800; font-size:0.7rem;">← DASHBOARD</a>
+            <span style="font-size: 0.6rem; font-weight: 800; color: #94a3b8;">FINANCE PRO v5.0</span>
+        </div>
+
+        <h2 style="text-align:center; margin-bottom: 20px;">💰 Finance Suite</h2>
+
+        <div class="nav-tabs">
+            <button class="tab-btn active" onclick="openTool(event, 'emi')">EMI</button>
+            <button class="tab-btn" onclick="openTool(event, 'gst')">GST</button>
+            <button class="tab-btn" onclick="openTool(event, 'disc')">DISC</button>
+            <button class="tab-btn" onclick="openTool(event, 'profit')">PROFIT</button>
+            <button class="tab-btn" onclick="openTool(event, 'interest')">INT</button>
+            <button class="tab-btn" onclick="openTool(event, 'cur')">USD/INR</button>
+        </div>
+
+        <div id="emi" class="tool-content active">
+            <input type="number" id="loan" placeholder="Loan Amount (₹)">
+            <input type="number" id="rate" placeholder="Interest Rate %">
+            <input type="number" id="time" placeholder="Tenure (Months)">
+            <button class="btn-calc" onclick="calcEMI()">CALCULATE EMI</button>
+            <div id="res-emi" class="result-box"></div>
+        </div>
+
+        <div id="gst" class="tool-content">
+            <input type="number" id="gstprice" placeholder="Amount (₹)">
+            <input type="number" id="gstpercent" placeholder="GST % (e.g. 18)">
+            <button class="btn-calc" onclick="calcGST()">CALCULATE GST</button>
+            <div id="res-gst" class="result-box"></div>
+        </div>
+
+        <div id="disc" class="tool-content">
+            <input type="number" id="price" placeholder="Original Price (₹)">
+            <input type="number" id="discount" placeholder="Discount %">
+            <button class="btn-calc" onclick="calcDisc()">CALCULATE DISCOUNT</button>
+            <div id="res-disc" class="result-box"></div>
+        </div>
+
+        <div id="profit" class="tool-content">
+            <input type="number" id="cp" placeholder="Cost Price (₹)">
+            <input type="number" id="sp" placeholder="Selling Price (₹)">
+            <button class="btn-calc" onclick="calcProfit()">CALCULATE PROFIT/LOSS</button>
+            <div id="res-profit" class="result-box"></div>
+        </div>
+
+        <div id="interest" class="tool-content">
+            <input type="number" id="p" placeholder="Principal Amount (₹)">
+            <input type="number" id="r" placeholder="Rate % P.A.">
+            <input type="number" id="t" placeholder="Time (Years)">
+            <button class="btn-calc" onclick="calcInt()">CALCULATE INTEREST</button>
+            <div id="res-int" class="result-box"></div>
+        </div>
+
+        <div id="cur" class="tool-content">
+            <input type="number" id="usd" placeholder="USD Amount ($)">
+            <p style="text-align:center; font-size:0.6rem; color:#94a3b8; font-weight:800;">Note: Static Rate 1 USD = ₹83</p>
+            <button class="btn-calc" onclick="calcCur()">CONVERT TO INR</button>
+            <div id="res-cur" class="result-box"></div>
+        </div>
+
+        <div class="footer">
+            BY RAMESH MEWALAL VISHWAKARMA 🚩<br>
+            POWERED BY RMV APEX GROUP © 2026
+        </div>
+
+        <div class="support-links">
+            <a href="https://buymeacoffee.com/rameshmewalalvishwakarma" target="_blank">☕ Coffee</a>
+            <a href="https://ko-fi.com/rameshmewalalvishwakarma" target="_blank">💖 Support</a>
+        </div>
+    </div>
+</div>
+
+<script>
+    function openTool(evt, toolName) {
+        let i, content, tabs;
+        content = document.getElementsByClassName("tool-content");
+        for (i = 0; i < content.length; i++) { content[i].style.display = "none"; }
+        tabs = document.getElementsByClassName("tab-btn");
+        for (i = 0; i < tabs.length; i++) { tabs[i].className = tabs[i].className.replace(" active", ""); }
+        document.getElementById(toolName).style.display = "block";
+        evt.currentTarget.className += " active";
+        // Hide all result boxes when switching
+        document.querySelectorAll('.result-box').forEach(r => r.style.display = 'none');
+    }
+
+    function showRes(id, title, val) {
+        const box = document.getElementById(id);
+        box.innerHTML = `<p>${title}</p><h3>${val}</h3>`;
+        box.style.display = "block";
+    }
+
+    function calcEMI() {
+        let P = +loan.value, R = rate.value/1200, N = +time.value;
+        if(!P || !R || !N) return;
+        let E = (P * R * Math.pow(1+R, N)) / (Math.pow(1+R, N) - 1);
+        showRes('res-emi', 'Monthly EMI', '₹' + Math.round(E).toLocaleString());
+    }
+
+    function calcGST() {
+        let p = +gstprice.value, g = +gstpercent.value;
+        let tax = p * g / 100;
+        showRes('res-gst', 'Total with GST', '₹' + (p + tax).toLocaleString());
+    }
+
+    function calcDisc() {
+        let p = +price.value, d = +discount.value;
+        let save = p * d / 100;
+        showRes('res-disc', 'Final Price', '₹' + (p - save).toLocaleString());
+    }
+
+    function calcProfit() {
+        let cpv = +cp.value, spv = +sp.value;
+        let res = spv - cpv;
+        let type = res >= 0 ? "Profit" : "Loss";
+        showRes('res-profit', type, '₹' + Math.abs(res).toLocaleString());
+    }
+
+    function calcInt() {
+        let P = +p.value, R = +r.value, T = +t.value;
+        let SI = (P * R * T) / 100;
+        showRes('res-int', 'Simple Interest', '₹' + SI.toLocaleString());
+    }
+
+    function calcCur() {
+        let u = +usd.value;
+        showRes('res-cur', 'Indian Rupees', '₹' + (u * 83).toLocaleString());
+    }
+
+    console.log("%cRMV APEX GROUP PROTECTION ACTIVE","color:red;font-size:16px;");
+</script>
+</body>
+</html>
