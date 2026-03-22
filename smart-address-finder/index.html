@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Address Finder | RMV APEX</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root { --bg: #f0f2f5; --card: #ffffff; --accent: #4285f4; --text: #1f1f1f; --shadow: rgba(0,0,0,0.1); }
+        [data-theme="dark"] { --bg: #0b0f19; --card: #161b22; --accent: #58a6ff; --text: #e6edf3; --shadow: rgba(0,0,0,0.5); }
+        
+        body { background: var(--bg); color: var(--text); font-family: 'Plus Jakarta Sans', sans-serif; margin: 0; padding: 15px; transition: 0.3s; }
+        .container { width: 100%; max-width: 600px; margin: auto; background: var(--card); padding: 25px; border-radius: 24px; box-shadow: 0 10px 30px var(--shadow); border: 1px solid rgba(255,255,255,0.1); }
+        
+        h1 { text-align: center; font-size: 1.6rem; color: var(--accent); margin-bottom: 5px; }
+        .tagline { text-align: center; font-size: 10px; color: #8b949e; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 25px; }
+
+        .search-box { background: rgba(0,0,0,0.05); border-radius: 16px; border: 1px solid rgba(0,0,0,0.1); padding: 5px; display: flex; margin-bottom: 15px; }
+        [data-theme="dark"] .search-box { background: #010409; border-color: #30363d; }
+        input { flex: 1; background: transparent; border: none; padding: 12px; color: var(--text); font-size: 16px; outline: none; }
+        
+        .action-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 10px; margin-bottom: 20px; }
+        .btn { border: none; padding: 14px; border-radius: 12px; font-weight: 800; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: 0.2s; font-size: 13px; }
+        .btn-find { background: var(--accent); color: white; }
+        .btn-clear { background: #ea4335; color: white; }
+        .btn:active { transform: scale(0.96); }
+
+        #resultArea { display: none; animation: slideUp 0.4s ease; }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        .map-frame { width: 100%; height: 350px; border-radius: 20px; border: 1px solid rgba(0,0,0,0.1); overflow: hidden; margin-bottom: 15px; background: #eee; }
+        iframe { width: 100%; height: 100%; border: none; }
+
+        .tool-bar { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 10px; }
+        .tool-btn { background: #f8f9fa; border: 1px solid #ddd; padding: 10px; border-radius: 10px; text-decoration: none; font-size: 11px; font-weight: 800; color: #444; text-align: center; transition: 0.2s; }
+        [data-theme="dark"] .tool-btn { background: #21262d; border-color: #30363d; color: #fff; }
+        .tool-btn:hover { background: var(--accent); color: white; }
+
+        /* Support Section 🚩 */
+        .support-card { margin-top: 30px; text-align: center; padding-top: 20px; border-top: 1px dashed #ccc; }
+        .support-btns { display: flex; flex-direction: column; gap: 10px; align-items: center; margin-top: 15px; }
+
+        .footer { text-align: center; margin-top: 30px; font-size: 9px; color: #8b949e; line-height: 1.6; }
+    </style>
+</head>
+<body data-theme="dark">
+
+<div class="container">
+    <h1>📍 Smart Address Finder</h1>
+    <div class="tagline">BY RAMESH MEWALAL VISHWAKARMA 🚩</div>
+
+    <div class="search-box">
+        <input type="text" id="locInput" placeholder="किसी भी जगह का नाम या पता लिखें...">
+    </div>
+
+    <div class="action-grid">
+        <button class="btn btn-find" onclick="findAddress()"><i class="fas fa-location-arrow"></i> Find Location</button>
+        <button class="btn btn-clear" onclick="resetAll()"><i class="fas fa-trash-alt"></i> Clear</button>
+    </div>
+
+    <div id="resultArea">
+        <div class="map-frame">
+            <iframe id="mapIframe" src=""></iframe>
+        </div>
+
+        <div class="tool-bar">
+            <a id="directMap" target="_blank" class="tool-btn"><i class="fas fa-directions"></i> Get Directions</a>
+            <a id="streetView" target="_blank" class="tool-btn"><i class="fas fa-street-view"></i> Street View</a>
+            <button class="tool-btn" onclick="shareLoc()"><i class="fas fa-share-alt"></i> Share Address</button>
+        </div>
+    </div>
+
+    <div class="support-card">
+        <div style="font-size: 11px; font-weight: 800; color: #8b949e;">SUPPORT MY WORK 🚩</div>
+        <div class="support-btns">
+            <a href="https://buymeacoffee.com/rameshmewalalvishwakarma" target="_blank">
+                <img src="https://img.buymeacoffee.com/button-api/?text=Buy me a coffee&emoji=☕&slug=rameshmewalalvishwakarma&button_colour=FFDD00&font_colour=000000&outline_colour=000000" style="height: 38px; border-radius: 8px;">
+            </a>
+            <a href="https://ko-fi.com/rameshmewalalvishwakarma" target="_blank" style="background:#29abe0; color:white; padding:10px 20px; border-radius:10px; text-decoration:none; font-weight:800; font-size:11px; display:flex; align-items:center; gap:8px;">
+                <i class="fas fa-mug-hot"></i> Support on Ko-fi
+            </a>
+        </div>
+    </div>
+
+    <div class="footer">
+        CRAFTED BY RAMESH MEWALAL VISHWAKARMA 🚩<br>
+        RMV APEX GROUP © 2026
+    </div>
+</div>
+
+<script>
+    function findAddress() {
+        const query = document.getElementById('locInput').value.trim();
+        if(!query) return alert("कृपया पता दर्ज करें! 🚩");
+
+        const resultArea = document.getElementById('resultArea');
+        const mapIframe = document.getElementById('mapIframe');
+        const encodedQuery = encodeURIComponent(query);
+
+        // 1. Embedded Map (Site View)
+        mapIframe.src = `https://www.google.com/maps/embed/v1/place?key=REPLACE_WITH_YOUR_KEY&q=${encodedQuery}`;
+        // Note: For FREE version without API key, we use search output:
+        mapIframe.src = `https://www.google.com/maps?q=${encodedQuery}&output=embed`;
+
+        // 2. Direct Navigation Link
+        document.getElementById('directMap').href = `https://www.google.com/maps/dir/?api=1&destination=${encodedQuery}`;
+        
+        // 3. Street View / Search Link
+        document.getElementById('streetView').href = `https://www.google.com/search?q=${encodedQuery}+address+contact+photos&tbm=lcl`;
+
+        resultArea.style.display = 'block';
+    }
+
+    function shareLoc() {
+        const query = document.getElementById('locInput').value;
+        const text = `📍 Check this location: ${query}\nShared via RMV Address Finder 🚩`;
+        navigator.clipboard.writeText(text).then(() => alert("Address link copied! ✅"));
+    }
+
+    function resetAll() {
+        document.getElementById('locInput').value = "";
+        document.getElementById('resultArea').style.display = 'none';
+    }
+</script>
+
+</body>
+</html>
