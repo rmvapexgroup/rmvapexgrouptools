@@ -3,247 +3,199 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RMV APEX GROUP | Ultra Pro V11 🚩</title>
+    <title>RMV APEX GROUP | PRO V11 🚩</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
-        :root { --bg: #05070a; --accent: #00d2ff; --glass: rgba(255, 255, 255, 0.05); --success: #238636; --gold: #ffd700; }
+        :root { --bg: #05070a; --accent: #00d2ff; --glass: rgba(255, 255, 255, 0.05); --gold: #ffd700; }
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: #fff; display: flex; flex-direction: column; align-items: center; padding: 20px; position: relative; }
-
-        /* Background Watermark */
-        body::before {
-            content: "RMV APEX GROUP";
-            position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-30deg);
-            font-size: 8vw; font-weight: 900; color: rgba(255, 255, 255, 0.02); z-index: -1; pointer-events: none;
+        
+        body { 
+            font-family: 'Segoe UI', sans-serif; background: var(--bg); color: #fff; 
+            display: flex; flex-direction: column; align-items: center; padding: 20px; 
+            position: relative;
         }
 
-        .container { background: var(--glass); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.1); padding: 30px; border-radius: 30px; width: 100%; max-width: 800px; border-top: 6px solid var(--accent); box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
-        .header h1 { color: var(--accent); text-align: center; font-weight: 900; margin-bottom: 5px; text-transform: uppercase; }
-        .header p { text-align: center; font-size: 10px; opacity: 0.6; margin-bottom: 25px; letter-spacing: 2px; }
-        
-        .input-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; margin-bottom: 20px; }
-        .input-box { background: #000; border: 1px solid #333; border-radius: 12px; padding: 12px; }
-        .input-box label { font-size: 10px; color: var(--accent); display: block; text-transform: uppercase; font-weight: bold; margin-bottom: 5px; }
-        .input-box input, .input-box select { background: transparent; border: none; color: #fff; width: 100%; outline: none; font-size: 16px; font-weight: bold; }
-        select option { background: #000; }
+        /* Visible Repeating Watermark */
+        .watermark-bg {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1; pointer-events: none; opacity: 0.05; /* Increased visibility */
+            display: flex; flex-wrap: wrap; justify-content: space-around; align-content: space-around;
+        }
+        .wm-text { transform: rotate(-30deg); font-weight: 900; font-size: 20px; white-space: nowrap; margin: 40px; }
 
-        .btn-main { width: 100%; padding: 18px; border: none; border-radius: 12px; background: linear-gradient(135deg, #00d2ff, #3a7bd5); color: #fff; font-weight: 900; cursor: pointer; margin-bottom: 15px; font-size: 16px; box-shadow: 0 10px 20px rgba(0,210,255,0.2); }
-        
-        .action-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 20px; }
-        .act-btn { padding: 12px; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; color: #fff; font-size: 11px; transition: 0.3s; }
-        .act-btn:hover { transform: scale(1.05); }
+        .container { 
+            background: var(--glass); backdrop-filter: blur(15px); border: 1px solid rgba(255,255,255,0.1); 
+            padding: 25px; border-radius: 25px; width: 100%; max-width: 850px; 
+            border-top: 5px solid var(--accent);
+        }
 
-        /* Summary Dashboard */
-        #summary { display: none; background: rgba(255,255,255,0.03); border-radius: 20px; padding: 20px; margin-bottom: 25px; border: 1px solid rgba(255,255,255,0.1); }
-        .sum-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 15px; text-align: center; }
-        .sum-card span { font-size: 10px; opacity: 0.7; display: block; margin-bottom: 5px; }
-        .sum-card b { font-size: 1.4rem; color: var(--accent); }
+        .header h1 { color: var(--accent); text-align: center; font-weight: 900; text-transform: uppercase; margin-bottom: 5px; }
+        .header p { text-align: center; font-size: 10px; opacity: 0.6; margin-bottom: 20px; }
 
-        /* Table Report */
-        .report-wrap { overflow-x: auto; margin-top: 20px; display: none; }
-        table { width: 100%; border-collapse: collapse; font-size: 12px; text-align: center; }
-        th { background: var(--accent); color: #000; padding: 12px; text-transform: uppercase; }
-        td { padding: 12px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .input-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; margin-bottom: 20px; }
+        .i-box { background: #000; border: 1px solid #333; padding: 10px; border-radius: 10px; }
+        .i-box label { font-size: 9px; color: var(--accent); display: block; font-weight: bold; margin-bottom: 4px; }
+        .i-box input, .i-box select { background: transparent; border: none; color: #fff; width: 100%; outline: none; font-size: 15px; font-weight: bold; }
+
+        .btn-calc { 
+            width: 100%; padding: 15px; border: none; border-radius: 12px; 
+            background: linear-gradient(135deg, #00d2ff, #3a7bd5); color: #fff; 
+            font-weight: 900; cursor: pointer; font-size: 15px; margin-bottom: 15px;
+        }
+
+        .action-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 20px; }
+        .act-btn { padding: 10px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; color: #fff; font-size: 10px; }
+
+        #summary { display: none; background: rgba(0,210,255,0.05); padding: 15px; border-radius: 15px; margin-bottom: 20px; text-align: center; }
+        .sum-val { font-size: 1.5rem; color: var(--accent); font-weight: 900; display: block; }
+
+        /* Report Table Styling */
+        .report-section { display: none; margin-top: 10px; }
+        .table-scroll { overflow-x: auto; width: 100%; }
+        table { width: 100%; border-collapse: collapse; font-size: 11px; }
+        th { background: var(--accent); color: #000; padding: 10px; }
+        td { padding: 10px; border-bottom: 1px solid rgba(255,255,255,0.05); text-align: center; }
         tr:nth-child(even) { background: rgba(255,255,255,0.02); }
-        .highlight { color: var(--gold); font-weight: bold; }
 
-        .sup-links { margin-top: 25px; display: grid; grid-template-columns: 1fr 1fr; gap: 15px; width: 100%; max-width: 800px; }
-        .s-btn { padding: 18px; border-radius: 15px; text-decoration: none; font-weight: 900; text-align: center; font-size: 12px; box-shadow: 0 10px 20px rgba(0,0,0,0.3); }
-        
-        .ticker { position: fixed; bottom: 0; width: 100%; background: #000; padding: 12px; font-size: 10px; color: var(--accent); border-top: 1px solid var(--accent); text-align: center; z-index: 99; font-weight: bold; }
+        .sup-links { margin-top: 30px; display: grid; grid-template-columns: 1fr 1fr; gap: 15px; width: 100%; max-width: 850px; }
+        .s-btn { padding: 15px; border-radius: 12px; text-decoration: none; font-weight: 900; text-align: center; font-size: 11px; }
+
+        .footer { margin-top: 30px; font-size: 10px; opacity: 0.5; font-weight: bold; }
     </style>
 </head>
 <body onload="checkSaved()">
 
-    <div class="container" id="master-report">
+    <div class="watermark-bg" id="wm-container">
+        </div>
+
+    <div class="container" id="printable-area">
         <div class="header">
             <h1>RMV APEX GROUP 🚩</h1>
-            <p>ADVANCED LOAN AMORTIZATION HUB V11</p>
+            <p>ADVANCED AMORTIZATION HUB V11.0</p>
         </div>
 
         <div class="input-grid">
-            <div class="input-box">
-                <label>Loan Amount (₹)</label>
-                <input type="number" id="principal" placeholder="eg. 500000">
-            </div>
-            <div class="input-box">
-                <label>Rate (%) Type</label>
-                <select id="rateType">
-                    <option value="reducing">Reducing Balance</option>
-                    <option value="fixed">Fixed Rate</option>
-                </select>
-            </div>
-            <div class="input-box">
-                <label>Annual Interest (%)</label>
-                <input type="number" id="roi" placeholder="eg. 10.5">
-            </div>
-            <div class="input-box">
-                <label>Tenure (Months)</label>
-                <input type="number" id="tenure" placeholder="eg. 24">
-            </div>
+            <div class="i-box"><label>LOAN AMOUNT (₹)</label><input type="number" id="p_val" placeholder="0"></div>
+            <div class="i-box"><label>RATE TYPE</label><select id="r_type"><option value="red">Reducing</option><option value="fix">Fixed</option></select></div>
+            <div class="i-box"><label>INTEREST (%)</label><input type="number" id="r_val" placeholder="0"></div>
+            <div class="i-box"><label>TENURE (MOS)</label><input type="number" id="n_val" placeholder="0"></div>
         </div>
 
-        <button class="btn-main" onclick="processUltraReport()">🚀 GENERATE AMORTIZATION REPORT</button>
+        <button class="btn-calc" onclick="generateReport()">🚀 GENERATE FULL REPORT</button>
 
         <div class="action-row">
-            <button class="act-btn" style="background:var(--success)" onclick="saveData()">SAVE</button>
-            <button class="act-btn" style="background:#4a5568" onclick="exportPDF()">DOWNLOAD PDF</button>
-            <button class="act-btn" style="background:#c53030" onclick="resetAll()">RESET</button>
+            <button class="act-btn" style="background:#238636" onclick="saveData()">SAVE</button>
+            <button class="act-btn" style="background:#4a5568" onclick="downloadPDF()">DOWNLOAD PDF</button>
+            <button class="act-btn" style="background:#c53030" onclick="resetPage()">RESET</button>
         </div>
 
         <div id="summary">
-            <div class="sum-grid">
-                <div class="sum-card"><span>MONTHLY EMI</span><b id="res_emi">₹0</b></div>
-                <div class="sum-card"><span>TOTAL INTEREST</span><b id="res_int" style="color:var(--gold);">₹0</b></div>
-                <div class="sum-card"><span>TOTAL REPAYMENT</span><b id="res_tot">₹0</b></div>
+            <div style="display:flex; justify-content: space-around;">
+                <div><span style="font-size:10px;">EMI</span><b class="sum-val" id="res_emi">₹0</b></div>
+                <div><span style="font-size:10px;">TOTAL INTEREST</span><b class="sum-val" id="res_int" style="color:var(--gold)">₹0</b></div>
             </div>
         </div>
 
-        <div class="report-wrap" id="report-wrap">
-            <h3 style="text-align:center; color:var(--accent); margin-bottom:15px; font-size: 14px;">MONTH-WISE REPAYMENT SCHEDULE</h3>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Month</th>
-                        <th>Opening Bal</th>
-                        <th>EMI</th>
-                        <th>Interest</th>
-                        <th>Principal</th>
-                        <th>Closing Bal</th>
-                    </tr>
-                </thead>
-                <tbody id="table-body"></tbody>
-            </table>
+        <div class="report-section" id="report-sec">
+            <div class="table-scroll">
+                <table>
+                    <thead>
+                        <tr><th>Month</th><th>Opening</th><th>EMI</th><th>Interest</th><th>Principal</th><th>Closing</th></tr>
+                    </thead>
+                    <tbody id="t-body"></tbody>
+                </table>
+            </div>
         </div>
     </div>
 
     <div class="sup-links">
-        <a href="https://buymeacoffee.com/rameshmewalalvishwakarma" target="_blank" class="s-btn" style="background:#FFDD00; color:#000;"><i class="fas fa-coffee"></i> BUY ME A COFFEE</a>
-        <a href="https://ko-fi.com/rameshmewalalvishwakarma" target="_blank" class="s-btn" style="background:#29abe0; color:#fff;"><i class="fas fa-heart"></i> SUPPORT ON KO-FI</a>
+        <a href="https://buymeacoffee.com/rameshmewalalvishwakarma" target="_blank" class="s-btn" style="background:#FFDD00; color:#000;">☕ BUY ME A COFFEE</a>
+        <a href="https://ko-fi.com/rameshmewalalvishwakarma" target="_blank" class="s-btn" style="background:#29abe0; color:#fff;">❤️ SUPPORT ON KO-FI</a>
     </div>
 
-    <div class="ticker"><marquee>🚩 RMV APEX GROUP | PROFESSIONAL FINANCIAL HUB | ADVANCED REDUCING BALANCE CALCULATOR | CRAFTED BY RAMESH MEWALAL VISHWAKARMA 🚩</marquee></div>
+    <div class="footer">🚩 RMV APEX GROUP | CRAFTED BY RAMESH MEWALAL VISHWAKARMA 🚩</div>
 
     <script>
-        function processUltraReport() {
-            const P = parseFloat(document.getElementById('principal').value);
-            const r_annual = parseFloat(document.getElementById('roi').value);
-            const N = parseInt(document.getElementById('tenure').value);
-            const type = document.getElementById('rateType').value;
+        // Generate Watermark Tiles
+        const wmContainer = document.getElementById('wm-container');
+        for(let i=0; i<40; i++) {
+            wmContainer.innerHTML += `<div class="wm-text">RMV APEX GROUP</div>`;
+        }
 
-            if (!P || !r_annual || !N) return alert("कृपया सभी आंकड़े भरें! 🚩");
+        function generateReport() {
+            const P = parseFloat(document.getElementById('p_val').value);
+            const r_ann = parseFloat(document.getElementById('r_val').value);
+            const N = parseInt(document.getElementById('n_val').value);
+            const type = document.getElementById('r_type').value;
 
-            let emi = 0;
-            let totalInterest = 0;
-            let schedule = [];
+            if(!P || !r_ann || !N) return alert("Fill All! 🚩");
 
-            if (type === "reducing") {
-                const R = r_annual / 12 / 100;
-                emi = (P * R * Math.pow(1 + R, N)) / (Math.pow(1 + R, N) - 1);
-                
-                let balance = P;
-                for (let i = 1; i <= N; i++) {
-                    let interest = balance * R;
-                    let principal = emi - interest;
-                    let opening = balance;
-                    balance -= principal;
-                    if (balance < 0) balance = 0;
-                    
-                    schedule.push({
-                        month: i,
-                        opening: opening,
-                        emi: emi,
-                        interest: interest,
-                        principal: principal,
-                        closing: balance
-                    });
-                    totalInterest += interest;
+            let emi, totalInt = 0, balance = P, tbody = document.getElementById('t-body');
+            tbody.innerHTML = "";
+
+            if(type === 'red') {
+                const R = r_ann / 12 / 100;
+                emi = (P * R * Math.pow(1+R, N)) / (Math.pow(1+R, N) - 1);
+                for(let i=1; i<=N; i++) {
+                    let int_m = balance * R;
+                    let prin_m = emi - int_m;
+                    let open = balance;
+                    balance -= prin_m;
+                    totalInt += int_m;
+                    addTableRow(i, open, emi, int_m, prin_m, balance);
                 }
             } else {
-                // Fixed Rate Calculation
-                totalInterest = (P * r_annual * (N / 12)) / 100;
-                let totalPayable = P + totalInterest;
-                emi = totalPayable / N;
-                let monthlyInt = totalInterest / N;
-                let monthlyPrin = P / N;
-                
-                let balance = P;
-                for (let i = 1; i <= N; i++) {
-                    let opening = balance;
-                    balance -= monthlyPrin;
-                    schedule.push({
-                        month: i,
-                        opening: opening,
-                        emi: emi,
-                        interest: monthlyInt,
-                        principal: monthlyPrin,
-                        closing: balance
-                    });
+                totalInt = (P * r_ann * (N/12)) / 100;
+                emi = (P + totalInt) / N;
+                let m_int = totalInt / N, m_prin = P / N;
+                for(let i=1; i<=N; i++) {
+                    let open = balance;
+                    balance -= m_prin;
+                    addTableRow(i, open, emi, m_int, m_prin, balance);
                 }
             }
 
-            // Update Summary
             document.getElementById('res_emi').innerText = "₹" + Math.round(emi).toLocaleString('en-IN');
-            document.getElementById('res_int').innerText = "₹" + Math.round(totalInterest).toLocaleString('en-IN');
-            document.getElementById('res_tot').innerText = "₹" + Math.round(P + totalInterest).toLocaleString('en-IN');
+            document.getElementById('res_int').innerText = "₹" + Math.round(totalInt).toLocaleString('en-IN');
             document.getElementById('summary').style.display = 'block';
+            document.getElementById('report-sec').style.display = 'block';
+        }
 
-            // Update Table
-            const tbody = document.getElementById('table-body');
-            tbody.innerHTML = "";
-            schedule.forEach(row => {
-                tbody.innerHTML += `
-                    <tr>
-                        <td>${row.month}</td>
-                        <td>₹${Math.round(row.opening).toLocaleString('en-IN')}</td>
-                        <td class="highlight">₹${Math.round(row.emi).toLocaleString('en-IN')}</td>
-                        <td>₹${Math.round(row.interest).toLocaleString('en-IN')}</td>
-                        <td>₹${Math.round(row.principal).toLocaleString('en-IN')}</td>
-                        <td style="color:var(--accent)">₹${Math.max(0, Math.round(row.closing)).toLocaleString('en-IN')}</td>
-                    </tr>
-                `;
-            });
-            document.getElementById('report-wrap').style.display = 'block';
+        function addTableRow(m, o, e, i, p, c) {
+            document.getElementById('t-body').innerHTML += `<tr><td>${m}</td><td>${Math.round(o)}</td><td style="color:var(--gold)">${Math.round(e)}</td><td>${Math.round(i)}</td><td>${Math.round(p)}</td><td style="color:var(--accent)">${Math.max(0, Math.round(c))}</td></tr>`;
+        }
+
+        function downloadPDF() {
+            const element = document.getElementById('printable-area');
+            const opt = {
+                margin: 5, filename: 'RMV_APEX_GROUP_REPORT.pdf',
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2, backgroundColor: '#05070a', useCORS: true },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
+            html2pdf().set(opt).from(element).save();
         }
 
         function saveData() {
-            const data = {
-                p: document.getElementById('principal').value,
-                r: document.getElementById('roi').value,
-                n: document.getElementById('tenure').value,
-                t: document.getElementById('rateType').value
-            };
-            localStorage.setItem('rmv_ultra_v11', JSON.stringify(data));
-            alert("Data Saved! 🚩");
+            const d = { p:document.getElementById('p_val').value, r:document.getElementById('r_val').value, n:document.getElementById('n_val').value, t:document.getElementById('r_type').value };
+            localStorage.setItem('rmv_v11_fix', JSON.stringify(d));
+            alert("Saved! 🚩");
         }
 
         function checkSaved() {
-            const s = localStorage.getItem('rmv_ultra_v11');
-            if (s) {
+            const s = localStorage.getItem('rmv_v11_fix');
+            if(s) {
                 const d = JSON.parse(s);
-                document.getElementById('principal').value = d.p;
-                document.getElementById('roi').value = d.r;
-                document.getElementById('tenure').value = d.n;
-                document.getElementById('rateType').value = d.t;
+                document.getElementById('p_val').value = d.p;
+                document.getElementById('r_val').value = d.r;
+                document.getElementById('n_val').value = d.n;
+                document.getElementById('r_type').value = d.t;
             }
         }
 
-        function exportPDF() {
-            const element = document.getElementById('master-report');
-            html2pdf().from(element).set({
-                margin: 5,
-                filename: 'RMV_APEX_AMORTIZATION.pdf',
-                html2canvas: { scale: 2, backgroundColor: '#05070a' },
-                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-            }).save();
-        }
-
-        function resetAll() {
-            localStorage.removeItem('rmv_ultra_v11');
-            location.reload();
-        }
+        function resetPage() { localStorage.removeItem('rmv_v11_fix'); location.reload(); }
     </script>
 </body>
 </html>
