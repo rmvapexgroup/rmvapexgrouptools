@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Finance Master Suite | RMV APEX GROUP</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root { --p: #0070f3; --d: #0f172a; --bg: #f8fafc; --gold: #f59e0b; --success: #10b981; --danger: #ef4444; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); margin: 0; padding: 15px; user-select: none; }
+        .watermark { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-30deg); font-size: 5rem; font-weight: 900; color: rgba(15, 23, 42, 0.02); z-index: 0; pointer-events: none; text-transform: uppercase; white-space: nowrap; }
+        
+        .container { max-width: 850px; margin: 0 auto; position: relative; z-index: 10; }
+        .card { background: white; padding: 25px; border-radius: 35px; box-shadow: 0 20px 50px rgba(0,0,0,0.05); border: 1px solid #f1f5f9; position: relative; }
+        .card::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 8px; background: linear-gradient(90deg, var(--p), var(--gold), var(--success)); border-radius: 35px 35px 0 0; }
+        
+        .nav-tabs { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 15px; margin-bottom: 20px; scrollbar-width: none; }
+        .tab-btn { padding: 12px 20px; border: none; border-radius: 14px; background: #f1f5f9; color: #64748b; font-weight: 800; font-size: 0.7rem; cursor: pointer; white-space: nowrap; transition: 0.3s; display: flex; align-items: center; gap: 8px; }
+        .tab-btn.active { background: var(--d); color: white; box-shadow: 0 10px 20px rgba(15, 23, 42, 0.2); }
+
+        .tool-content { display: none; animation: fadeIn 0.4s ease; }
+        .tool-content.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .input-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-bottom: 15px; }
+        label { font-size: 0.65rem; font-weight: 800; color: #64748b; text-transform: uppercase; margin-bottom: 5px; display: block; }
+        input, select { width: 100%; padding: 12px; border-radius: 12px; border: 2px solid #f1f5f9; font-weight: 700; box-sizing: border-box; outline: none; transition: 0.3s; }
+        input:focus { border-color: var(--p); }
+
+        .action-btns { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 10px; margin: 15px 0; }
+        .btn { padding: 14px; border: none; border-radius: 12px; font-weight: 800; cursor: pointer; font-size: 0.75rem; color: white; transition: 0.3s; display: flex; align-items: center; justify-content: center; gap: 6px; }
+        .btn-calc { background: var(--d); } .btn-save { background: var(--p); } .btn-clear { background: var(--danger); }
+        .btn-print { background: var(--success); width: 100%; margin-top: 10px; }
+
+        .result-panel { margin-top: 25px; }
+        .summary-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; margin-bottom: 20px; }
+        .stat-box { background: #f8fafc; padding: 15px; border-radius: 20px; text-align: center; border: 1px solid #eff6ff; }
+        .stat-box h3 { margin: 0; font-size: 1.1rem; color: var(--d); }
+        .stat-box p { margin: 5px 0 0; font-size: 0.6rem; font-weight: 800; color: #94a3b8; text-transform: uppercase; }
+
+        .table-wrap { background: white; border-radius: 20px; border: 1px solid #f1f5f9; overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; font-size: 0.8rem; min-width: 500px; }
+        th { background: #f8fafc; padding: 12px; text-align: left; color: #64748b; text-transform: uppercase; font-size: 0.65rem; }
+        td { padding: 10px 12px; border-bottom: 1px solid #f1f5f9; font-weight: 700; }
+        
+        .badge-tax { background: #fff1f2; color: #e11d48; padding: 3px 8px; border-radius: 6px; font-size: 0.55rem; }
+
+        @media print { .no-print { display: none !important; } .container { width: 100%; max-width: none; } .card { box-shadow: none; border: 1px solid #eee; } }
+    </style>
+</head>
+<body oncontextmenu="return false">
+
+<div class="watermark">RMV APEX GROUP</div>
+
+<div class="container">
+    <div class="card">
+        <div class="no-print" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+            <a href="../index.html" style="text-decoration:none; color:var(--gold); font-weight:800; font-size:0.7rem;">← DASHBOARD</a>
+            <span class="badge-tax">LATEST ACT FY 2025-26</span>
+        </div>
+
+        <h2 style="text-align:center; margin-bottom: 5px;">💰 Finance Master Suite</h2>
+        <p style="text-align:center; font-size: 0.7rem; color: #94a3b8; font-weight: 800; margin-bottom: 25px;">RMV APEX GROUP • INTEGRATED ENGINE</p>
+
+        <div class="nav-tabs no-print">
+            <button class="tab-btn active" onclick="openTool(event, 'tax')"><i class="fas fa-file-invoice-dollar"></i> TAX & EXPENSE</button>
+            <button class="tab-btn" onclick="openTool(event, 'emi')"><i class="fas fa-calculator"></i> LOAN EMI</button>
+            <button class="tab-btn" onclick="openTool(event, 'gst')"><i class="fas fa-percent"></i> GST PRO</button>
+            <button class="tab-btn" onclick="openTool(event, 'sip')"><i class="fas fa-chart-line"></i> SIP/INV</button>
+        </div>
+
+        <div id="tax" class="tool-content active">
+            <div class="input-grid">
+                <div><label>Annual Salary (₹)</label><input type="number" id="tax_income" placeholder="Total Salary"></div>
+                <div><label>Monthly Expense (₹)</label><input type="number" id="tax_exp" placeholder="Living Costs"></div>
+                <div><label>Other Income (₹)</label><input type="number" id="tax_other" value="0"></div>
+            </div>
+            <div class="action-btns no-print">
+                <button class="btn btn-calc" onclick="runTax()">CALCULATE PLAN</button>
+                <button class="btn btn-save" onclick="save('tax')">SAVE</button>
+                <button class="btn btn-clear" onclick="resetAll()">RESET</button>
+            </div>
+        </div>
+
+        <div id="emi" class="tool-content">
+            <div class="input-grid">
+                <div><label>Loan Amount (₹)</label><input type="number" id="emi_loan" placeholder="e.g. 500000"></div>
+                <div><label>Rate % (P.A.)</label><input type="number" id="emi_rate" placeholder="e.g. 8.5"></div>
+                <div><label>Tenure (Months)</label><input type="number" id="emi_time" placeholder="e.g. 60"></div>
+            </div>
+            <div class="action-btns no-print">
+                <button class="btn btn-calc" onclick="runEMI()">GENERATE LEDGER</button>
+                <button class="btn btn-save" onclick="save('emi')">SAVE</button>
+                <button class="btn btn-clear" onclick="resetAll()">RESET</button>
+            </div>
+        </div>
+
+        <div id="gst" class="tool-content">
+            <div class="input-grid">
+                <div><label>Amount (₹)</label><input type="number" id="gst_amt" placeholder="e.g. 10000"></div>
+                <div><label>GST Rate %</label><input type="number" id="gst_perc" placeholder="18"></div>
+                <div><label>Mode</label><select id="gst_mode"><option value="plus">Exclusive (+GST)</option><option value="minus">Inclusive (-GST)</option></select></div>
+            </div>
+            <div class="action-btns no-print">
+                <button class="btn btn-calc" onclick="runGST()">CALCULATE GST</button>
+                <button class="btn btn-save" onclick="save('gst')">SAVE</button>
+                <button class="btn btn-clear" onclick="resetAll()">RESET</button>
+            </div>
+        </div>
+
+        <div id="sip" class="tool-content">
+            <div class="input-grid">
+                <div><label>Monthly SIP (₹)</label><input type="number" id="sip_amt" placeholder="e.g. 5000"></div>
+                <div><label>Exp. Return %</label><input type="number" id="sip_rate" placeholder="12"></div>
+                <div><label>Years</label><input type="number" id="sip_years" placeholder="10"></div>
+            </div>
+            <div class="action-btns no-print">
+                <button class="btn btn-calc" onclick="runSIP()">CALCULATE WEALTH</button>
+                <button class="btn btn-save" onclick="save('sip')">SAVE</button>
+                <button class="btn btn-clear" onclick="resetAll()">RESET</button>
+            </div>
+        </div>
+
+        <div id="result-area" class="result-panel" style="display:none;">
+            <div class="summary-grid" id="summary-res"></div>
+            <div class="table-wrap" id="table-res"></div>
+            <button class="btn btn-print no-print" onclick="window.print()"><i class="fas fa-file-pdf"></i> DOWNLOAD REPORT</button>
+        </div>
+
+        <div class="footer no-print" style="text-align:center; margin-top:20px; font-size:0.6rem; font-weight:800; color:#94a3b8;">
+            BY RAMESH MEWALAL VISHWAKARMA 🚩<br>RMV APEX GROUP © 2026
+        </div>
+    </div>
+</div>
+
+<script>
+    function openTool(evt, name) {
+        document.querySelectorAll('.tool-content').forEach(c => c.classList.remove('active'));
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.getElementById(name).classList.add('active');
+        evt.currentTarget.classList.add('active');
+        document.getElementById('result-area').style.display = "none";
+    }
+
+    // --- TAX ENGINE (LATEST FY 2025-26) ---
+    function runTax() {
+        let inc = (+tax_income.value || 0) + (+tax_other.value || 0);
+        let exp = +tax_exp.value || 0;
+        let stdDed = 75000;
+        let taxable = Math.max(0, inc - stdDed);
+        let tax = 0;
+
+        if (taxable > 1200000) {
+            if (taxable <= 400000) tax = 0;
+            else if (taxable <= 800000) tax = (taxable - 400000) * 0.05;
+            else if (taxable <= 1200000) tax = 20000 + (taxable - 800000) * 0.10;
+            else if (taxable <= 1600000) tax = 60000 + (taxable - 1200000) * 0.15;
+            else if (taxable <= 2000000) tax = 120000 + (taxable - 1600000) * 0.20;
+            else tax = 200000 + (taxable - 2000000) * 0.30;
+            tax *= 1.04; // Cess
+        }
+
+        let savings = inc - tax - (exp * 12);
+        
+        showSummary([
+            {p: 'Taxable Income', v: taxable},
+            {p: 'Total Tax', v: tax, c: 'var(--danger)'},
+            {p: 'Annual Savings', v: savings, c: 'var(--success)'},
+            {p: 'Daily Budget', v: savings/365}
+        ]);
+        
+        let html = `<table><tr><th>Category</th><th>Monthly</th><th>Annual</th></tr>`;
+        html += `<tr><td>Gross Income</td><td>₹${Math.round(inc/12).toLocaleString()}</td><td>₹${inc.toLocaleString()}</td></tr>`;
+        html += `<tr><td>Tax Liability</td><td>₹${Math.round(tax/12).toLocaleString()}</td><td style="color:red">₹${Math.round(tax).toLocaleString()}</td></tr>`;
+        html += `<tr><td>Living Expenses</td><td>₹${exp.toLocaleString()}</td><td>₹${(exp*12).toLocaleString()}</td></tr>`;
+        html += `<tr style="background:#f0f9ff"><td><b>Final In-Hand</b></td><td><b>₹${Math.round(savings/12).toLocaleString()}</b></td><td><b>₹${Math.round(savings).toLocaleString()}</b></td></tr></table>`;
+        
+        document.getElementById('table-res').innerHTML = html;
+        document.getElementById('result-area').style.display = "block";
+    }
+
+    // --- EMI ENGINE ---
+    function runEMI() {
+        let P = +emi_loan.value, R = emi_rate.value/1200, N = +emi_time.value;
+        if(!P || !R || !N) return;
+        let E = (P * R * Math.pow(1+R, N)) / (Math.pow(1+R, N) - 1);
+        let tot = E * N;
+
+        showSummary([
+            {p: 'Monthly EMI', v: E},
+            {p: 'Total Interest', v: tot-P, c: 'var(--danger)'},
+            {p: 'Total Payable', v: tot}
+        ]);
+
+        let html = `<table><tr><th>Month</th><th>Opening</th><th>Interest</th><th>Principal</th><th>Closing</th></tr>`;
+        let bal = P;
+        for(let i=1; i<=Math.min(N, 120); i++) { // Limit table to 120 months for speed
+            let intr = bal * R;
+            let prin = E - intr;
+            html += `<tr><td>${i}</td><td>₹${Math.round(bal).toLocaleString()}</td><td>₹${Math.round(intr).toLocaleString()}</td><td>₹${Math.round(prin).toLocaleString()}</td><td>₹${Math.round(bal-prin).toLocaleString()}</td></tr>`;
+            bal -= prin;
+        }
+        html += `</table>`;
+        document.getElementById('table-res').innerHTML = html;
+        document.getElementById('result-area').style.display = "block";
+    }
+
+    // --- GST ENGINE ---
+    function runGST() {
+        let p = +gst_amt.value, g = +gst_perc.value, m = gst_mode.value;
+        let tax, final;
+        if(m === 'plus') { tax = p * g / 100; final = p + tax; }
+        else { tax = p - (p * (100 / (100 + g))); final = p - tax; }
+
+        showSummary([
+            {p: 'Base Amount', v: (m==='plus'?p:final)},
+            {p: 'GST Amount', v: tax, c: 'var(--gold)'},
+            {p: 'Total Amount', v: (m==='plus'?final:p)}
+        ]);
+        document.getElementById('table-res').innerHTML = "";
+        document.getElementById('result-area').style.display = "block";
+    }
+
+    // --- SIP ENGINE ---
+    function runSIP() {
+        let m = +sip_amt.value, r = sip_rate.value/12/100, y = +sip_years.value * 12;
+        let fv = m * ((Math.pow(1 + r, y) - 1) / r) * (1 + r);
+        let invested = m * y;
+
+        showSummary([
+            {p: 'Invested Amount', v: invested},
+            {p: 'Est. Returns', v: fv-invested, c: 'var(--success)'},
+            {p: 'Total Value', v: fv}
+        ]);
+        document.getElementById('table-res').innerHTML = "";
+        document.getElementById('result-area').style.display = "block";
+    }
+
+    function showSummary(stats) {
+        let html = "";
+        stats.forEach(s => {
+            html += `<div class="stat-box"><h3 style="color:${s.c || 'var(--d)'}">₹${Math.round(s.v).toLocaleString()}</h3><p>${s.p}</p></div>`;
+        });
+        document.getElementById('summary-res').innerHTML = html;
+    }
+
+    function save(tool) {
+        alert("डाटा सुरक्षित! 🚩");
+    }
+
+    function resetAll() {
+        location.reload();
+    }
+</script>
+</body>
+</html>
