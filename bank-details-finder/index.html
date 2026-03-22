@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bank Details Finder | RMV APEX GROUP</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg: #060913;
+            --card: #111827;
+            --accent: #00eaff;
+            --accent2: #7c3aed;
+            --text: #f3f4f6;
+            --gold: #f59e0b;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+
+        /* Watermark */
+        body::before {
+            content: "RMV APEX GROUP";
+            position: fixed;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%) rotate(-30deg);
+            font-size: 5rem;
+            font-weight: 900;
+            color: rgba(0, 234, 255, 0.03);
+            z-index: -1;
+            pointer-events: none;
+            text-transform: uppercase;
+            white-space: nowrap;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 800px;
+            background: var(--card);
+            padding: 30px;
+            border-radius: 30px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            position: relative;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 5px;
+            background: linear-gradient(to right, #fff, var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hub-tag {
+            text-align: center;
+            font-size: 0.65rem;
+            letter-spacing: 2px;
+            color: var(--gold);
+            margin-bottom: 30px;
+            font-weight: 800;
+        }
+
+        .search-area {
+            position: relative;
+            margin-bottom: 15px;
+        }
+
+        input {
+            width: 100%;
+            padding: 18px;
+            background: #1f2937;
+            border: 2px solid transparent;
+            border-radius: 18px;
+            color: white;
+            font-weight: 600;
+            box-sizing: border-box;
+            transition: 0.3s;
+            text-transform: uppercase;
+            font-size: 1rem;
+        }
+
+        input:focus { border-color: var(--accent); outline: none; box-shadow: 0 0 15px rgba(0, 234, 255, 0.1); }
+
+        .btn-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 25px;
+        }
+
+        button {
+            padding: 14px;
+            border: none;
+            border-radius: 14px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+        }
+
+        .btn-main { background: var(--accent); color: #000; }
+        .btn-sec { background: #374151; color: #fff; }
+        .btn-clear { background: rgba(239, 68, 68, 0.1); color: #ef4444; }
+
+        button:hover { transform: translateY(-2px); filter: brightness(1.1); }
+
+        .result-layout {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 15px;
+            background: #0f172a;
+            padding: 25px;
+            border-radius: 25px;
+            border: 1px solid #1e293b;
+        }
+
+        .info-box {
+            padding: 10px;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .label { font-size: 0.65rem; color: #64748b; font-weight: 800; text-transform: uppercase; margin-bottom: 5px; }
+        .val { color: #fff; font-size: 0.95rem; font-weight: 600; line-height: 1.4; }
+
+        .map-box {
+            height: 300px;
+            border-radius: 25px;
+            overflow: hidden;
+            border: 1px solid #1e293b;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        iframe { width: 100%; height: 100%; border: none; }
+
+        .export-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .btn-exp { flex: 1; background: #1e293b; color: #94a3b8; font-size: 0.7rem; }
+        .btn-exp:hover { background: var(--accent2); color: #fff; }
+
+        .history-card {
+            margin-top: 35px;
+            background: rgba(0,0,0,0.2);
+            padding: 20px;
+            border-radius: 25px;
+        }
+
+        .history-header { font-size: 0.75rem; font-weight: 800; color: #4b5563; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; }
+
+        .history-item {
+            background: #1f2937;
+            padding: 12px 18px;
+            border-radius: 12px;
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .history-item:hover { background: #2d3748; transform: scale(1.01); }
+
+        /* ☕ Support RMV APEX GROUP */
+        .support-panel {
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 1px solid #1e293b;
+            text-align: center;
+        }
+
+        .support-links {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .kofi-link {
+            background: #29abe0; color: white; padding: 12px 25px; border-radius: 12px;
+            text-decoration: none; font-weight: 800; font-size: 0.85rem; display: flex; align-items: center; gap: 10px;
+            box-shadow: 0 5px 15px rgba(41, 171, 224, 0.2);
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 35px;
+            font-size: 0.7rem;
+            color: #4b5563;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .loader { display: none; text-align: center; color: var(--accent); font-weight: 800; margin: 15px 0; }
+    </style>
+</head>
+<body oncontextmenu="return false">
+
+<div class="container">
+    <h1>🏦 Bank Details Finder</h1>
+    <div class="hub-tag">MASTER INTELLIGENCE | RMV APEX GROUP 🚩</div>
+
+    <div class="search-area">
+        <input type="text" id="ifscInput" placeholder="Enter IFSC Code (e.g. UTIB0000194)">
+    </div>
+
+    <div class="btn-grid">
+        <button class="btn-main" onclick="getBankDetails()"><i class="fas fa-search"></i> Find Details</button>
+        <button class="btn-sec" onclick="startVoice()"><i class="fas fa-microphone"></i> Voice</button>
+        <button class="btn-clear" onclick="clearUI()"><i class="fas fa-sync-alt"></i> Reset</button>
+    </div>
+
+    <div class="loader" id="loader"><i class="fas fa-circle-notch fa-spin"></i> Fetching Full Bank Data...</div>
+
+    <div class="result-layout" id="resultLayout">
+        <div class="map-box" id="mapBox">
+            <iframe id="mapFrame" src=""></iframe>
+        </div>
+
+        <div class="info-grid" id="fullDetails">
+            </div>
+
+        <div class="export-actions">
+            <button class="btn-exp" onclick="copyData()"><i class="fas fa-copy"></i> Copy All</button>
+            <button class="btn-exp" onclick="download('txt')"><i class="fas fa-file-alt"></i> Save TXT</button>
+            <button class="btn-exp" onclick="download('json')"><i class="fas fa-code"></i> Save JSON</button>
+            <button class="btn-exp" onclick="shareData()"><i class="fas fa-share-alt"></i> Share</button>
+        </div>
+    </div>
+
+    <div class="history-card">
+        <div class="history-header">
+            <span>RECENT SEARCHES 🚩</span>
+            <span onclick="clearHistory()" style="cursor:pointer; color:#ef4444;">CLEAR HISTORY</span>
+        </div>
+        <div id="historyList"></div>
+    </div>
+
+    <div class="support-panel">
+        <p style="font-size: 0.65rem; font-weight: 800; color: #4b5563; text-transform: uppercase;">Support RMV APEX GROUP 🚩</p>
+        <div class="support-links">
+            <a href="https://buymeacoffee.com/rameshmewalalvishwakarma" target="_blank">
+                <img src="https://img.buymeacoffee.com/button-api/?text=Buy me a coffee&emoji=☕&slug=rameshmewalalvishwakarma&button_colour=FFDD00&font_colour=000000&font_family=Inter&outline_colour=000000&coffee_colour=ffffff" style="height: 45px; border-radius: 12px;">
+            </a>
+            <a href="https://ko-fi.com/rameshmewalalvishwakarma" target="_blank" class="kofi-link">
+                <i class="fas fa-mug-hot"></i> Support on Ko-fi
+            </a>
+        </div>
+    </div>
+
+    <div class="footer">
+        Crafted with Pride by Ramesh Mewalal Vishwakarma 🚩<br>
+        RMV APEX GROUP © 2026 | All Rights Reserved
+    </div>
+</div>
+
+<script>
+    let BANK_DATA = null;
+    let HISTORY = JSON.parse(localStorage.getItem('rmv_bank_full_history')) || [];
+
+    async function getBankDetails() {
+        let code = document.getElementById('ifscInput').value.trim().toUpperCase();
+        if (!code) return alert("कृपया IFSC कोड दर्ज करें! 🚩");
+
+        document.getElementById('loader').style.display = 'block';
+        document.getElementById('resultLayout').style.display = 'none';
+
+        try {
+            let res = await fetch(`https://ifsc.razorpay.com/${code}`);
+            if (!res.ok) throw new Error();
+            let data = await res.json();
+            
+            BANK_DATA = data;
+            renderInfo(data);
+            renderMap(data);
+            saveToHistory(data);
+            
+            document.getElementById('resultLayout').style.display = 'grid';
+        } catch (e) {
+            alert("Bank not found! Please check IFSC code again. 🚩");
+        }
+        document.getElementById('loader').style.display = 'none';
+    }
+
+    function renderInfo(data) {
+        // SWIFT code logic (usually needs manual lookup, but we can provide placeholders or derived info)
+        const details = {
+            "Bank Name": data.BANK,
+            "IFSC Code": data.IFSC,
+            "MICR Code": data.MICR || "Not Available",
+            "Branch Name": data.BRANCH,
+            "Bank Code": data.BANKCODE,
+            "Contact Number": data.CONTACT || "N/A",
+            "UPI Status": "Enabled 🟢",
+            "City / District": `${data.CITY} / ${data.DISTRICT}`,
+            "State": data.STATE,
+            "Full Address": data.ADDRESS,
+            "SWIFT/BIC Code": "Contact Branch for SWIFT 🏦"
+        };
+
+        let html = "";
+        for (let [key, val] of Object.entries(details)) {
+            html += `<div class="info-box">
+                        <div class="label">${key}</div>
+                        <div class="val">${val}</div>
+                     </div>`;
+        }
+        document.getElementById('fullDetails').innerHTML = html;
+    }
+
+    function renderMap(data) {
+        let query = encodeURIComponent(`${data.BANK} ${data.BRANCH} ${data.CITY} ${data.ADDRESS}`);
+        document.getElementById('mapFrame').src = `https://maps.google.com/maps?q=${query}&t=&z=15&ie=UTF8&iwloc=&output=embed`;
+    }
+
+    function saveToHistory(data) {
+        let item = { code: data.IFSC, bank: data.BANK, branch: data.BRANCH };
+        HISTORY = [item, ...HISTORY.filter(x => x.code !== data.IFSC)].slice(0, 5);
+        localStorage.setItem('rmv_bank_full_history', JSON.stringify(HISTORY));
+        renderHistory();
+    }
+
+    function renderHistory() {
+        document.getElementById('historyList').innerHTML = HISTORY.map(h => `
+            <div class="history-item" onclick="quickLoad('${h.code}')">
+                <span><b>${h.code}</b></span>
+                <span style="font-size:0.7rem; color:#94a3b8;">${h.bank} (${h.branch})</span>
+            </div>
+        `).join('');
+    }
+
+    function quickLoad(code) {
+        document.getElementById('ifscInput').value = code;
+        getBankDetails();
+    }
+
+    function startVoice() {
+        let Speech = window.SpeechRecognition || window.webkitSpeechRecognition;
+        if(!Speech) return alert("Voice Search Not Supported 🚩");
+        let rec = new Speech();
+        rec.onresult = (e) => {
+            document.getElementById('ifscInput').value = e.results[0][0].transcript.replace(/\s/g, '').toUpperCase();
+            getBankDetails();
+        };
+        rec.start();
+    }
+
+    function copyData() {
+        let text = document.getElementById('fullDetails').innerText;
+        navigator.clipboard.writeText(text);
+        alert("Full Details Copied! 🚩");
+    }
+
+    function download(format) {
+        let content = format === 'json' ? JSON.stringify(BANK_DATA, null, 2) : document.getElementById('fullDetails').innerText;
+        let blob = new Blob([content], { type: 'text/plain' });
+        let a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = `RMV_Bank_Details_${BANK_DATA.IFSC}.${format}`;
+        a.click();
+    }
+
+    function shareData() {
+        if (navigator.share) {
+            navigator.share({ title: 'Bank Info 🚩', text: document.getElementById('fullDetails').innerText });
+        } else {
+            alert("Share not supported in this browser.");
+        }
+    }
+
+    function clearUI() {
+        document.getElementById('ifscInput').value = "";
+        document.getElementById('resultLayout').style.display = 'none';
+        BANK_DATA = null;
+    }
+
+    function clearHistory() {
+        HISTORY = [];
+        localStorage.removeItem('rmv_bank_full_history');
+        renderHistory();
+    }
+
+    renderHistory();
+</script>
+
+</body>
+</html>
