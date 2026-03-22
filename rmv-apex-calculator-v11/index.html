@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RMV APEX GROUP | PRO V11 🚩</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root { --bg: #05070a; --accent: #00d2ff; --glass: rgba(255, 255, 255, 0.05); --success: #238636; }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body { 
+            font-family: 'Segoe UI', sans-serif; 
+            background: var(--bg); 
+            color: #fff; 
+            min-height: 100vh; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Background Watermark */
+        body::before {
+            content: "RMV APEX GROUP";
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(-30deg);
+            font-size: 8vw;
+            font-weight: 900;
+            color: rgba(255, 255, 255, 0.03);
+            white-space: nowrap;
+            z-index: -1;
+            pointer-events: none;
+            letter-spacing: 10px;
+        }
+
+        .main-container { 
+            background: var(--glass); 
+            backdrop-filter: blur(25px); 
+            border: 1px solid rgba(255,255,255,0.1); 
+            padding: 35px; 
+            border-radius: 40px; 
+            width: 100%; 
+            max-width: 650px; 
+            box-shadow: 0 30px 60px rgba(0,0,0,0.6); 
+            border-top: 6px solid var(--accent);
+            position: relative;
+        }
+
+        .header { text-align: center; margin-bottom: 30px; }
+        .header h1 { color: var(--accent); letter-spacing: 2px; font-weight: 900; text-transform: uppercase; }
+        
+        .input-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-bottom: 25px; }
+        .input-box { background: rgba(0,0,0,0.5); border: 1px solid #333; border-radius: 15px; padding: 15px; }
+        .input-box label { font-size: 10px; color: var(--accent); display: block; margin-bottom: 8px; font-weight: 800; text-transform: uppercase; }
+        .input-box input { background: transparent; border: none; color: #fff; width: 100%; outline: none; font-size: 18px; font-weight: 700; text-align: center; }
+
+        .btn-calculate { 
+            width: 100%; padding: 18px; border: none; border-radius: 15px; 
+            background: linear-gradient(135deg, #00d2ff 0%, #3a7bd5 100%); 
+            color: #fff; font-weight: 900; font-size: 16px; cursor: pointer; 
+            text-transform: uppercase; margin-bottom: 20px; transition: 0.3s; 
+        }
+
+        .control-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+        .ctrl-btn { padding: 14px; border: none; border-radius: 12px; font-weight: 800; font-size: 11px; cursor: pointer; color: #fff; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        
+        .btn-save { background: var(--success); }
+        .btn-pdf { background: #4a5568; }
+        .btn-clear { background: #c53030; }
+
+        #results { margin-top: 40px; display: none; text-align: center; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 30px; }
+        .emi-result { font-size: 3rem; color: var(--accent); font-weight: 900; }
+        .chart-container { height: 250px; margin-top: 30px; }
+
+        /* Support Section */
+        .support-links { margin-top: 35px; width: 100%; max-width: 650px; display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .sup-btn { display: flex; align-items: center; justify-content: center; gap: 12px; padding: 18px; border-radius: 20px; text-decoration: none; font-weight: 800; font-size: 13px; }
+        .bmc { background: #FFDD00; color: #000; }
+        .kofi { background: #29abe0; color: #fff; }
+
+        .ticker { position: fixed; bottom: 0; width: 100%; background: #000; padding: 12px; font-size: 10px; color: var(--accent); border-top: 1px solid var(--accent); text-align: center; }
+    </style>
+</head>
+<body onload="checkSavedData()">
+
+    <div class="main-container" id="capture-pro">
+        <div class="header">
+            <h1>RMV APEX GROUP 🚩</h1>
+            <p style="font-size: 10px; opacity: 0.6;">Ultimate Financial Hub • V11.0</p>
+        </div>
+
+        <div class="input-grid">
+            <div class="input-box">
+                <label>Loan Amount</label>
+                <input type="number" id="loan_amt" placeholder="₹0">
+            </div>
+            <div class="input-box">
+                <label>Interest Rate (%)</label>
+                <input type="number" id="rate_val" placeholder="0.00">
+            </div>
+            <div class="input-box" style="grid-column: span 2;">
+                <label>Tenure (Months)</label>
+                <input type="number" id="months_val" placeholder="0">
+            </div>
+        </div>
+
+        <button class="btn-calculate" onclick="calculateEMI()">🚀 Calculate Pro Report</button>
+
+        <div class="control-grid">
+            <button class="ctrl-btn btn-save" onclick="saveToLocal()"><i class="fas fa-save"></i> SAVE</button>
+            <button class="ctrl-btn btn-pdf" onclick="generatePDF()"><i class="fas fa-file-pdf"></i> DOWNLOAD</button>
+            <button class="ctrl-btn btn-clear" onclick="clearAll()"><i class="fas fa-sync-alt"></i> CLEAR</button>
+        </div>
+
+        <div id="results">
+            <div class="emi-result" id="emi_display">₹0</div>
+            <p style="font-size: 10px; opacity: 0.6; text-transform: uppercase;">Monthly EMI Payable</p>
+            <div class="chart-container">
+                <canvas id="emiChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <div class="support-links">
+        <a href="https://buymeacoffee.com/rameshmewalalvishwakarma" target="_blank" class="sup-btn bmc"><i class="fas fa-coffee"></i> BUY ME A COFFEE</a>
+        <a href="https://ko-fi.com/rameshmewalalvishwakarma" target="_blank" class="sup-btn kofi"><i class="fas fa-heart"></i> KO-FI</a>
+    </div>
+
+    <div class="ticker">
+        <marquee scrollamount="5">🚩 RMV APEX GROUP | CRAFTED BY RAMESH MEWALAL VISHWAKARMA 🚩</marquee>
+    </div>
+
+    <script>
+        let myChart = null;
+
+        function calculateEMI() {
+            const P = parseFloat(document.getElementById('loan_amt').value);
+            const R = parseFloat(document.getElementById('rate_val').value) / 12 / 100;
+            const N = parseInt(document.getElementById('months_val').value);
+
+            if (!P || !R || !N) { alert("Fill data! 🚩"); return; }
+
+            const emi = (P * R * Math.pow(1 + R, N)) / (Math.pow(1 + R, N) - 1);
+            const totalInt = (emi * N) - P;
+
+            document.getElementById('emi_display').innerText = "₹" + Math.round(emi).toLocaleString('en-IN');
+            document.getElementById('results').style.display = 'block';
+
+            const ctx = document.getElementById('emiChart').getContext('2d');
+            if (myChart) myChart.destroy();
+            myChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Principal', 'Interest'],
+                    datasets: [{ data: [P, totalInt], backgroundColor: ['#3a7bd5', '#00d2ff'], borderWidth: 0 }]
+                },
+                options: { cutout: '75%', plugins: { legend: { labels: { color: '#fff' } } } }
+            });
+        }
+
+        function saveToLocal() {
+            const data = { l: document.getElementById('loan_amt').value, r: document.getElementById('rate_val').value, m: document.getElementById('months_val').value };
+            localStorage.setItem('rmv_v11', JSON.stringify(data));
+            alert("Saved! 🚩");
+        }
+
+        function checkSavedData() {
+            const saved = localStorage.getItem('rmv_v11');
+            if (saved) {
+                const data = JSON.parse(saved);
+                document.getElementById('loan_amt').value = data.l;
+                document.getElementById('rate_val').value = data.r;
+                document.getElementById('months_val').value = data.m;
+            }
+        }
+
+        function clearAll() { localStorage.removeItem('rmv_v11'); location.reload(); }
+
+        function generatePDF() {
+            const element = document.getElementById('capture-pro');
+            html2pdf().from(element).set({
+                margin: 10, filename: 'RMV_APEX_GROUP_REPORT.pdf',
+                html2canvas: { scale: 2, backgroundColor: '#05070a' }
+            }).save();
+        }
+    </script>
+</body>
+</html>
