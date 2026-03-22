@@ -3,13 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RMV APEX GROUP | Numbers Pro 🚩</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <title>RMV APEX GROUP | Ultra Pro V11 🚩</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
-        :root { --bg: #05070a; --accent: #00d2ff; --glass: rgba(255, 255, 255, 0.05); --success: #238636; }
+        :root { --bg: #05070a; --accent: #00d2ff; --glass: rgba(255, 255, 255, 0.05); --success: #238636; --gold: #ffd700; }
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: #fff; display: flex; flex-direction: column; align-items: center; padding: 20px; position: relative; }
 
@@ -20,107 +19,231 @@
             font-size: 8vw; font-weight: 900; color: rgba(255, 255, 255, 0.02); z-index: -1; pointer-events: none;
         }
 
-        .container { background: var(--glass); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.1); padding: 30px; border-radius: 30px; width: 100%; max-width: 600px; border-top: 6px solid var(--accent); }
-        .header h1 { color: var(--accent); text-align: center; font-weight: 900; margin-bottom: 20px; }
+        .container { background: var(--glass); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.1); padding: 30px; border-radius: 30px; width: 100%; max-width: 800px; border-top: 6px solid var(--accent); box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
+        .header h1 { color: var(--accent); text-align: center; font-weight: 900; margin-bottom: 5px; text-transform: uppercase; }
+        .header p { text-align: center; font-size: 10px; opacity: 0.6; margin-bottom: 25px; letter-spacing: 2px; }
         
-        .input-row { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-bottom: 20px; }
+        .input-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; margin-bottom: 20px; }
         .input-box { background: #000; border: 1px solid #333; border-radius: 12px; padding: 12px; }
-        .input-box label { font-size: 10px; color: var(--accent); display: block; text-transform: uppercase; font-weight: bold; }
-        .input-box input { background: transparent; border: none; color: #fff; width: 100%; outline: none; font-size: 18px; text-align: center; }
+        .input-box label { font-size: 10px; color: var(--accent); display: block; text-transform: uppercase; font-weight: bold; margin-bottom: 5px; }
+        .input-box input, .input-box select { background: transparent; border: none; color: #fff; width: 100%; outline: none; font-size: 16px; font-weight: bold; }
+        select option { background: #000; }
 
-        .btn-main { width: 100%; padding: 16px; border: none; border-radius: 12px; background: linear-gradient(135deg, #00d2ff, #3a7bd5); color: #fff; font-weight: 900; cursor: pointer; margin-bottom: 15px; }
+        .btn-main { width: 100%; padding: 18px; border: none; border-radius: 12px; background: linear-gradient(135deg, #00d2ff, #3a7bd5); color: #fff; font-weight: 900; cursor: pointer; margin-bottom: 15px; font-size: 16px; box-shadow: 0 10px 20px rgba(0,210,255,0.2); }
         
-        .action-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
-        .act-btn { padding: 10px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; color: #fff; font-size: 11px; }
+        .action-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 20px; }
+        .act-btn { padding: 12px; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; color: #fff; font-size: 11px; transition: 0.3s; }
+        .act-btn:hover { transform: scale(1.05); }
 
-        /* Numeric Results - BIG & CLEAR */
-        #results { margin-top: 30px; display: none; background: rgba(0,210,255,0.05); padding: 20px; border-radius: 20px; border: 1px dashed var(--accent); }
-        .res-item { margin-bottom: 15px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px; }
-        .res-label { font-size: 12px; opacity: 0.7; display: block; margin-bottom: 5px; }
-        .res-val { font-size: 2.2rem; font-weight: 900; color: var(--accent); }
-        .total-val { font-size: 1.5rem; color: #fff; }
+        /* Summary Dashboard */
+        #summary { display: none; background: rgba(255,255,255,0.03); border-radius: 20px; padding: 20px; margin-bottom: 25px; border: 1px solid rgba(255,255,255,0.1); }
+        .sum-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 15px; text-align: center; }
+        .sum-card span { font-size: 10px; opacity: 0.7; display: block; margin-bottom: 5px; }
+        .sum-card b { font-size: 1.4rem; color: var(--accent); }
 
-        .chart-box { height: 150px; margin-top: 20px; opacity: 0.6; } /* Chart is now small and out of the way */
+        /* Table Report */
+        .report-wrap { overflow-x: auto; margin-top: 20px; display: none; }
+        table { width: 100%; border-collapse: collapse; font-size: 12px; text-align: center; }
+        th { background: var(--accent); color: #000; padding: 12px; text-transform: uppercase; }
+        td { padding: 12px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        tr:nth-child(even) { background: rgba(255,255,255,0.02); }
+        .highlight { color: var(--gold); font-weight: bold; }
 
-        .sup-links { margin-top: 25px; display: grid; grid-template-columns: 1fr 1fr; gap: 15px; width: 100%; max-width: 600px; }
-        .s-btn { padding: 15px; border-radius: 12px; text-decoration: none; font-weight: bold; text-align: center; font-size: 12px; }
+        .sup-links { margin-top: 25px; display: grid; grid-template-columns: 1fr 1fr; gap: 15px; width: 100%; max-width: 800px; }
+        .s-btn { padding: 18px; border-radius: 15px; text-decoration: none; font-weight: 900; text-align: center; font-size: 12px; box-shadow: 0 10px 20px rgba(0,0,0,0.3); }
         
-        .footer { margin-top: 30px; font-size: 10px; opacity: 0.5; }
+        .ticker { position: fixed; bottom: 0; width: 100%; background: #000; padding: 12px; font-size: 10px; color: var(--accent); border-top: 1px solid var(--accent); text-align: center; z-index: 99; font-weight: bold; }
     </style>
 </head>
-<body onload="checkData()">
+<body onload="checkSaved()">
 
-    <div class="container" id="printable">
-        <div class="header"><h1>RMV APEX GROUP 🚩</h1></div>
-
-        <div class="input-row">
-            <div class="input-box"><label>Amount (₹)</label><input type="number" id="amt" placeholder="0"></div>
-            <div class="input-box"><label>Interest (%)</label><input type="number" id="rate" placeholder="0"></div>
-            <div class="input-box" style="grid-column: span 2;"><label>Tenure (Months)</label><input type="number" id="mon" placeholder="0"></div>
+    <div class="container" id="master-report">
+        <div class="header">
+            <h1>RMV APEX GROUP 🚩</h1>
+            <p>ADVANCED LOAN AMORTIZATION HUB V11</p>
         </div>
 
-        <button class="btn-main" onclick="runCalc()">🚀 GET NUMERIC REPORT</button>
+        <div class="input-grid">
+            <div class="input-box">
+                <label>Loan Amount (₹)</label>
+                <input type="number" id="principal" placeholder="eg. 500000">
+            </div>
+            <div class="input-box">
+                <label>Rate (%) Type</label>
+                <select id="rateType">
+                    <option value="reducing">Reducing Balance</option>
+                    <option value="fixed">Fixed Rate</option>
+                </select>
+            </div>
+            <div class="input-box">
+                <label>Annual Interest (%)</label>
+                <input type="number" id="roi" placeholder="eg. 10.5">
+            </div>
+            <div class="input-box">
+                <label>Tenure (Months)</label>
+                <input type="number" id="tenure" placeholder="eg. 24">
+            </div>
+        </div>
+
+        <button class="btn-main" onclick="processUltraReport()">🚀 GENERATE AMORTIZATION REPORT</button>
 
         <div class="action-row">
-            <button class="act-btn" style="background:var(--success)" onclick="save()">SAVE</button>
-            <button class="act-btn" style="background:#555" onclick="pdf()">PDF</button>
-            <button class="act-btn" style="background:#c53030" onclick="cls()">CLEAR</button>
+            <button class="act-btn" style="background:var(--success)" onclick="saveData()">SAVE</button>
+            <button class="act-btn" style="background:#4a5568" onclick="exportPDF()">DOWNLOAD PDF</button>
+            <button class="act-btn" style="background:#c53030" onclick="resetAll()">RESET</button>
         </div>
 
-        <div id="results">
-            <div class="res-item">
-                <span class="res-label">MONTHLY EMI</span>
-                <div class="res-val" id="emi_out">₹0</div>
+        <div id="summary">
+            <div class="sum-grid">
+                <div class="sum-card"><span>MONTHLY EMI</span><b id="res_emi">₹0</b></div>
+                <div class="sum-card"><span>TOTAL INTEREST</span><b id="res_int" style="color:var(--gold);">₹0</b></div>
+                <div class="sum-card"><span>TOTAL REPAYMENT</span><b id="res_tot">₹0</b></div>
             </div>
-            <div class="res-item">
-                <span class="res-label">TOTAL INTEREST PAYABLE</span>
-                <div class="total-val" id="int_out" style="color: #00d2ff;">₹0</div>
-            </div>
-            <div class="res-item">
-                <span class="res-label">TOTAL AMOUNT (P + I)</span>
-                <div class="total-val" id="tot_out">₹0</div>
-            </div>
-            
-            <div class="chart-box"><canvas id="miniChart"></canvas></div>
+        </div>
+
+        <div class="report-wrap" id="report-wrap">
+            <h3 style="text-align:center; color:var(--accent); margin-bottom:15px; font-size: 14px;">MONTH-WISE REPAYMENT SCHEDULE</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Month</th>
+                        <th>Opening Bal</th>
+                        <th>EMI</th>
+                        <th>Interest</th>
+                        <th>Principal</th>
+                        <th>Closing Bal</th>
+                    </tr>
+                </thead>
+                <tbody id="table-body"></tbody>
+            </table>
         </div>
     </div>
 
     <div class="sup-links">
-        <a href="https://buymeacoffee.com/rameshmewalalvishwakarma" target="_blank" class="s-btn" style="background:#FFDD00; color:#000;">☕ BUY ME A COFFEE</a>
-        <a href="https://ko-fi.com/rameshmewalalvishwakarma" target="_blank" class="s-btn" style="background:#29abe0; color:#fff;">❤️ KO-FI</a>
+        <a href="https://buymeacoffee.com/rameshmewalalvishwakarma" target="_blank" class="s-btn" style="background:#FFDD00; color:#000;"><i class="fas fa-coffee"></i> BUY ME A COFFEE</a>
+        <a href="https://ko-fi.com/rameshmewalalvishwakarma" target="_blank" class="s-btn" style="background:#29abe0; color:#fff;"><i class="fas fa-heart"></i> SUPPORT ON KO-FI</a>
     </div>
 
-    <div class="footer">🚩 RMV APEX GROUP | CRAFTED BY RAMESH MEWALAL VISHWAKARMA 🚩</div>
+    <div class="ticker"><marquee>🚩 RMV APEX GROUP | PROFESSIONAL FINANCIAL HUB | ADVANCED REDUCING BALANCE CALCULATOR | CRAFTED BY RAMESH MEWALAL VISHWAKARMA 🚩</marquee></div>
 
     <script>
-        let myChart = null;
-        function runCalc() {
-            const P = parseFloat(document.getElementById('amt').value);
-            const R = parseFloat(document.getElementById('rate').value) / 12 / 100;
-            const N = parseInt(document.getElementById('mon').value);
-            if(!P || !R || !N) return alert("संख्याएं भरें! 🚩");
+        function processUltraReport() {
+            const P = parseFloat(document.getElementById('principal').value);
+            const r_annual = parseFloat(document.getElementById('roi').value);
+            const N = parseInt(document.getElementById('tenure').value);
+            const type = document.getElementById('rateType').value;
 
-            const emi = (P * R * Math.pow(1+R, N)) / (Math.pow(1+R, N)-1);
-            const total = emi * N;
-            const interest = total - P;
+            if (!P || !r_annual || !N) return alert("कृपया सभी आंकड़े भरें! 🚩");
 
-            document.getElementById('emi_out').innerText = "₹" + Math.round(emi).toLocaleString('en-IN');
-            document.getElementById('int_out').innerText = "₹" + Math.round(interest).toLocaleString('en-IN');
-            document.getElementById('tot_out').innerText = "₹" + Math.round(total).toLocaleString('en-IN');
-            document.getElementById('results').style.display = 'block';
+            let emi = 0;
+            let totalInterest = 0;
+            let schedule = [];
 
-            const ctx = document.getElementById('miniChart').getContext('2d');
-            if(myChart) myChart.destroy();
-            myChart = new Chart(ctx, {
-                type: 'bar',
-                data: { labels: ['P', 'I'], datasets: [{ data: [P, interest], backgroundColor: ['#3a7bd5', '#00d2ff'] }] },
-                options: { indexAxis: 'y', plugins: { legend: { display: false } }, scales: { x: { display: false }, y: { ticks: { color: '#fff' } } } }
+            if (type === "reducing") {
+                const R = r_annual / 12 / 100;
+                emi = (P * R * Math.pow(1 + R, N)) / (Math.pow(1 + R, N) - 1);
+                
+                let balance = P;
+                for (let i = 1; i <= N; i++) {
+                    let interest = balance * R;
+                    let principal = emi - interest;
+                    let opening = balance;
+                    balance -= principal;
+                    if (balance < 0) balance = 0;
+                    
+                    schedule.push({
+                        month: i,
+                        opening: opening,
+                        emi: emi,
+                        interest: interest,
+                        principal: principal,
+                        closing: balance
+                    });
+                    totalInterest += interest;
+                }
+            } else {
+                // Fixed Rate Calculation
+                totalInterest = (P * r_annual * (N / 12)) / 100;
+                let totalPayable = P + totalInterest;
+                emi = totalPayable / N;
+                let monthlyInt = totalInterest / N;
+                let monthlyPrin = P / N;
+                
+                let balance = P;
+                for (let i = 1; i <= N; i++) {
+                    let opening = balance;
+                    balance -= monthlyPrin;
+                    schedule.push({
+                        month: i,
+                        opening: opening,
+                        emi: emi,
+                        interest: monthlyInt,
+                        principal: monthlyPrin,
+                        closing: balance
+                    });
+                }
+            }
+
+            // Update Summary
+            document.getElementById('res_emi').innerText = "₹" + Math.round(emi).toLocaleString('en-IN');
+            document.getElementById('res_int').innerText = "₹" + Math.round(totalInterest).toLocaleString('en-IN');
+            document.getElementById('res_tot').innerText = "₹" + Math.round(P + totalInterest).toLocaleString('en-IN');
+            document.getElementById('summary').style.display = 'block';
+
+            // Update Table
+            const tbody = document.getElementById('table-body');
+            tbody.innerHTML = "";
+            schedule.forEach(row => {
+                tbody.innerHTML += `
+                    <tr>
+                        <td>${row.month}</td>
+                        <td>₹${Math.round(row.opening).toLocaleString('en-IN')}</td>
+                        <td class="highlight">₹${Math.round(row.emi).toLocaleString('en-IN')}</td>
+                        <td>₹${Math.round(row.interest).toLocaleString('en-IN')}</td>
+                        <td>₹${Math.round(row.principal).toLocaleString('en-IN')}</td>
+                        <td style="color:var(--accent)">₹${Math.max(0, Math.round(row.closing)).toLocaleString('en-IN')}</td>
+                    </tr>
+                `;
             });
+            document.getElementById('report-wrap').style.display = 'block';
         }
-        function save() { localStorage.setItem('rmv_data', JSON.stringify({a:document.getElementById('amt').value, r:document.getElementById('rate').value, m:document.getElementById('mon').value})); alert("Saved!"); }
-        function checkData() { const s = localStorage.getItem('rmv_data'); if(s){ const d=JSON.parse(s); document.getElementById('amt').value=d.a; document.getElementById('rate').value=d.r; document.getElementById('mon').value=d.m; } }
-        function pdf() { html2pdf().from(document.getElementById('printable')).set({margin:10, filename:'RMV_REPORT.pdf', html2canvas:{backgroundColor:'#05070a'}}).save(); }
-        function cls() { localStorage.removeItem('rmv_data'); location.reload(); }
+
+        function saveData() {
+            const data = {
+                p: document.getElementById('principal').value,
+                r: document.getElementById('roi').value,
+                n: document.getElementById('tenure').value,
+                t: document.getElementById('rateType').value
+            };
+            localStorage.setItem('rmv_ultra_v11', JSON.stringify(data));
+            alert("Data Saved! 🚩");
+        }
+
+        function checkSaved() {
+            const s = localStorage.getItem('rmv_ultra_v11');
+            if (s) {
+                const d = JSON.parse(s);
+                document.getElementById('principal').value = d.p;
+                document.getElementById('roi').value = d.r;
+                document.getElementById('tenure').value = d.n;
+                document.getElementById('rateType').value = d.t;
+            }
+        }
+
+        function exportPDF() {
+            const element = document.getElementById('master-report');
+            html2pdf().from(element).set({
+                margin: 5,
+                filename: 'RMV_APEX_AMORTIZATION.pdf',
+                html2canvas: { scale: 2, backgroundColor: '#05070a' },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            }).save();
+        }
+
+        function resetAll() {
+            localStorage.removeItem('rmv_ultra_v11');
+            location.reload();
+        }
     </script>
 </body>
 </html>
