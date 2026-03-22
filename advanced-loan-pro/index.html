@@ -30,6 +30,10 @@
         th { background: #f1f5f9; padding: 12px; color: #475569; text-transform: uppercase; }
         td { padding: 10px 12px; border-bottom: 1px solid #f1f5f9; font-weight: 700; }
         tr:hover { background: #f8fafc; }
+        .support-section { margin-top: 30px; padding-top: 20px; border-top: 1px dashed #e2e8f0; text-align: center; }
+        .support-btns { display: flex; gap: 15px; justify-content: center; align-items: center; flex-wrap: wrap; margin-top: 15px; }
+        .kofi-btn { background: #29abe0; color: white; padding: 10px 20px; border-radius: 10px; font-weight: 800; font-size: 0.8rem; text-decoration: none; display: flex; align-items: center; gap: 8px; box-shadow: 0 4px 15px rgba(41,171,224,0.3); transition: 0.3s; }
+        .footer { text-align: center; margin-top: 20px; font-size: 0.65rem; font-weight: 800; color: #94a3b8; }
         @media print { .no-print { display: none !important; } .container { width: 100% !important; max-width: none !important; } }
     </style>
 </head>
@@ -65,6 +69,22 @@
             <button class="btn btn-save" onclick="saveData()">SAVE LOCAL</button>
             <button class="btn btn-down" onclick="window.print()"><i class="fas fa-file-pdf"></i> REPORT</button>
             <button class="btn btn-clear" onclick="clearAll()">CLEAR</button>
+        </div>
+
+        <div class="support-section">
+            <p style="font-size: 0.65rem; font-weight: 800; color: #64748b; text-transform: uppercase;">Support RMV APEX GROUP 🚩</p>
+            <div class="support-btns">
+                <a href="https://buymeacoffee.com/rameshmewalalvishwakarma" target="_blank">
+                    <img src="https://img.buymeacoffee.com/button-api/?text=Buy me a coffee&emoji=☕&slug=rameshmewalalvishwakarma&button_colour=FFDD00&font_colour=000000&font_family=Inter&outline_colour=000000&coffee_colour=ffffff" style="height: 40px; border-radius: 10px; box-shadow: 0 4px 15px rgba(255, 221, 0, 0.3);">
+                </a>
+                <a href="https://ko-fi.com/rameshmewalalvishwakarma" target="_blank" class="kofi-btn">
+                    <i class="fas fa-mug-hot"></i> Support on Ko-fi
+                </a>
+            </div>
+        </div>
+        <div class="footer">
+            BY RAMESH MEWALAL VISHWAKARMA 🚩<br>
+            RMV APEX GROUP © 2026
         </div>
     </div>
 
