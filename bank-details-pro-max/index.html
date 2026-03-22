@@ -14,14 +14,13 @@
         h1 { text-align: center; color: var(--accent); font-size: 1.5rem; margin-bottom: 5px; }
         .tagline { text-align: center; font-size: 10px; color: #8b949e; margin-bottom: 25px; letter-spacing: 1px; }
 
-        .search-area { background: #010409; border-radius: 14px; border: 1px solid #30363d; padding: 4px; margin-bottom: 12px; display: flex; align-items: center; }
+        .search-area { background: #010409; border-radius: 14px; border: 1px solid #30363d; padding: 4px; margin-bottom: 12px; display: flex; }
         input { flex: 1; background: transparent; border: none; padding: 12px; color: #fff; font-size: 16px; outline: none; }
         
         .main-btn-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 10px; margin-bottom: 20px; }
         .btn { border: none; padding: 14px; border-radius: 12px; font-weight: 800; cursor: pointer; text-transform: uppercase; font-size: 13px; display: flex; align-items: center; justify-content: center; gap: 8px; transition: 0.2s; }
         .btn-search { background: var(--accent); color: #0d1117; }
         .btn-clear { background: rgba(218, 54, 51, 0.1); color: var(--danger); border: 1px solid rgba(218, 54, 51, 0.2); }
-        .btn:active { transform: scale(0.96); }
 
         #results { display: none; margin-top: 25px; border-top: 1px solid #30363d; padding-top: 20px; animation: slideUp 0.4s ease-out; }
         @keyframes slideUp { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
@@ -32,22 +31,20 @@
         .val { color: #fff; text-align: right; width: 65%; font-weight: 700; word-wrap: break-word; }
 
         .tools-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-        .btn-tool { background: #21262d; color: #c9d1d9; padding: 12px; border-radius: 10px; text-decoration: none; font-size: 11px; font-weight: 700; border: 1px solid #30363d; text-align: center; }
-        .btn-tool:hover { background: #30363d; }
-        .btn-download { background: var(--success); color: white; border: none; }
+        .btn-tool { background: #21262d; color: #c9d1d9; padding: 12px; border-radius: 10px; text-decoration: none; font-size: 11px; font-weight: 700; border: 1px solid #30363d; text-align: center; display: flex; align-items: center; justify-content: center; gap: 6px; }
+        .btn-map { background: #ea4335 !important; color: white !important; } /* Google Red */
+        .btn-google { background: #4285f4 !important; color: white !important; } /* Google Blue */
+        .btn-download { background: var(--success); color: white; border: none; grid-column: span 2; }
 
-        /* Support Panel */
         .support-panel { margin-top: 35px; text-align: center; border-top: 1px solid #30363d; padding-top: 25px; }
-        .support-flex { display: flex; flex-direction: column; gap: 12px; align-items: center; }
-
         .footer { text-align: center; margin-top: 30px; font-size: 9px; color: #484f58; line-height: 1.6; }
     </style>
 </head>
-<body oncontextmenu="return false">
+<body>
 
 <div class="container">
     <h1>🏦 Bank Pro Max</h1>
-    <div class="tagline">PREMIUM FINANCIAL TOOL BY RMV APEX 🚩</div>
+    <div class="tagline">BY RAMESH MEWALAL VISHWAKARMA 🚩</div>
     
     <div class="search-area">
         <input type="text" id="userInput" placeholder="IFSC, Bank, or Branch...">
@@ -64,72 +61,58 @@
         </div>
         
         <div class="tools-grid">
-            <button class="btn-tool btn-download" onclick="downloadDetails()"><i class="fas fa-file-download"></i> Save as TXT</button>
-            <a id="mapLink" target="_blank" class="btn-tool"><i class="fas fa-map-marker-alt"></i> Live Location</a>
-            <a id="searchLink" target="_blank" class="btn-tool"><i class="fas fa-search-plus"></i> More Details</a>
-            <button class="btn-tool" onclick="copyToClipboard()"><i class="fas fa-copy"></i> Copy Data</button>
+            <a id="mapLink" target="_blank" class="btn-tool btn-map"><i class="fas fa-map-marker-alt"></i> Live Map</a>
+            <a id="searchLink" target="_blank" class="btn-tool btn-google"><i class="fab fa-google"></i> Google Map</a>
+            <button class="btn-tool" onclick="copyToClipboard()"><i class="fas fa-copy"></i> Copy All</button>
+            <button class="btn-tool btn-download" onclick="downloadDetails()"><i class="fas fa-file-download"></i> Download Report</button>
         </div>
     </div>
 
     <div class="support-panel">
-        <div class="support-flex">
-            <a href="https://buymeacoffee.com/rameshmewalalvishwakarma" target="_blank">
-                <img src="https://img.buymeacoffee.com/button-api/?text=Buy me a coffee&emoji=☕&slug=rameshmewalalvishwakarma&button_colour=FFDD00&font_colour=000000&font_family=Inter&outline_colour=000000&coffee_colour=ffffff" style="height: 38px;">
-            </a>
-            <a href="https://ko-fi.com/rameshmewalalvishwakarma" target="_blank" style="background:#29abe0; color:white; padding:10px 20px; border-radius:10px; text-decoration:none; font-weight:800; font-size:11px;">
-                <i class="fas fa-mug-hot"></i> Support on Ko-fi
-            </a>
-        </div>
+        <a href="https://buymeacoffee.com/rameshmewalalvishwakarma" target="_blank">
+            <img src="https://img.buymeacoffee.com/button-api/?text=Buy me a coffee&emoji=☕&slug=rameshmewalalvishwakarma&button_colour=FFDD00&font_colour=000000&font_family=Inter&outline_colour=000000&coffee_colour=ffffff" style="height: 38px;">
+        </a>
     </div>
 
     <div class="footer">
-        CRAFTED WITH ❤️ BY RAMESH MEWALAL VISHWAKARMA 🚩<br>
-        SECURE & ENCRYPTED RMV APEX INTERFACE © 2026
+        CRAFTED BY RAMESH MEWALAL VISHWAKARMA 🚩<br>
+        RMV APEX GROUP © 2026
     </div>
 </div>
 
 <script>
-    let currentData = null;
-
     async function fetchDetails() {
         const input = document.getElementById('userInput').value.trim();
         if (!input) return alert("Enter details first!");
-
         const isIFSC = /^[A-Z]{4}0[A-Z0-9]{6}$/i.test(input);
         
         try {
             if (isIFSC) {
                 const res = await fetch(`https://ifsc.razorpay.com/${input.toUpperCase()}`);
                 if (res.ok) {
-                    currentData = await res.json();
-                    renderUI(currentData);
-                } else {
-                    renderFallback(input);
-                }
-            } else {
-                renderFallback(input);
-            }
+                    const data = await res.json();
+                    renderUI(data);
+                } else { renderFallback(input); }
+            } else { renderFallback(input); }
             document.getElementById('results').style.display = 'block';
-        } catch (e) { alert("Data Fetching Error! 🚩"); }
+        } catch (e) { alert("Error! 🚩"); }
     }
 
     function renderUI(data) {
-        const rows = [
-            ["Bank", data.BANK], ["Branch", data.BRANCH], ["IFSC", data.IFSC], 
-            ["MICR", data.MICR || "NA"], ["Contact", data.CONTACT || "NA"], 
-            ["City", data.CITY], ["State", data.STATE], ["Address", data.ADDRESS]
-        ];
-        let html = rows.map(r => `<div class="info-row"><span class="label">${r[0]}</span><span class="val">${r[1]}</span></div>`).join('');
-        document.getElementById('dataRows').innerHTML = html;
-        document.getElementById('mapLink').href = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(data.BANK + " " + data.BRANCH)}`;
-        document.getElementById('searchLink').href = `https://www.google.com/search?q=${encodeURIComponent(data.BANK + " " + data.BRANCH + " swift code")}`;
+        const rows = [["Bank", data.BANK], ["Branch", data.BRANCH], ["IFSC", data.IFSC], ["MICR", data.MICR || "NA"], ["City", data.CITY], ["State", data.STATE], ["Address", data.ADDRESS]];
+        document.getElementById('dataRows').innerHTML = rows.map(r => `<div class="info-row"><span class="label">${r[0]}</span><span class="val">${r[1]}</span></div>`).join('');
+        
+        // 1. Live Map: सीधे रास्ता दिखाने के लिए (Navigation)
+        document.getElementById('mapLink').href = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(data.BANK + " " + data.BRANCH + " " + data.ADDRESS)}`;
+        
+        // 2. Google Search: गूगल सर्च में पूरी कुंडली निकालने के लिए
+        document.getElementById('searchLink').href = `https://www.google.com/search?q=${encodeURIComponent(data.BANK + " " + data.BRANCH + " location map swift micr")}`;
     }
 
     function renderFallback(q) {
-        document.getElementById('dataRows').innerHTML = `<div class="info-row" style="display:block; text-align:center;"><p style="color:var(--accent); margin:0;">Target: ${q}</p><p style="font-size:11px;">Use external tools below for full extraction.</p></div>`;
-        document.getElementById('mapLink').href = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(q + " bank")}`;
-        document.getElementById('searchLink').href = `https://www.google.com/search?q=${encodeURIComponent(q + " bank details")}`;
-        currentData = q;
+        document.getElementById('dataRows').innerHTML = `<div class="info-row" style="display:block; text-align:center;"><p style="color:var(--accent); margin:0;">Target: ${q}</p><p style="font-size:11px;">Detailed extraction ready via Google.</p></div>`;
+        document.getElementById('mapLink').href = `https://www.google.com/maps/search/${encodeURIComponent(q)}`;
+        document.getElementById('searchLink').href = `https://www.google.com/search?q=${encodeURIComponent(q + " bank details ifsc branch map")}`;
     }
 
     function downloadDetails() {
@@ -142,14 +125,12 @@
     }
 
     function copyToClipboard() {
-        const text = document.getElementById('printArea').innerText;
-        navigator.clipboard.writeText(text).then(() => alert("Copied to Clipboard! ✅"));
+        navigator.clipboard.writeText(document.getElementById('printArea').innerText).then(() => alert("Copied! ✅"));
     }
 
     function clearAll() {
         document.getElementById('userInput').value = "";
         document.getElementById('results').style.display = 'none';
-        currentData = null;
     }
 </script>
 
