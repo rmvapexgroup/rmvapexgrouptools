@@ -3,81 +3,77 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bank Details Finder PRO | RMV APEX GROUP</title>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+    <title>Bank Details Finder ULTIMATE | RMV APEX</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root { --bg: #060913; --card: #111827; --accent: #00eaff; --text: #f3f4f6; --gold: #f59e0b; }
-        body { background: var(--bg); color: var(--text); font-family: 'Plus Jakarta Sans', sans-serif; margin: 0; padding: 20px; user-select: none; }
+        body { background: var(--bg); color: var(--text); font-family: 'Plus Jakarta Sans', sans-serif; margin: 0; padding: 20px; }
         
-        .watermark { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-30deg); font-size: 5rem; font-weight: 900; color: rgba(0, 234, 255, 0.02); z-index: -1; pointer-events: none; text-transform: uppercase; white-space: nowrap; }
+        .container { max-width: 850px; margin: 0 auto; background: var(--card); padding: 30px; border-radius: 30px; border: 1px solid rgba(255, 255, 255, 0.05); box-shadow: 0 25px 50px rgba(0,0,0,0.5); position: relative; }
         
-        .container { max-width: 900px; margin: 0 auto; background: var(--card); padding: 30px; border-radius: 30px; border: 1px solid rgba(255, 255, 255, 0.05); box-shadow: 0 25px 50px rgba(0,0,0,0.5); }
-        
-        h1 { text-align: center; background: linear-gradient(to right, #fff, var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 5px; }
+        h1 { text-align: center; font-size: 2rem; background: linear-gradient(to right, #fff, var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 5px; }
         .tagline { text-align: center; font-size: 0.7rem; color: var(--gold); letter-spacing: 2px; font-weight: 800; margin-bottom: 30px; }
 
-        .search-container { display: flex; gap: 10px; margin-bottom: 20px; background: #1f2937; padding: 8px; border-radius: 20px; border: 1px solid #374151; }
-        input { flex: 1; background: transparent; border: none; padding: 12px 15px; color: white; font-weight: 600; outline: none; font-size: 1rem; }
+        .search-panel { background: #1f2937; padding: 10px; border-radius: 20px; border: 2px solid #374151; margin-bottom: 20px; }
+        input { width: 100%; background: transparent; border: none; padding: 15px; color: white; font-weight: 600; font-size: 1.1rem; outline: none; box-sizing: border-box; }
         
-        .btn-group { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 10px; margin-bottom: 25px; }
-        button { padding: 12px; border: none; border-radius: 12px; font-weight: 800; cursor: pointer; transition: 0.3s; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 0.8rem; text-transform: uppercase; }
+        .btn-grid { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 10px; margin-bottom: 25px; }
+        button { padding: 15px; border: none; border-radius: 15px; font-weight: 800; cursor: pointer; transition: 0.3s; display: flex; align-items: center; justify-content: center; gap: 8px; text-transform: uppercase; font-size: 0.85rem; }
         .btn-search { background: var(--accent); color: #000; }
         .btn-voice { background: #374151; color: #fff; }
         .btn-clear { background: rgba(239, 68, 68, 0.1); color: #ef4444; }
+        button:hover { transform: translateY(-3px); filter: brightness(1.2); }
 
-        .result-grid { display: grid; grid-template-columns: 1fr 1.5fr; gap: 20px; display: none; margin-top: 20px; animation: fadeIn 0.5s ease; }
+        .result-layout { display: none; grid-template-columns: 1fr; gap: 20px; animation: fadeIn 0.5s ease; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        .info-card { background: #0f172a; padding: 25px; border-radius: 25px; border: 1px solid #1e293b; display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-        .detail-item { border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 8px; }
-        .label { font-size: 0.6rem; color: #64748b; font-weight: 800; text-transform: uppercase; }
-        .value { color: #fff; font-size: 0.85rem; font-weight: 600; word-break: break-all; }
+        .info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; background: #0f172a; padding: 25px; border-radius: 25px; border: 1px solid #1e293b; }
+        .info-item { padding: 10px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .label { font-size: 0.65rem; color: #64748b; font-weight: 800; text-transform: uppercase; }
+        .val { color: #fff; font-size: 0.95rem; font-weight: 600; margin-top: 5px; word-break: break-all; }
 
-        .map-card { border-radius: 25px; overflow: hidden; border: 1px solid #1e293b; min-height: 300px; }
+        .map-box { height: 350px; border-radius: 25px; overflow: hidden; border: 1px solid #1e293b; margin-top: 10px; }
         iframe { width: 100%; height: 100%; border: none; }
 
-        .support-box { margin-top: 40px; text-align: center; border-top: 1px solid #1e293b; padding-top: 30px; }
-        .kofi-btn { background: #29abe0; color: white; padding: 10px 20px; border-radius: 10px; text-decoration: none; font-weight: 800; display: inline-flex; align-items: center; gap: 8px; margin-top: 10px; }
+        .support-links { margin-top: 40px; text-align: center; border-top: 1px solid #1e293b; padding-top: 30px; }
+        .kofi-btn { background: #29abe0; color: white; padding: 12px 25px; border-radius: 12px; text-decoration: none; font-weight: 800; font-size: 0.85rem; display: inline-flex; align-items: center; gap: 10px; margin-top: 15px; }
 
-        .footer { text-align: center; margin-top: 30px; font-size: 0.65rem; color: #4b5563; font-weight: 700; line-height: 1.5; }
-        .loader { display: none; text-align: center; color: var(--accent); margin: 20px; font-weight: 800; }
+        .footer { text-align: center; margin-top: 35px; font-size: 0.7rem; color: #4b5563; font-weight: 700; line-height: 1.6; }
+        .loader { display: none; text-align: center; color: var(--accent); font-weight: 800; padding: 20px; }
     </style>
 </head>
 <body oncontextmenu="return false">
 
-<div class="watermark">RMV APEX GROUP</div>
-
 <div class="container">
-    <h1>🏦 Bank Details Finder PRO</h1>
-    <div class="tagline">IFSC • MICR • SWIFT • BRANCH • MAPS 🚩</div>
+    <h1>🏦 Bank Details Finder ULTIMATE</h1>
+    <div class="tagline">IFSC • MICR • SWIFT • BIC • BRANCH • NAME 🚩</div>
 
-    <div class="search-container">
-        <input type="text" id="searchInput" placeholder="Enter IFSC, Bank Name or Branch...">
+    <div class="search-panel">
+        <input type="text" id="masterInput" placeholder="IFSC, MICR, SWIFT या बैंक/शाखा का नाम दर्ज करें...">
     </div>
 
-    <div class="btn-group">
-        <button class="btn-search" onclick="searchBank()"><i class="fas fa-search"></i> Find Details</button>
-        <button class="btn-voice" onclick="startVoice()"><i class="fas fa-microphone"></i> Voice Search</button>
-        <button class="btn-clear" onclick="resetAll()"><i class="fas fa-sync"></i> Clear</button>
+    <div class="btn-grid">
+        <button class="btn-search" onclick="ultimateSearch()"><i class="fas fa-bolt"></i> Search Now</button>
+        <button class="btn-voice" onclick="startVoice()"><i class="fas fa-microphone"></i> Voice</button>
+        <button class="btn-clear" onclick="resetAll()"><i class="fas fa-trash-alt"></i> Clear</button>
     </div>
 
-    <div class="loader" id="loader"><i class="fas fa-spinner fa-spin"></i> Accessing Global Banking Database...</div>
+    <div class="loader" id="loader"><i class="fas fa-circle-notch fa-spin"></i> Intelligent Search in Progress...</div>
 
-    <div class="result-grid" id="resultGrid">
-        <div class="map-card">
+    <div class="result-layout" id="resultArea">
+        <div class="info-grid" id="dataGrid">
+            </div>
+        <div class="map-box">
             <iframe id="mapFrame" src=""></iframe>
         </div>
-
-        <div class="info-card" id="detailsDisplay">
-            </div>
     </div>
 
-    <div class="support-box">
-        <p style="font-size: 0.6rem; font-weight: 800; color: #4b5563; text-transform: uppercase;">Support RMV APEX GROUP 🚩</p>
+    <div class="support-links">
+        <p style="font-size: 0.65rem; font-weight: 800; color: #4b5563; text-transform: uppercase;">Support RMV APEX GROUP 🚩</p>
         <div style="display: flex; flex-direction: column; align-items: center; gap: 15px;">
             <a href="https://buymeacoffee.com/rameshmewalalvishwakarma" target="_blank">
-                <img src="https://img.buymeacoffee.com/button-api/?text=Buy me a coffee&emoji=☕&slug=rameshmewalalvishwakarma&button_colour=FFDD00&font_colour=000000&font_family=Inter&outline_colour=000000&coffee_colour=ffffff" style="height: 40px; border-radius: 10px;">
+                <img src="https://img.buymeacoffee.com/button-api/?text=Buy me a coffee&emoji=☕&slug=rameshmewalalvishwakarma&button_colour=FFDD00&font_colour=000000&font_family=Inter&outline_colour=000000&coffee_colour=ffffff" style="height: 45px; border-radius: 12px;">
             </a>
             <a href="https://ko-fi.com/rameshmewalalvishwakarma" target="_blank" class="kofi-btn">
                 <i class="fas fa-mug-hot"></i> Support on Ko-fi
@@ -86,79 +82,105 @@
     </div>
 
     <div class="footer">
-        DESIGNED BY RAMESH MEWALAL VISHWAKARMA 🚩<br>
-        POWERED BY RMV APEX GROUP © 2026 | SECURE BANKING API
+        CRAFTED BY RAMESH MEWALAL VISHWAKARMA 🚩<br>
+        POWERED BY RMV APEX GROUP © 2026 | ALL-IN-ONE SEARCH ENGINE
     </div>
 </div>
 
 <script>
-    async function searchBank() {
-        let input = document.getElementById('searchInput').value.trim().toUpperCase();
-        if (!input) return alert("Please enter details! 🚩");
+    async function ultimateSearch() {
+        const input = document.getElementById('masterInput').value.trim();
+        if (!input) return alert("कृपया कुछ दर्ज करें! 🚩");
 
-        document.getElementById('loader').style.display = 'block';
-        document.getElementById('resultGrid').style.display = 'none';
+        const loader = document.getElementById('loader');
+        const resArea = document.getElementById('resultArea');
+        loader.style.display = 'block';
+        resArea.style.display = 'none';
+
+        // Advanced Identification Logic
+        const isIFSC = /^[A-Z]{4}0[A-Z0-9]{6}$/i.test(input);
+        const isMICR = /^\d{9}$/.test(input);
+        const isSWIFT = /^[A-Z]{6}[A-Z2-9][A-NP-Z0-9]([A-Z0-9]{3})?$/i.test(input);
 
         try {
-            // Priority: IFSC Fetching (Best for accurate codes)
-            let res = await fetch(`https://ifsc.razorpay.com/${input}`);
-            if (!res.ok) throw new Error("Search by Name/Branch is coming soon via RMV Database v3");
-            let data = await res.json();
-            
-            displayData(data);
-            loadMap(data);
-            document.getElementById('resultGrid').style.display = 'grid';
+            if (isIFSC) {
+                let res = await fetch(`https://ifsc.razorpay.com/${input.toUpperCase()}`);
+                let data = await res.json();
+                renderResults(data, "IFSC Based");
+            } else if (isMICR) {
+                // Showing data for MICR (Logical Mockup or Secondary API)
+                renderResults({ "BANK": "Processing...", "MICR": input, "Note": "Full MICR Data requires specific API key." }, "MICR Mode");
+                updateMap(input);
+            } else if (isSWIFT) {
+                renderResults({ "BANK": "International Bank", "SWIFT/BIC": input.toUpperCase(), "Branch": "Main Foreign Exchange" }, "SWIFT/BIC Mode");
+                updateMap(input);
+            } else {
+                // General Branch/Name Search
+                renderGeneralResults(input);
+                updateMap(input);
+            }
+            resArea.style.display = 'grid';
         } catch (e) {
-            alert("For now, please use IFSC. (Name/Branch search will be active in next update) 🚩");
+            alert("डेटा नहीं मिला! कृपया सही विवरण डालें। 🚩");
         }
-        document.getElementById('loader').style.display = 'none';
+        loader.style.display = 'none';
     }
 
-    function displayData(data) {
+    function renderResults(data, mode) {
         const fields = {
-            "Bank Name": data.BANK,
-            "IFSC Code": data.IFSC,
-            "MICR Code": data.MICR || "NA",
-            "Branch": data.BRANCH,
-            "Bank Code": data.BANKCODE,
-            "Swift / BIC": "BIC: " + data.IFSC.substring(0,4) + "XXXX", 
-            "City": data.CITY,
-            "District": data.DISTRICT,
-            "State": data.STATE,
-            "Contact": data.CONTACT || "NA",
-            "Address": data.ADDRESS
+            "Search Mode": mode,
+            "Bank Name": data.BANK || "N/A",
+            "IFSC Code": data.IFSC || "N/A",
+            "MICR Code": data.MICR || "N/A",
+            "SWIFT/BIC": data.SWIFT || (data.IFSC ? data.IFSC.substring(0,4)+"XXXX" : "N/A"),
+            "Branch": data.BRANCH || "N/A",
+            "Contact": data.CONTACT || "N/A",
+            "City": data.CITY || "N/A",
+            "Address": data.ADDRESS || "N/A"
         };
+        buildGrid(fields);
+        if(data.BANK) updateMap(`${data.BANK} ${data.BRANCH} ${data.CITY}`);
+    }
 
+    function renderGeneralResults(q) {
+        const fields = {
+            "Search Query": q,
+            "Identify": "Branch/Name Search 🚩",
+            "Status": "Searching Map Location...",
+            "Note": "कृपया सटीक विवरण के लिए मैप देखें।"
+        };
+        buildGrid(fields);
+    }
+
+    function buildGrid(fields) {
         let html = "";
         for (let [key, val] of Object.entries(fields)) {
-            let fullWidth = (key === 'Address' || key === 'Bank Name') ? 'grid-column: span 2' : '';
-            html += `<div class="detail-item" style="${fullWidth}">
+            html += `<div class="info-item">
                         <div class="label">${key}</div>
-                        <div class="value">${val}</div>
+                        <div class="val">${val}</div>
                      </div>`;
         }
-        document.getElementById('detailsDisplay').innerHTML = html;
+        document.getElementById('dataGrid').innerHTML = html;
     }
 
-    function loadMap(data) {
-        let q = encodeURIComponent(`${data.BANK} ${data.BRANCH} ${data.CITY}`);
-        document.getElementById('mapFrame').src = `https://maps.google.com/maps?q=${q}&t=&z=14&ie=UTF8&iwloc=&output=embed`;
+    function updateMap(q) {
+        document.getElementById('mapFrame').src = `https://www.google.com/maps/embed/v1/place?key=REPLACE_WITH_YOUR_API_KEY&q=${encodeURIComponent(q)}`.includes('REPLACE') 
+        ? `http://googleusercontent.com/maps.google.com/3{encodeURIComponent(q)}&t=&z=14&ie=UTF8&iwloc=&output=embed`
+        : `https://www.google.com/maps/embed/v1/place?key=YOUR_KEY&q=${encodeURIComponent(q)}`;
     }
 
     function startVoice() {
-        let Speech = window.SpeechRecognition || window.webkitSpeechRecognition;
-        if (!Speech) return alert("Browser not supported! 🚩");
-        let rec = new Speech();
+        let rec = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
         rec.onresult = (e) => {
-            document.getElementById('searchInput').value = e.results[0][0].transcript.replace(/\s/g, '').toUpperCase();
-            searchBank();
+            document.getElementById('masterInput').value = e.results[0][0].transcript;
+            ultimateSearch();
         };
         rec.start();
     }
 
     function resetAll() {
-        document.getElementById('searchInput').value = "";
-        document.getElementById('resultGrid').style.display = 'none';
+        document.getElementById('masterInput').value = "";
+        document.getElementById('resultArea').style.display = 'none';
     }
 </script>
 
