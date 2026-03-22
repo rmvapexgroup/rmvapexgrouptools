@@ -43,19 +43,19 @@
         .result-text { font-size: 1.8rem; color: var(--p); font-weight: 800; margin-bottom: 5px; }
         .rate-info { font-size: 0.9rem; color: #64748b; font-weight: 700; }
 
-        .btn-download { width: 100%; margin-top: 20px; background: var(--success); color: white; padding: 12px; font-size: 0.85rem; }
+        .btn-download { width: 100%; margin-top: 20px; background: var(--success); color: white; padding: 12px; font-size: 0.85rem; border: none; border-radius: 12px; font-weight: 800; cursor: pointer; }
         .btn-download:hover { transform: scale(1.02); box-shadow: 0 10px 20px rgba(16, 185, 129, 0.2); }
 
-        .support-section { margin-top: 35px; padding-top: 20px; border-top: 1px solid #eee; text-align: center; }
-        .support-btns { display: flex; justify-content: center; gap: 12px; margin-top: 10px; }
-        .support-btn { padding: 10px 15px; border-radius: 12px; text-decoration: none; font-size: 0.75rem; font-weight: 700; display: flex; align-items: center; gap: 8px; }
-        .bmc-btn { background: #FFDD00; color: #000; }
-        .kofi-btn { background: #29abe0; color: #fff; }
+        /* --- Updated Support Section --- */
+        .support-section { margin-top: 35px; padding-top: 20px; border-top: 1px solid #f1f5f9; text-align: center; }
+        .support-btns { display: flex; flex-direction: column; align-items: center; gap: 12px; margin-top: 15px; }
+        .kofi-btn { background: #29abe0; color: white; padding: 10px 20px; border-radius: 10px; font-weight: 800; font-size: 0.8rem; text-decoration: none; display: flex; align-items: center; gap: 8px; box-shadow: 0 4px 15px rgba(41,171,224,0.3); transition: 0.3s; }
+        .kofi-btn:hover { transform: translateY(-2px); }
 
-        .footer-tag { text-align: center; margin-top: 25px; font-size: 0.75rem; color: #94a3b8; font-weight: 800; }
+        .footer-tag { text-align: center; margin-top: 25px; font-size: 0.75rem; color: #94a3b8; font-weight: 800; border-top: 1px solid #f8fafc; padding-top: 15px; }
 
         @media print {
-            .btn-grid, .back-nav, .support-section, .btn-download, .footer-tag, .swap-btn { display: none !important; }
+            .no-print, .btn-grid, .back-nav, .support-section, .btn-download, .footer-tag, .swap-btn { display: none !important; }
             .card { border: none; box-shadow: none; width: 100%; max-width: 100%; }
             .result-box { display: block !important; background: white; border: 1px solid #ddd; }
         }
@@ -66,7 +66,7 @@
 <div class="watermark">RMV APEX GROUP</div>
 
 <div class="card">
-    <div class="back-nav">
+    <div class="back-nav no-print">
         <a href="../index.html" class="back-link"><i class="fas fa-arrow-left"></i> DASHBOARD</a>
     </div>
 
@@ -88,7 +88,7 @@
         </select>
     </div>
 
-    <div class="swap-btn" onclick="swapCurrencies()" title="Swap">
+    <div class="swap-btn no-print" onclick="swapCurrencies()" title="Swap">
         <i class="fas fa-retweet"></i>
     </div>
 
@@ -103,7 +103,7 @@
         </select>
     </div>
     
-    <div class="btn-grid">
+    <div class="btn-grid no-print">
         <button class="btn-calc" onclick="convertCurrency()"><i class="fas fa-sync-alt"></i> Convert</button>
         <button class="btn-clear" onclick="clearAll()"><i class="fas fa-undo"></i> Reset</button>
     </div>
@@ -112,15 +112,22 @@
         <div class="result-text" id="finalResult">0.00</div>
         <div class="rate-info" id="rateInfo">1 INR = 0.012 USD</div>
         
-        <button class="btn-download" onclick="downloadPDF()"><i class="fas fa-file-invoice-dollar"></i> Download Report</button>
+        <button class="btn-download no-print" onclick="downloadPDF()"><i class="fas fa-file-invoice-dollar"></i> Download Report</button>
     </div>
 
-    <div class="support-section">
+    <div class="support-section no-print">
+        <p style="font-size: 0.65rem; font-weight: 800; color: #64748b; text-transform: uppercase;">Support RMV APEX GROUP 🚩</p>
         <div class="support-btns">
-            <a href="https://buymeacoffee.com/rameshmewalalvishwakarma" class="support-btn bmc-btn" target="_blank"><i class="fas fa-coffee"></i> Coffee</a>
-            <a href="https://ko-fi.com/rameshmewalalvishwakarma" class="support-btn kofi-btn" target="_blank"><i class="fas fa-mug-hot"></i> Ko-fi</a>
+            <a href="https://buymeacoffee.com/rameshmewalalvishwakarma" target="_blank">
+                <img src="https://img.buymeacoffee.com/button-api/?text=Buy me a coffee&emoji=☕&slug=rameshmewalalvishwakarma&button_colour=FFDD00&font_colour=000000&font_family=Inter&outline_colour=000000&coffee_colour=ffffff" style="height: 40px; border-radius: 10px; box-shadow: 0 4px 15px rgba(255, 221, 0, 0.2);">
+            </a>
+
+            <a href="https://ko-fi.com/rameshmewalalvishwakarma" target="_blank" class="kofi-btn">
+                <i class="fas fa-mug-hot"></i> Support on Ko-fi
+            </a>
         </div>
     </div>
+
     <div class="footer-tag">Crafted by Ramesh Mewalal Vishwakarma 🚩</div>
 </div>
 
