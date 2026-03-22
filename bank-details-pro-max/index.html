@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bank Pro Max | RMV APEX GROUP</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root { --bg: #0d1117; --card: #161b22; --accent: #58a6ff; --text: #c9d1d9; --success: #238636; --danger: #da3633; }
+        body { background: var(--bg); color: var(--text); font-family: 'Plus Jakarta Sans', sans-serif; margin: 0; padding: 15px; }
+        .container { width: 100%; max-width: 500px; margin: auto; background: var(--card); padding: 25px; border-radius: 24px; border: 1px solid #30363d; box-shadow: 0 15px 50px rgba(0,0,0,0.6); }
+        
+        h1 { text-align: center; color: var(--accent); font-size: 1.5rem; margin-bottom: 20px; }
+        
+        .search-area { background: #010409; border-radius: 14px; border: 1px solid #30363d; padding: 4px; display: flex; margin-bottom: 12px; }
+        input { flex: 1; background: transparent; border: none; padding: 12px; color: #fff; font-size: 16px; outline: none; }
+        
+        .btn-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 10px; margin-bottom: 20px; }
+        .btn { border: none; padding: 14px; border-radius: 12px; font-weight: 800; cursor: pointer; text-transform: uppercase; font-size: 12px; display: flex; align-items: center; justify-content: center; gap: 8px; transition: 0.2s; }
+        .btn-search { background: var(--accent); color: #0d1117; }
+        .btn-clear { background: rgba(218, 54, 51, 0.1); color: var(--danger); border: 1px solid rgba(218, 54, 51, 0.2); }
+
+        #results { display: none; margin-top: 15px; animation: fadeIn 0.4s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .info-card { background: #0d1117; border-radius: 16px; padding: 15px; border: 1px solid #30363d; margin-bottom: 15px; }
+        .info-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 13px; }
+        .label { color: #8b949e; font-weight: 600; }
+        .val { color: #fff; text-align: right; width: 65%; font-weight: 700; word-wrap: break-word; }
+
+        .map-box { height: 300px; border-radius: 16px; overflow: hidden; border: 1px solid #30363d; margin-bottom: 15px; }
+        iframe { width: 100%; height: 100%; border: none; }
+
+        .tools { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px; }
+        .btn-tool { background: #21262d; color: #fff; padding: 12px; border-radius: 10px; text-decoration: none; font-size: 11px; font-weight: 800; border: 1px solid #30363d; display: flex; align-items: center; justify-content: center; gap: 6px; }
+
+        /* Support Section 🚩 */
+        .support-panel { margin-top: 35px; text-align: center; border-top: 1px solid #30363d; padding-top: 25px; }
+        .support-flex { display: flex; flex-direction: column; gap: 12px; align-items: center; }
+
+        .footer { text-align: center; margin-top: 30px; font-size: 9px; color: #484f58; letter-spacing: 0.5px; }
+    </style>
+</head>
+<body oncontextmenu="return false">
+
+<div class="container">
+    <h1>🏦 Bank Pro Max</h1>
+    
+    <div class="search-area">
+        <input type="text" id="bankInput" placeholder="Enter IFSC, Name, or Branch...">
+    </div>
+
+    <div class="btn-grid">
+        <button class="btn btn-search" onclick="startFinder()"><i class="fas fa-search-dollar"></i> Get Details</button>
+        <button class="btn btn-clear" onclick="resetAll()"><i class="fas fa-redo"></i> Reset</button>
+    </div>
+
+    <div id="results">
+        <div class="map-box">
+            <iframe id="mapFrame" src=""></iframe>
+        </div>
+
+        <div class="info-card" id="dataPrint">
+            <div id="dataList"></div>
+        </div>
+
+        <div class="tools">
+            <button class="btn-tool" onclick="copyData()"><i class="fas fa-copy"></i> Copy All</button>
+            <button class="btn-tool" style="background:var(--success)" onclick="downloadData()"><i class="fas fa-file-download"></i> Save TXT</button>
+        </div>
+    </div>
+
+    <div class="support-panel">
+        <div class="support-flex">
+            <a href="https://buymeacoffee.com/rameshmewalalvishwakarma" target="_blank">
+                <img src="https://img.buymeacoffee.com/button-api/?text=Buy me a coffee&emoji=☕&slug=rameshmewalalvishwakarma&button_colour=FFDD00&font_colour=000000&font_family=Inter&outline_colour=000000&coffee_colour=ffffff" style="height: 38px; border-radius: 8px;">
+            </a>
+            <a href="https://ko-fi.com/rameshmewalalvishwakarma" target="_blank" style="background:#29abe0; color:white; padding:10px 20px; border-radius:10px; text-decoration:none; font-weight:800; font-size:11px; display:flex; align-items:center; gap:8px;">
+                <i class="fas fa-mug-hot"></i> Support on Ko-fi
+            </a>
+        </div>
+    </div>
+
+    <div class="footer">
+        CRAFTED BY RAMESH MEWALAL VISHWAKARMA 🚩<br>
+        POWERED BY RMV APEX GROUP © 2026
+    </div>
+</div>
+
+<script>
+    async function startFinder() {
+        const input = document.getElementById('bankInput').value.trim();
+        if(!input) return alert("Please enter details! 🚩");
+
+        const mapFrame = document.getElementById('mapFrame');
+        const dataList = document.getElementById('dataList');
+        const results = document.getElementById('results');
+
+        // Detecting IFSC
+        const isIFSC = /^[A-Z]{4}0[A-Z0-9]{6}$/i.test(input);
+
+        try {
+            if (isIFSC) {
+                const response = await fetch(`https://ifsc.razorpay.com/${input.toUpperCase()}`);
+                if (response.ok) {
+                    const data = await response.json();
+                    renderHTML(data);
+                    mapFrame.src = `https://www.google.com/maps?q=${encodeURIComponent(data.BANK + " " + data.BRANCH)}&output=embed`;
+                } else {
+                    fallbackSearch(input);
+                }
+            } else {
+                fallbackSearch(input);
+            }
+            results.style.display = 'block';
+        } catch (e) {
+            fallbackSearch(input);
+            results.style.display = 'block';
+        }
+    }
+
+    function renderHTML(data) {
+        const fields = [
+            ["Bank", data.BANK], ["Branch", data.BRANCH], ["IFSC", data.IFSC],
+            ["MICR", data.MICR || "NA"], ["City", data.CITY], ["Contact", data.CONTACT || "NA"],
+            ["State", data.STATE], ["Address", data.ADDRESS]
+        ];
+        document.getElementById('dataList').innerHTML = fields.map(f => `
+            <div class="info-row"><span class="label">${f[0]}</span><span class="val">${f[1]}</span></div>
+        `).join('');
+    }
+
+    function fallbackSearch(q) {
+        document.getElementById('dataList').innerHTML = `
+            <div class="info-row" style="display:block; text-align:center;">
+                <p style="color:var(--accent); font-weight:800;">Target: ${q}</p>
+                <p style="font-size:11px;">Search details found in map above.</p>
+            </div>`;
+        document.getElementById('mapFrame').src = `https://www.google.com/maps?q=${encodeURIComponent(q + " bank branch location")}&output=embed`;
+    }
+
+    function copyData() {
+        navigator.clipboard.writeText(document.getElementById('dataPrint').innerText).then(() => alert("Copied! ✅"));
+    }
+
+    function downloadData() {
+        const blob = new Blob([document.getElementById('dataPrint').innerText], { type: "text/plain" });
+        const a = document.createElement("a");
+        a.download = "Bank_Details.txt"; a.href = URL.createObjectURL(blob); a.click();
+    }
+
+    function resetAll() {
+        document.getElementById('bankInput').value = "";
+        document.getElementById('results').style.display = 'none';
+    }
+</script>
+
+</body>
+</html>
