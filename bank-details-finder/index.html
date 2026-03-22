@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bank Finder ULTIMATE | RMV APEX</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root { --bg: #060913; --card: #111827; --accent: #00eaff; --text: #f3f4f6; --gold: #f59e0b; }
+        body { background: var(--bg); color: var(--text); font-family: 'Plus Jakarta Sans', sans-serif; margin: 0; padding: 15px; }
+        .container { max-width: 800px; margin: 0 auto; background: var(--card); padding: 25px; border-radius: 25px; border: 1px solid rgba(255, 255, 255, 0.05); box-shadow: 0 20px 40px rgba(0,0,0,0.5); }
+        h1 { text-align: center; font-size: 1.6rem; background: linear-gradient(to right, #fff, var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 5px; }
+        .tagline { text-align: center; font-size: 0.65rem; color: var(--gold); letter-spacing: 2px; font-weight: 800; margin-bottom: 20px; }
+        
+        .search-area { background: #1f2937; padding: 5px; border-radius: 15px; border: 1px solid #374151; display: flex; margin-bottom: 15px; }
+        input { flex: 1; background: transparent; border: none; padding: 12px; color: white; font-weight: 600; font-size: 1rem; outline: none; }
+        
+        .btn-grid { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 8px; margin-bottom: 20px; }
+        button { padding: 12px; border: none; border-radius: 12px; font-weight: 800; cursor: pointer; transition: 0.2s; display: flex; align-items: center; justify-content: center; gap: 6px; text-transform: uppercase; font-size: 0.75rem; }
+        .btn-search { background: var(--accent); color: #000; }
+        .btn-voice { background: #374151; color: #fff; }
+        .btn-clear { background: rgba(239, 68, 68, 0.1); color: #ef4444; }
+
+        #resultArea { display: none; margin-top: 15px; animation: fadeIn 0.4s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+
+        .info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; background: #0f172a; padding: 20px; border-radius: 20px; border: 1px solid #1e293b; margin-bottom: 15px; }
+        .data-box { padding: 8px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .label { font-size: 0.6rem; color: #64748b; font-weight: 800; text-transform: uppercase; }
+        .val { color: #fff; font-size: 0.85rem; font-weight: 600; margin-top: 3px; word-break: break-all; }
+
+        .map-box { height: 300px; border-radius: 20px; overflow: hidden; border: 1px solid #1e293b; background: #000; }
+        iframe { width: 100%; height: 100%; border: none; }
+
+        .support-area { margin-top: 30px; text-align: center; border-top: 1px solid #1e293b; padding-top: 25px; }
+        .footer { text-align: center; margin-top: 25px; font-size: 0.65rem; color: #4b5563; font-weight: 700; text-transform: uppercase; }
+        .loader { display: none; text-align: center; color: var(--accent); padding: 10px; font-weight: 800; font-size: 0.8rem; }
+    </style>
+</head>
+<body oncontextmenu="return false">
+
+<div class="container">
+    <h1>🏦 Bank Details Finder</h1>
+    <div class="tagline">IFSC • MICR • SWIFT • NAME • MAPS 🚩</div>
+
+    <div class="search-area">
+        <input type="text" id="searchInput" placeholder="IFSC, MICR, SWIFT या बैंक/ब्रांच का नाम डालें...">
+    </div>
+
+    <div class="btn-grid">
+        <button class="btn-search" onclick="doSearch()"><i class="fas fa-search"></i> Search</button>
+        <button class="btn-voice" onclick="runVoice()"><i class="fas fa-microphone"></i> Voice</button>
+        <button class="btn-clear" onclick="resetUI()"><i class="fas fa-undo"></i> Reset</button>
+    </div>
+
+    <div class="loader" id="loader"><i class="fas fa-spinner fa-spin"></i> Smart Search In Progress...</div>
+
+    <div id="resultArea">
+        <div class="info-grid" id="infoGrid"></div>
+        <div class="map-box">
+            <iframe id="mapFrame" src="about:blank"></iframe>
+        </div>
+    </div>
+
+    <div class="support-area">
+        <div style="display: flex; flex-direction: column; align-items: center; gap: 12px;">
+            <a href="https://buymeacoffee.com/rameshmewalalvishwakarma" target="_blank">
+                <img src="https://img.buymeacoffee.com/button-api/?text=Buy me a coffee&emoji=☕&slug=rameshmewalalvishwakarma&button_colour=FFDD00&font_colour=000000&font_family=Inter&outline_colour=000000&coffee_colour=ffffff" style="height: 40px; border-radius: 10px;">
+            </a>
+            <a href="https://ko-fi.com/rameshmewalalvishwakarma" target="_blank" style="background:#29abe0; color:white; padding:10px 20px; border-radius:10px; text-decoration:none; font-weight:800; font-size:0.75rem;">
+                <i class="fas fa-mug-hot"></i> Support on Ko-fi
+            </a>
+        </div>
+    </div>
+
+    <div class="footer">
+        CRAFTED BY RAMESH MEWALAL VISHWAKARMA 🚩<br>
+        POWERED BY RMV APEX GROUP © 2026
+    </div>
+</div>
+
+<script>
+    async function doSearch() {
+        const input = document.getElementById('searchInput').value.trim();
+        if (!input) return alert("कृपया कुछ दर्ज करें! 🚩");
+
+        document.getElementById('loader').style.display = 'block';
+        document.getElementById('resultArea').style.display = 'none';
+
+        const isIFSC = /^[A-Z]{4}0[A-Z0-9]{6}$/i.test(input);
+
+        try {
+            if (isIFSC) {
+                const res = await fetch(`https://ifsc.razorpay.com/${input.toUpperCase()}`);
+                if (res.ok) {
+                    const data = await res.json();
+                    renderFull(data);
+                    updateMap(`${data.BANK} ${data.BRANCH} ${data.CITY}`);
+                } else {
+                    renderFallback(input);
+                }
+            } else {
+                renderFallback(input);
+            }
+            document.getElementById('resultArea').style.display = 'block';
+        } catch (e) {
+            renderFallback(input);
+        }
+        document.getElementById('loader').style.display = 'none';
+    }
+
+    function renderFull(data) {
+        const fields = {
+            "Mode": "Direct Bank Data 💎",
+            "Bank": data.BANK,
+            "IFSC": data.IFSC,
+            "MICR": data.MICR || "NA",
+            "Branch": data.BRANCH,
+            "Contact": data.CONTACT || "NA",
+            "State": data.STATE,
+            "Address": data.ADDRESS
+        };
+        buildUI(fields);
+    }
+
+    function renderFallback(query) {
+        const fields = {
+            "Mode": "Live Smart Search 🚩",
+            "Target": query,
+            "Details": "Fetching Live Location...",
+            "Note": "मैप के अंदर 'View Larger Map' दबाकर पूरी डिटेल्स देखें।"
+        };
+        buildUI(fields);
+        updateMap(query);
+    }
+
+    function buildUI(fields) {
+        let html = "";
+        for (let [l, v] of Object.entries(fields)) {
+            html += `<div class="data-box"><div class="label">${l}</div><div class="val">${v}</div></div>`;
+        }
+        document.getElementById('infoGrid').innerHTML = html;
+    }
+
+    function updateMap(q) {
+        // Secure Google Maps Embed URL
+        const mapUrl = `https://www.google.com/maps?q=${encodeURIComponent(q)}&output=embed`;
+        document.getElementById('mapFrame').src = mapUrl;
+    }
+
+    function runVoice() {
+        let rec = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+        rec.onresult = (e) => {
+            document.getElementById('searchInput').value = e.results[0][0].transcript;
+            doSearch();
+        };
+        rec.start();
+    }
+
+    function resetUI() {
+        document.getElementById('searchInput').value = "";
+        document.getElementById('resultArea').style.display = 'none';
+    }
+</script>
+
+</body>
+</html>
