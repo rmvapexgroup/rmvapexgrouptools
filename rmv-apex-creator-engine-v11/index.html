@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RMV APEX GROUP | Super AI Creative Engine 🚩</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root { --bg: #030508; --primary: #00d2ff; --secondary: #3a7bd5; --gold: #ffd700; --glass: rgba(255, 255, 255, 0.03); --white: #ffffff; }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: #fff; display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
+
+        /* Branding Watermark */
+        .watermark-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; opacity: 0.04; display: flex; flex-wrap: wrap; justify-content: space-around; }
+        .wm-text { transform: rotate(-30deg); font-weight: 900; font-size: 15px; margin: 50px; color: #fff; }
+
+        /* Sidebar Navigation */
+        .app-shell { display: flex; height: 100%; }
+        .sidebar { width: 80px; background: #0a0c10; border-right: 1px solid #222; display: flex; flex-direction: column; align-items: center; padding: 20px 0; gap: 30px; }
+        .nav-item { color: #555; font-size: 20px; cursor: pointer; transition: 0.3s; position: relative; }
+        .nav-item:hover, .nav-item.active { color: var(--primary); }
+        .nav-item.active::after { content: ''; position: absolute; right: -20px; top: 50%; transform: translateY(-50%); width: 4px; height: 20px; background: var(--primary); border-radius: 10px; }
+
+        /* Editor Section */
+        .editor-panel { width: 450px; background: #0d1117; border-right: 1px solid #222; padding: 25px; overflow-y: auto; scrollbar-width: thin; }
+        .section-header { font-size: 11px; color: var(--gold); font-weight: 900; text-transform: uppercase; margin-bottom: 20px; letter-spacing: 2px; display: flex; align-items: center; gap: 10px; }
+        
+        .input-group { margin-bottom: 15px; }
+        .input-group label { display: block; font-size: 10px; color: #888; margin-bottom: 5px; text-transform: uppercase; }
+        .input-group input, .input-group textarea, .input-group select { width: 100%; background: #000; border: 1px solid #333; color: #fff; padding: 12px; border-radius: 10px; font-size: 13px; outline: none; }
+        .input-group input:focus { border-color: var(--primary); }
+
+        /* Preview Pane */
+        .preview-pane { flex: 1; background: #161b22; display: flex; justify-content: center; align-items: flex-start; padding: 40px; overflow-y: auto; }
+        
+        /* Resume Mode Styling */
+        .resume-paper { width: 210mm; min-height: 297mm; background: #fff; color: #333; padding: 50px; box-shadow: 0 40px 80px rgba(0,0,0,0.6); position: relative; }
+        .res-name { font-size: 32px; font-weight: 900; color: #000; text-transform: uppercase; border-bottom: 3px solid #000; padding-bottom: 10px; }
+        .res-contact { font-size: 11px; margin-top: 10px; color: #666; font-weight: bold; }
+        .res-section { margin-top: 25px; }
+        .res-sec-title { font-size: 14px; font-weight: 900; border-bottom: 1px solid #ddd; padding-bottom: 5px; margin-bottom: 10px; color: var(--secondary); text-transform: uppercase; }
+        .res-content { font-size: 12px; line-height: 1.6; white-space: pre-wrap; }
+
+        /* Bio/Ad Mode Styling */
+        .creative-card { width: 500px; background: #fff; color: #000; border-radius: 20px; padding: 30px; text-align: center; }
+        .creative-card h3 { font-size: 10px; color: #999; text-transform: uppercase; margin-bottom: 15px; }
+        .creative-content { font-size: 20px; font-weight: 700; line-height: 1.4; color: #222; }
+
+        /* Floating Actions */
+        .floating-bar { position: fixed; bottom: 30px; right: 30px; display: flex; gap: 10px; }
+        .act-btn { padding: 15px 30px; border-radius: 30px; border: none; font-weight: 900; cursor: pointer; display: flex; align-items: center; gap: 10px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); transition: 0.3s; }
+        .btn-blue { background: var(--primary); color: #000; }
+        .btn-gold { background: var(--gold); color: #000; text-decoration: none; }
+
+        @media print {
+            .sidebar, .editor-panel, .floating-bar { display: none !important; }
+            .preview-pane { padding: 0; background: #fff; }
+            .resume-paper { box-shadow: none; margin: 0; width: 100%; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="watermark-bg" id="wm"></div>
+
+    <div class="app-shell">
+        <aside class="sidebar">
+            <div class="nav-item active" title="AI Resume" onclick="switchMode('resume', this)"><i class="fas fa-file-invoice"></i></div>
+            <div class="nav-item" title="AI Bio" onclick="switchMode('bio', this)"><i class="fas fa-user-circle"></i></div>
+            <div class="nav-item" title="Ad Copy" onclick="switchMode('ad', this)"><i class="fas fa-bullhorn"></i></div>
+        </aside>
+
+        <section class="editor-panel">
+            <div id="editor_content">
+                </div>
+        </section>
+
+        <main class="preview-pane">
+            <div id="preview_display">
+                </div>
+        </main>
+    </div>
+
+    <div class="floating-bar">
+        <a href="https://buymeacoffee.com/rameshmewalalvishwakarma" target="_blank" class="act-btn btn-gold"><i class="fas fa-coffee"></i> Support RMV</a>
+        <button class="act-btn btn-blue" onclick="exportData()"><i class="fas fa-file-pdf"></i> Export / Save</button>
+    </div>
+
+    <script>
+        // Watermark
+        const wm = document.getElementById('wm');
+        for(let i=0; i<40; i++) wm.innerHTML += `<div class="wm-text">RMV APEX GROUP</div>`;
+
+        let mode = 'resume';
+
+        function switchMode(newMode, el) {
+            mode = newMode;
+            document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+            el.classList.add('active');
+            renderUI();
+        }
+
+        function renderUI() {
+            const editor = document.getElementById('editor_content');
+            const preview = document.getElementById('preview_display');
+
+            if(mode === 'resume') {
+                editor.innerHTML = `
+                    <div class="section-header">💎 AI Resume Engine</div>
+                    <div class="input-group"><label>Full Name</label><input type="text" id="r_name" oninput="syncResume()"></div>
+                    <div class="input-group"><label>Contact</label><input type="text" id="r_contact" oninput="syncResume()"></div>
+                    <div class="input-group"><label>Experience</label><textarea id="r_exp" rows="8" oninput="syncResume()"></textarea></div>
+                    <div class="input-group"><label>Education</label><textarea id="r_edu" rows="4" oninput="syncResume()"></textarea></div>
+                `;
+                preview.innerHTML = `
+                    <div class="resume-paper" id="print_area">
+                        <div class="res-name" id="p_name">YOUR NAME</div>
+                        <div class="res-contact" id="p_contact">email@example.com | +91 000...</div>
+                        <div class="res-section"><div class="res-sec-title">Work Experience</div><div class="res-content" id="p_exp">Job History...</div></div>
+                        <div class="res-section"><div class="res-sec-title">Education</div><div class="res-content" id="p_edu">Academic Details...</div></div>
+                        <div style="position:absolute; bottom:20px; right:20px; font-size:8px; opacity:0.3;">🚩 RMV APEX GROUP ENGINE</div>
+                    </div>
+                `;
+            } else if(mode === 'bio') {
+                editor.innerHTML = `
+                    <div class="section-header">✍️ Smart Bio Generator</div>
+                    <div class="input-group"><label>Your Role</label><input type="text" id="b_role" placeholder="e.g. Developer"></div>
+                    <button class="act-btn btn-blue" style="width:100%;" onclick="genBio()">✨ Generate Bio</button>
+                `;
+                preview.innerHTML = `
+                    <div class="creative-card">
+                        <h3>Your AI Generated Bio</h3>
+                        <div class="creative-content" id="p_creative">Click generate...</div>
+                    </div>
+                `;
+            } else {
+                editor.innerHTML = `
+                    <div class="section-header">📢 Ad Copy Engine</div>
+                    <div class="input-group"><label>Product Name</label><input type="text" id="a_prod"></div>
+                    <div class="input-group"><label>Main Benefit</label><input type="text" id="a_ben"></div>
+                    <button class="act-btn btn-blue" style="width:100%;" onclick="genAd()">🔥 Generate Ad</button>
+                `;
+                preview.innerHTML = `
+                    <div class="creative-card">
+                        <h3>Viral Ad Copy</h3>
+                        <div class="creative-content" id="p_creative">Click generate...</div>
+                    </div>
+                `;
+            }
+        }
+
+        function syncResume() {
+            document.getElementById('p_name').innerText = document.getElementById('r_name').value || "YOUR NAME";
+            document.getElementById('p_contact').innerText = document.getElementById('r_contact').value || "Contact details...";
+            document.getElementById('p_exp').innerText = document.getElementById('r_exp').value || "Experience details...";
+            document.getElementById('p_edu').innerText = document.getElementById('r_edu').value || "Education details...";
+        }
+
+        function genBio() {
+            const role = document.getElementById('b_role').value;
+            document.getElementById('p_creative').innerText = `🚀 ${role} | Turning ideas into code and coffee into solutions. Let's build the future! 🚩`;
+        }
+
+        function genAd() {
+            const prod = document.getElementById('a_prod').value;
+            const ben = document.getElementById('a_ben').value;
+            document.getElementById('p_creative').innerText = `Tired of slow results? 😫 \nDiscover ${prod} - The ultimate way to ${ben}! \nLimited time offer! ⏳`;
+        }
+
+        function exportData() {
+            if(mode === 'resume') window.print();
+            else {
+                const text = document.getElementById('p_creative').innerText;
+                navigator.clipboard.writeText(text);
+                alert("Copied to Clipboard! 🚩");
+            }
+        }
+
+        renderUI();
+    </script>
+</body>
+</html>
