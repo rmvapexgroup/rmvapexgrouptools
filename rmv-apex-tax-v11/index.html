@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RMV APEX GROUP | Tax Master 🚩</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root { --bg: #05070a; --accent: #00d2ff; --glass: rgba(255, 255, 255, 0.05); --gold: #ffd700; --success: #2ecc71; --danger: #ff4d4d; }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: #fff; display: flex; flex-direction: column; align-items: center; padding: 20px; position: relative; }
+
+        /* Branding Watermark */
+        .watermark-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; opacity: 0.07; display: flex; flex-wrap: wrap; justify-content: space-around; align-content: space-around; }
+        .wm-text { transform: rotate(-30deg); font-weight: 900; font-size: 18px; margin: 40px; color: #fff; }
+
+        .container { background: var(--glass); backdrop-filter: blur(15px); border: 1px solid rgba(255,255,255,0.1); padding: 30px; border-radius: 30px; width: 100%; max-width: 900px; border-top: 6px solid var(--accent); box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
+        .header h1 { color: var(--accent); text-align: center; font-weight: 900; letter-spacing: 2px; }
+        .header p { text-align: center; font-size: 10px; opacity: 0.6; margin-bottom: 25px; }
+        
+        .input-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; margin-bottom: 20px; }
+        .i-box { background: #000; border: 1px solid #333; border-radius: 12px; padding: 12px; }
+        .i-box label { font-size: 10px; color: var(--accent); display: block; font-weight: bold; margin-bottom: 5px; text-transform: uppercase; }
+        .i-box input { background: transparent; border: none; color: #fff; width: 100%; outline: none; font-size: 16px; font-weight: bold; }
+
+        .btn-calc { width: 100%; padding: 18px; border: none; border-radius: 15px; background: linear-gradient(135deg, #00d2ff, #3a7bd5); color: #fff; font-weight: 900; cursor: pointer; font-size: 16px; margin-bottom: 15px; }
+        
+        #results { display: none; margin-top: 25px; }
+        .comparison-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .regime-card { padding: 20px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.1); position: relative; overflow: hidden; }
+        .regime-card h3 { color: var(--gold); text-align: center; margin-bottom: 15px; font-size: 14px; text-transform: uppercase; }
+        .tax-val { font-size: 2rem; font-weight: 900; text-align: center; margin: 10px 0; }
+        
+        .winner-tag { background: var(--success); color: #000; font-size: 10px; font-weight: bold; padding: 5px 15px; border-radius: 20px; position: absolute; top: 10px; right: 10px; display: none; }
+        .benefit-info { text-align: center; background: rgba(0,210,255,0.1); padding: 15px; border-radius: 15px; margin-top: 20px; border: 1px dashed var(--accent); font-weight: bold; }
+
+        .action-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 25px; }
+        .act-btn { padding: 12px; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; color: #fff; font-size: 11px; }
+
+        .sup-links { margin-top: 35px; display: grid; grid-template-columns: 1fr 1fr; gap: 15px; width: 100%; max-width: 900px; }
+        .s-btn { padding: 18px; border-radius: 15px; text-decoration: none; font-weight: bold; text-align: center; font-size: 11px; }
+        .footer { margin-top: 40px; font-size: 10px; opacity: 0.5; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+    <div class="watermark-bg" id="wm"></div>
+
+    <div class="container" id="printable">
+        <div class="header">
+            <h1>RMV APEX GROUP 🚩</h1>
+            <p>ADVANCED INCOME TAX CALCULATOR (FY 2024-25)</p>
+        </div>
+
+        <div class="input-grid">
+            <div class="i-box"><label>Gross Annual Salary (₹)</label><input type="number" id="gross_salary" placeholder="eg. 10,00,000"></div>
+            <div class="i-box"><label>Standard Deduction (₹)</label><input type="number" id="std_deduct" value="75000"></div>
+            <div class="i-box"><label>80C (LIC, PPF, EPF) (₹)</label><input type="number" id="ded80c" value="150000"></div>
+            <div class="i-box"><label>80D (Health Insurance) (₹)</label><input type="number" id="ded80d" value="25000"></div>
+            <div class="i-box"><label>HRA / Home Loan Int. (₹)</label><input type="number" id="hra_loan" placeholder="eg. 2,00,000"></div>
+            <div class="i-box"><label>Other Exemptions (₹)</label><input type="number" id="other_ded" value="0"></div>
+        </div>
+
+        <button class="btn-calc" onclick="compareTax()">🚀 COMPARE TAX REGIMES</button>
+
+        <div id="results">
+            <div class="comparison-grid">
+                <div class="regime-card" id="card_old">
+                    <div class="winner-tag" id="win_old">BEST CHOICE ✅</div>
+                    <h3>Old Tax Regime</h3>
+                    <div class="tax-val" id="tax_old">₹0</div>
+                    <div style="font-size: 11px; opacity: 0.7; text-align:center;">Tax with Deductions</div>
+                </div>
+
+                <div class="regime-card" id="card_new">
+                    <div class="winner-tag" id="win_new">BEST CHOICE ✅</div>
+                    <h3>New Tax Regime</h3>
+                    <div class="tax-val" id="tax_new">₹0</div>
+                    <div style="font-size: 11px; opacity: 0.7; text-align:center;">Lower Rates, No Deductions</div>
+                </div>
+            </div>
+
+            <div class="benefit-info" id="final_advice">...</div>
+        </div>
+
+        <div class="action-row">
+            <button class="act-btn" style="background:#238636" onclick="window.print()">PRINT</button>
+            <button class="act-btn" style="background:#4a5568" onclick="exportPDF()">PDF REPORT</button>
+            <button class="act-btn" style="background:#c53030" onclick="location.reload()">CLEAR</button>
+        </div>
+    </div>
+
+    <div class="sup-links">
+        <a href="https://buymeacoffee.com/rameshmewalalvishwakarma" target="_blank" class="s-btn" style="background:#FFDD00; color:#000;">☕ BUY ME A COFFEE</a>
+        <a href="https://ko-fi.com/rameshmewalalvishwakarma" target="_blank" class="s-btn" style="background:#29abe0; color:#fff;">❤️ SUPPORT ON KO-FI</a>
+    </div>
+
+    <div class="footer">🚩 RMV APEX GROUP | POWERED BY RAMESH MEWALAL VISHWAKARMA 🚩</div>
+
+    <script>
+        const wm = document.getElementById('wm');
+        for(let i=0; i<40; i++) wm.innerHTML += `<div class="wm-text">RMV APEX GROUP</div>`;
+
+        function calculateOldTax(income) {
+            if (income <= 250000) return 0;
+            let tax = 0;
+            if (income > 1000000) { tax += (income - 1000000) * 0.3 + 112500; }
+            else if (income > 500000) { tax += (income - 500000) * 0.2 + 12500; }
+            else { tax += (income - 250000) * 0.05; }
+            
+            // Rebate 87A for Old Regime (up to 5L taxable income)
+            if (income <= 500000) tax = 0;
+            return tax + (tax * 0.04); // Including 4% Cess
+        }
+
+        function calculateNewTax(income) {
+            // New Regime Slab FY 2024-25: 0-3L (Nil), 3-7L (5%), 7-10L (10%), 10-12L (15%), 12-15L (20%), 15L+ (30%)
+            // Rebate 87A: Up to 7 Lakhs (Taxable income)
+            let tax = 0;
+            if (income > 1500000) tax = (income - 1500000) * 0.3 + 140000;
+            else if (income > 1200000) tax = (income - 1200000) * 0.2 + 80000;
+            else if (income > 1000000) tax = (income - 1000000) * 0.15 + 50000;
+            else if (income > 700000) tax = (income - 700000) * 0.1 + 20000;
+            else if (income > 300000) tax = (income - 300000) * 0.05;
+
+            if (income <= 775000) tax = 0; // Marginal Relief effect for New Regime
+            return tax + (tax * 0.04);
+        }
+
+        function compareTax() {
+            const gross = parseFloat(document.getElementById('gross_salary').value) || 0;
+            const stdDed = parseFloat(document.getElementById('std_deduct').value) || 0;
+            const c80 = parseFloat(document.getElementById('ded80c').value) || 0;
+            const d80 = parseFloat(document.getElementById('ded80d').value) || 0;
+            const hra = parseFloat(document.getElementById('hra_loan').value) || 0;
+            const other = parseFloat(document.getElementById('other_ded').value) || 0;
+
+            // Old Regime Taxable Income
+            const oldTaxable = Math.max(0, gross - stdDed - c80 - d80 - hra - other);
+            const oldTax = calculateOldTax(oldTaxable);
+
+            // New Regime Taxable Income (Only Std Deduction allowed)
+            const newTaxable = Math.max(0, gross - stdDed);
+            const newTax = calculateNewTax(newTaxable);
+
+            document.getElementById('tax_old').innerText = "₹" + Math.round(oldTax).toLocaleString('en-IN');
+            document.getElementById('tax_new').innerText = "₹" + Math.round(newTax).toLocaleString('en-IN');
+
+            const diff = Math.abs(oldTax - newTax);
+            const winner = oldTax < newTax ? "Old Regime" : "New Regime";
+
+            document.getElementById('win_old').style.display = oldTax < newTax ? 'block' : 'none';
+            document.getElementById('win_new').style.display = newTax <= oldTax ? 'block' : 'none';
+            document.getElementById('final_advice').innerText = `🚩 Suggestion: Go with ${winner}. You save ₹${Math.round(diff).toLocaleString('en-IN')}!`;
+            
+            document.getElementById('results').style.display = 'block';
+        }
+
+        function exportPDF() {
+            const element = document.getElementById('printable');
+            html2pdf().from(element).set({
+                margin: 5, filename: 'RMV_Tax_Report.pdf',
+                html2canvas: { scale: 2, backgroundColor: '#05070a' },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'landscape' }
+            }).save();
+        }
+    </script>
+</body>
+</html>
