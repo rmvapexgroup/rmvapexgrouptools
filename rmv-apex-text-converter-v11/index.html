@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RMV APEX GROUP | Text Case Converter 🚩</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root { --bg: #05070a; --accent: #9b59b6; --glass: rgba(255, 255, 255, 0.05); --gold: #ffd700; --white: #ffffff; }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: var(--white); display: flex; flex-direction: column; align-items: center; padding: 20px; min-height: 100vh; }
+
+        .watermark-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; opacity: 0.05; display: flex; flex-wrap: wrap; justify-content: space-around; }
+        .wm-text { transform: rotate(-30deg); font-weight: 900; font-size: 18px; margin: 50px; color: var(--white); }
+
+        .container { background: var(--glass); backdrop-filter: blur(15px); border: 1px solid rgba(255,255,255,0.1); padding: 35px; border-radius: 30px; width: 100%; max-width: 800px; border-top: 6px solid var(--accent); box-shadow: 0 20px 50px rgba(0,0,0,0.5); margin-bottom: 30px; }
+        .header h1 { color: var(--accent); text-align: center; font-weight: 900; letter-spacing: 1px; }
+        .header p { text-align: center; font-size: 10px; opacity: 0.6; margin-bottom: 25px; text-transform: uppercase; }
+
+        textarea { width: 100%; height: 200px; background: #000; border: 1px solid #333; border-radius: 15px; padding: 20px; color: #fff; font-size: 16px; outline: none; transition: 0.3s; resize: vertical; margin-bottom: 20px; }
+        textarea:focus { border-color: var(--accent); box-shadow: 0 0 15px rgba(155, 89, 182, 0.2); }
+
+        .btn-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; margin-bottom: 20px; }
+        .btn-tool { padding: 12px; border: none; border-radius: 10px; background: #222; color: #fff; font-size: 12px; font-weight: bold; cursor: pointer; transition: 0.2s; border: 1px solid #333; }
+        .btn-tool:hover { background: var(--accent); border-color: var(--accent); transform: translateY(-2px); }
+
+        .action-area { display: flex; gap: 15px; border-top: 1px solid #333; padding-top: 20px; }
+        .btn-main { flex: 1; padding: 15px; border: none; border-radius: 12px; font-weight: 900; cursor: pointer; transition: 0.3s; font-size: 14px; }
+        .btn-copy { background: #2ecc71; color: #000; }
+        .btn-clear { background: #e74c3c; color: #fff; }
+
+        .sup-links { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; width: 100%; max-width: 800px; margin-bottom: 20px; }
+        .s-btn { padding: 16px; border-radius: 15px; text-decoration: none; text-align: center; font-weight: bold; font-size: 11px; display: flex; align-items: center; justify-content: center; gap: 8px; }
+
+        .footer { font-size: 10px; opacity: 0.5; font-weight: bold; text-align: center; margin-bottom: 20px; }
+    </style>
+</head>
+<body>
+
+    <div class="watermark-bg" id="wm"></div>
+
+    <div class="container">
+        <div class="header">
+            <h1>RMV APEX GROUP 🚩</h1>
+            <p>Advanced Text Case Converter V11</p>
+        </div>
+
+        <textarea id="textInput" placeholder="यहाँ अपना टेक्स्ट पेस्ट करें..."></textarea>
+
+        <div class="btn-grid">
+            <button class="btn-tool" onclick="convert('upper')">UPPERCASE</button>
+            <button class="btn-tool" onclick="convert('lower')">lowercase</button>
+            <button class="btn-tool" onclick="convert('capital')">Capitalize</button>
+            <button class="btn-tool" onclick="convert('sentence')">Sentence case</button>
+            <button class="btn-tool" onclick="convert('inverse')">iNVERSE cASE</button>
+        </div>
+
+        <div class="action-area">
+            <button class="btn-main btn-copy" onclick="copyText()">📥 COPY TEXT</button>
+            <button class="btn-main btn-clear" onclick="clearText()">❌ CLEAR</button>
+        </div>
+    </div>
+
+    <div class="sup-links">
+        <a href="https://buymeacoffee.com/rameshmewalalvishwakarma" target="_blank" class="s-btn" style="background:#FFDD00; color:#000;">
+            <i class="fas fa-coffee"></i> BUY ME A COFFEE
+        </a>
+        <a href="https://ko-fi.com/rameshmewalalvishwakarma" target="_blank" class="s-btn" style="background:#29abe0; color:#fff;">
+            <i class="fas fa-heart"></i> SUPPORT ON KO-FI
+        </a>
+    </div>
+
+    <div class="footer">🚩 RMV APEX GROUP | DESIGNED BY RAMESH MEWALAL VISHWAKARMA 🚩</div>
+
+    <script>
+        const wm = document.getElementById('wm');
+        for(let i=0; i<30; i++) wm.innerHTML += `<div class="wm-text">RMV APEX GROUP</div>`;
+
+        const input = document.getElementById('textInput');
+
+        function convert(type) {
+            let str = input.value;
+            if (!str) return;
+
+            switch(type) {
+                case 'upper': input.value = str.toUpperCase(); break;
+                case 'lower': input.value = str.toLowerCase(); break;
+                case 'capital': 
+                    input.value = str.toLowerCase().split(' ').map(s => s.charAt(0).toUpperCase() + s.substring(1)).join(' '); 
+                    break;
+                case 'sentence':
+                    input.value = str.toLowerCase().replace(/(^\s*\w|[\.\!\?]\s*\w)/g, c => c.toUpperCase());
+                    break;
+                case 'inverse':
+                    input.value = str.split('').map(c => c === c.toUpperCase() ? c.toLowerCase() : c.toUpperCase()).join('');
+                    break;
+            }
+        }
+
+        function copyText() {
+            input.select();
+            document.execCommand('copy');
+            alert("टेक्स्ट क्लिपबोर्ड पर कॉपी हो गया है! 🚩");
+        }
+
+        function clearText() {
+            input.value = "";
+        }
+    </script>
+</body>
+</html>
