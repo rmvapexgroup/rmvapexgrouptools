@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RMV APEX GROUP | Education Planner 🚩</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root { --bg: #05070a; --accent: #00d2ff; --glass: rgba(255, 255, 255, 0.05); --gold: #ffd700; --success: #2ecc71; }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: #fff; display: flex; flex-direction: column; align-items: center; padding: 20px; position: relative; overflow-x: hidden; }
+
+        /* Branding Watermark */
+        .watermark-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; opacity: 0.08; display: flex; flex-wrap: wrap; justify-content: space-around; align-content: space-around; }
+        .wm-text { transform: rotate(-30deg); font-weight: 900; font-size: 18px; margin: 45px; color: #fff; }
+
+        .container { background: var(--glass); backdrop-filter: blur(15px); border: 1px solid rgba(255,255,255,0.1); padding: 30px; border-radius: 30px; width: 100%; max-width: 800px; border-top: 6px solid var(--accent); box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
+        .header h1 { color: var(--accent); text-align: center; font-weight: 900; letter-spacing: 2px; }
+        .header p { text-align: center; font-size: 10px; opacity: 0.6; margin-bottom: 25px; }
+        
+        .input-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 15px; margin-bottom: 20px; }
+        .i-box { background: #000; border: 1px solid #333; border-radius: 12px; padding: 12px; }
+        .i-box label { font-size: 10px; color: var(--accent); display: block; font-weight: bold; margin-bottom: 5px; text-transform: uppercase; }
+        .i-box input, .i-box select { background: transparent; border: none; color: #fff; width: 100%; outline: none; font-size: 16px; font-weight: bold; }
+
+        .btn-calc { width: 100%; padding: 18px; border: none; border-radius: 15px; background: linear-gradient(135deg, #00d2ff, #3a7bd5); color: #fff; font-weight: 900; cursor: pointer; font-size: 16px; margin-bottom: 15px; }
+        
+        #results { display: none; background: rgba(255,255,255,0.03); border: 1px dashed var(--accent); border-radius: 20px; padding: 25px; text-align: center; margin-top: 20px; }
+        .res-big { font-size: 2.6rem; font-weight: 900; color: var(--success); margin: 10px 0; }
+        .target-card { background: rgba(255, 215, 0, 0.1); padding: 15px; border-radius: 12px; margin: 15px 0; border: 1px solid rgba(255, 215, 0, 0.2); }
+
+        .action-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 25px; }
+        .act-btn { padding: 12px; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; color: #fff; font-size: 11px; }
+
+        .sup-links { margin-top: 35px; display: grid; grid-template-columns: 1fr 1fr; gap: 15px; width: 100%; max-width: 800px; }
+        .s-btn { padding: 18px; border-radius: 15px; text-decoration: none; font-weight: bold; text-align: center; font-size: 11px; }
+        .footer { margin-top: 40px; font-size: 10px; opacity: 0.5; font-weight: bold; }
+    </style>
+</head>
+<body onload="loadStored()">
+
+    <div class="watermark-bg" id="wm"></div>
+
+    <div class="container" id="printable">
+        <div class="header">
+            <h1>RMV APEX GROUP 🚩</h1>
+            <p>ADVANCED CHILD EDUCATION COST PLANNER V11</p>
+        </div>
+
+        <div class="input-grid">
+            <div class="i-box"><label>Child's Current Age</label><input type="number" id="c_age" placeholder="eg. 3"></div>
+            <div class="i-box"><label>Target College Age</label><input type="number" id="t_age" value="18"></div>
+            <div class="i-box"><label>Current Course Cost (₹)</label><input type="number" id="cur_cost" placeholder="eg. 10,00,000"></div>
+            <div class="i-box"><label>Education Inflation (%)</label><input type="number" id="infl" value="10"></div>
+            <div class="i-box" style="grid-column: span 2;"><label>Expected SIP Returns (%)</label><input type="number" id="roi" value="12"></div>
+        </div>
+
+        <button class="btn-calc" onclick="calculateEdu()">🚀 ANALYZE EDUCATION FUND</button>
+
+        <div id="results">
+            <span style="font-size: 10px; opacity: 0.7; text-transform: uppercase;">Future Cost of Education</span>
+            <div class="res-big" id="future_val">₹0</div>
+            
+            <div class="target-card">
+                <span style="font-size: 11px; color: var(--accent); font-weight: bold;">Required Monthly Investment (SIP)</span>
+                <div style="font-size: 1.8rem; font-weight: 900; color: #fff;" id="req_sip">₹0</div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                <div class="i-box" style="text-align: left;"><label>Planning Years</label><b id="plan_yrs">0 Years</b></div>
+                <div class="i-box" style="text-align: left;"><label>Wealth Gap (Inflation)</label><b id="gap_val" style="color:var(--gold)">₹0</b></div>
+            </div>
+        </div>
+
+        <div class="action-row">
+            <button class="act-btn" style="background:#238636" onclick="save()">SAVE</button>
+            <button class="act-btn" style="background:#4a5568" onclick="pdf()">REPORT PDF</button>
+            <button class="act-btn" style="background:#c53030" onclick="reset()">CLEAR</button>
+        </div>
+    </div>
+
+    <div class="sup-links">
+        <a href="https://buymeacoffee.com/rameshmewalalvishwakarma" target="_blank" class="s-btn" style="background:#FFDD00; color:#000;">☕ BUY ME A COFFEE</a>
+        <a href="https://ko-fi.com/rameshmewalalvishwakarma" target="_blank" class="s-btn" style="background:#29abe0; color:#fff;">❤️ SUPPORT ON KO-FI</a>
+    </div>
+
+    <div class="footer">🚩 RMV APEX GROUP | DESIGNED BY RAMESH MEWALAL VISHWAKARMA 🚩</div>
+
+    <script>
+        const wm = document.getElementById('wm');
+        for(let i=0; i<40; i++) wm.innerHTML += `<div class="wm-text">RMV APEX GROUP</div>`;
+
+        function calculateEdu() {
+            const currentAge = parseInt(document.getElementById('c_age').value);
+            const targetAge = parseInt(document.getElementById('t_age').value);
+            const currentCost = parseFloat(document.getElementById('cur_cost').value);
+            const inflation = parseFloat(document.getElementById('infl').value) / 100;
+            const roi = parseFloat(document.getElementById('roi').value) / 100 / 12;
+
+            if(!currentAge || !currentCost || targetAge <= currentAge) return alert("संख्याएं सही भरें! 🚩");
+
+            const yearsLeft = targetAge - currentAge;
+            const monthsLeft = yearsLeft * 12;
+
+            // 1. Calculate Future Cost of Education
+            const futureCost = currentCost * Math.pow(1 + inflation, yearsLeft);
+
+            // 2. Calculate Required Monthly SIP
+            const requiredSIP = futureCost / (((Math.pow(1 + roi, monthsLeft) - 1) / roi) * (1 + roi));
+
+            document.getElementById('future_val').innerText = "₹" + Math.round(futureCost).toLocaleString('en-IN');
+            document.getElementById('req_sip').innerText = "₹" + Math.round(requiredSIP).toLocaleString('en-IN') + " / mo";
+            document.getElementById('plan_yrs').innerText = yearsLeft + " Years";
+            document.getElementById('gap_val').innerText = "₹" + Math.round(futureCost - currentCost).toLocaleString('en-IN');
+            
+            document.getElementById('results').style.display = 'block';
+        }
+
+        function pdf() {
+            const element = document.getElementById('printable');
+            html2pdf().from(element).set({
+                margin: 10, filename: 'RMV_Child_Edu_Plan.pdf',
+                html2canvas: { scale: 2, backgroundColor: '#05070a' },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            }).save();
+        }
+
+        function save() {
+            const d = { c:document.getElementById('c_age').value, t:document.getElementById('t_age').value, co:document.getElementById('cur_cost').value, i:document.getElementById('infl').value };
+            localStorage.setItem('rmv_edu_data', JSON.stringify(d));
+            alert("Goal Saved! 🚩");
+        }
+
+        function loadStored() {
+            const s = localStorage.getItem('rmv_edu_data');
+            if(s) {
+                const d = JSON.parse(s);
+                document.getElementById('c_age').value = d.c;
+                document.getElementById('t_age').value = d.t;
+                document.getElementById('cur_cost').value = d.co;
+                document.getElementById('infl').value = d.i;
+            }
+        }
+
+        function reset() { localStorage.removeItem('rmv_edu_data'); location.reload(); }
+    </script>
+</body>
+</html>
