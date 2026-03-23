@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RMV APEX GROUP | Image Resizer 🚩</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root { --bg: #05070a; --accent: #00f2fe; --glass: rgba(255, 255, 255, 0.05); --gold: #ffd700; --success: #2ecc71; }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: #fff; display: flex; flex-direction: column; align-items: center; padding: 20px; min-height: 100vh; }
+
+        /* Branding Watermark */
+        .watermark-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; opacity: 0.06; display: flex; flex-wrap: wrap; justify-content: space-around; }
+        .wm-text { transform: rotate(-30deg); font-weight: 900; font-size: 18px; margin: 50px; color: #fff; }
+
+        .container { background: var(--glass); backdrop-filter: blur(15px); border: 1px solid rgba(255,255,255,0.1); padding: 30px; border-radius: 30px; width: 100%; max-width: 700px; border-top: 6px solid var(--accent); box-shadow: 0 20px 50px rgba(0,0,0,0.5); margin-bottom: 30px; }
+        .header h1 { color: var(--accent); text-align: center; font-weight: 900; letter-spacing: 1px; }
+        .header p { text-align: center; font-size: 10px; opacity: 0.6; margin-bottom: 25px; text-transform: uppercase; }
+        
+        .section-title { font-size: 11px; color: var(--accent); margin: 15px 0 10px; font-weight: bold; text-transform: uppercase; border-left: 3px solid var(--accent); padding-left: 10px; }
+        .i-box { background: #000; border: 1px solid #333; border-radius: 12px; padding: 15px; margin-bottom: 15px; text-align: center; }
+        .i-box label { font-size: 10px; color: #aaa; display: block; margin-bottom: 10px; text-transform: uppercase; }
+        .i-box input[type="file"] { color: var(--accent); font-size: 12px; }
+
+        .size-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin-bottom: 20px; }
+        .size-card { background: rgba(255,255,255,0.03); border: 1px solid #333; padding: 15px; border-radius: 15px; cursor: pointer; text-align: center; transition: 0.3s; }
+        .size-card:hover { border-color: var(--accent); background: rgba(0, 242, 254, 0.05); transform: translateY(-3px); }
+        .size-card.active { border-color: var(--accent); background: rgba(0, 242, 254, 0.15); }
+        .size-card i { font-size: 20px; margin-bottom: 8px; color: var(--gold); }
+        .size-card div { font-size: 12px; font-weight: bold; }
+        .size-card span { font-size: 9px; opacity: 0.6; }
+
+        .btn-resize { width: 100%; padding: 18px; border: none; border-radius: 15px; background: linear-gradient(135deg, #00f2fe, #4facfe); color: #000; font-weight: 900; cursor: pointer; font-size: 16px; transition: 0.3s; margin-top: 10px; }
+        .btn-resize:hover { transform: scale(1.02); box-shadow: 0 0 20px rgba(0, 242, 254, 0.4); }
+        
+        #preview-area { display: none; margin-top: 30px; text-align: center; }
+        canvas { max-width: 100%; border-radius: 10px; border: 2px solid #333; margin-top: 15px; }
+
+        .dl-btn { background: var(--success); color: #000; padding: 12px 25px; border-radius: 12px; text-decoration: none; display: inline-block; font-weight: 900; margin-top: 15px; cursor: pointer; }
+
+        /* Support Buttons */
+        .sup-links { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; width: 100%; max-width: 700px; margin-bottom: 20px; }
+        .s-btn { padding: 16px; border-radius: 15px; text-decoration: none; text-align: center; font-weight: bold; font-size: 11px; transition: 0.3s; display: flex; align-items: center; justify-content: center; gap: 8px; }
+
+        .footer { font-size: 10px; opacity: 0.5; font-weight: bold; text-align: center; margin-bottom: 20px; }
+    </style>
+</head>
+<body>
+
+    <div class="watermark-bg" id="wm"></div>
+
+    <div class="container">
+        <div class="header">
+            <h1>RMV APEX GROUP 🚩</h1>
+            <p>Smart AI Image Resizer (Social Media Sizes) V11</p>
+        </div>
+
+        <div class="section-title">Upload Your Image</div>
+        <div class="i-box">
+            <label>Select Photo (JPG/PNG)</label>
+            <input type="file" id="imageInput" accept="image/*">
+        </div>
+
+        <div class="section-title">Select Platform Size</div>
+        <div class="size-grid">
+            <div class="size-card active" onclick="selectSize(this, 1080, 1080)">
+                <i class="fab fa-instagram"></i>
+                <div>Insta Post</div>
+                <span>1080 x 1080 (1:1)</span>
+            </div>
+            <div class="size-card" onclick="selectSize(this, 1080, 1920)">
+                <i class="fas fa-mobile-alt"></i>
+                <div>Insta Story / Reel</div>
+                <span>1080 x 1920 (9:16)</span>
+            </div>
+            <div class="size-card" onclick="selectSize(this, 1280, 720)">
+                <i class="fab fa-youtube"></i>
+                <div>YT Thumbnail</div>
+                <span>1280 x 720 (16:9)</span>
+            </div>
+            <div class="size-card" onclick="selectSize(this, 1200, 627)">
+                <i class="fab fa-linkedin"></i>
+                <div>LinkedIn Post</div>
+                <span>1200 x 627</span>
+            </div>
+        </div>
+
+        <button class="btn-resize" onclick="processImage()">🚀 RESIZE & OPTIMIZE IMAGE</button>
+
+        <div id="preview-area">
+            <div class="section-title">Preview & Download</div>
+            <canvas id="canvas"></canvas>
+            <br>
+            <a id="downloadBtn" class="dl-btn">📥 DOWNLOAD RESIZED IMAGE</a>
+        </div>
+    </div>
+
+    <div class="sup-links">
+        <a href="https://buymeacoffee.com/rameshmewalalvishwakarma" target="_blank" class="s-btn" style="background:#FFDD00; color:#000;">
+            <i class="fas fa-coffee"></i> BUY ME A COFFEE
+        </a>
+        <a href="https://ko-fi.com/rameshmewalalvishwakarma" target="_blank" class="s-btn" style="background:#29abe0; color:#fff;">
+            <i class="fas fa-heart"></i> SUPPORT ON KO-FI
+        </a>
+    </div>
+
+    <div class="footer">🚩 RMV APEX GROUP | DESIGNED BY RAMESH MEWALAL VISHWAKARMA 🚩</div>
+
+    <script>
+        const wm = document.getElementById('wm');
+        for(let i=0; i<30; i++) wm.innerHTML += `<div class="wm-text">RMV APEX GROUP</div>`;
+
+        let targetW = 1080, targetH = 1080;
+
+        function selectSize(el, w, h) {
+            document.querySelectorAll('.size-card').forEach(c => c.classList.remove('active'));
+            el.classList.add('active');
+            targetW = w;
+            targetH = h;
+        }
+
+        function processImage() {
+            const input = document.getElementById('imageInput');
+            if (!input.files[0]) { alert("कृपया पहले एक इमेज चुनें! 🚩"); return; }
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const img = new Image();
+                img.onload = function() {
+                    const canvas = document.getElementById('canvas');
+                    const ctx = canvas.getContext('2d');
+                    canvas.width = targetW;
+                    canvas.height = targetH;
+                    
+                    // Center Crop/Fit Logic
+                    const scale = Math.max(targetW / img.width, targetH / img.height);
+                    const x = (targetW / 2) - (img.width / 2) * scale;
+                    const y = (targetH / 2) - (img.height / 2) * scale;
+                    
+                    ctx.drawImage(img, x, y, img.width * scale, img.height * scale);
+                    
+                    document.getElementById('preview-area').style.display = 'block';
+                    document.getElementById('downloadBtn').href = canvas.toDataURL("image/jpeg", 0.9);
+                    document.getElementById('downloadBtn').download = `RMV_APEX_Resized_${targetW}x${targetH}.jpg`;
+                }
+                img.src = e.target.result;
+            }
+            reader.readAsDataURL(input.files[0]);
+        }
+    </script>
+</body>
+</html>
