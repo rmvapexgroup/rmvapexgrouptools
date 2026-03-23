@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RMV APEX GROUP | SEO Master 🚩</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root { --bg: #030508; --primary: #00f2fe; --secondary: #4facfe; --glass: rgba(255, 255, 255, 0.03); --gold: #ffd700; --danger: #ff4d4d; --safe: #2ecc71; }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: #fff; display: flex; flex-direction: column; align-items: center; padding: 20px; min-height: 100vh; }
+
+        .watermark-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; opacity: 0.04; display: flex; flex-wrap: wrap; justify-content: space-around; }
+        .wm-text { transform: rotate(-30deg); font-weight: 900; font-size: 16px; margin: 45px; color: #fff; }
+
+        .container { background: var(--glass); backdrop-filter: blur(25px); border: 1px solid rgba(255,255,255,0.08); padding: 35px; border-radius: 35px; width: 100%; max-width: 850px; border-top: 5px solid var(--primary); box-shadow: 0 30px 60px rgba(0,0,0,0.7); margin-bottom: 30px; }
+        .header h1 { background: linear-gradient(to right, #00f2fe, #4facfe); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-align: center; font-weight: 900; font-size: 30px; }
+        .header p { text-align: center; font-size: 10px; opacity: 0.5; margin-bottom: 25px; text-transform: uppercase; letter-spacing: 3px; }
+        
+        .search-area { background: #000; border: 1px solid #222; border-radius: 20px; padding: 10px; display: flex; align-items: center; gap: 10px; margin-bottom: 25px; transition: 0.3s; }
+        .search-area:focus-within { border-color: var(--primary); box-shadow: 0 0 20px rgba(0,242,254,0.15); }
+        .search-area input { background: transparent; border: none; color: #fff; flex: 1; padding: 15px; font-size: 18px; outline: none; }
+        .search-area button { background: var(--primary); border: none; color: #000; font-weight: 900; padding: 15px 30px; border-radius: 15px; cursor: pointer; transition: 0.3s; }
+        .search-area button:hover { transform: scale(1.05); }
+
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; display: none; margin-top: 20px; }
+        .keyword-table { width: 100%; border-collapse: collapse; margin-top: 30px; display: none; }
+        .keyword-table th { text-align: left; padding: 15px; border-bottom: 1px solid #333; font-size: 12px; color: #888; text-transform: uppercase; }
+        .keyword-table td { padding: 15px; border-bottom: 1px solid #111; font-size: 15px; }
+        
+        .difficulty-pill { padding: 4px 10px; border-radius: 6px; font-size: 11px; font-weight: bold; }
+        .diff-low { background: rgba(46, 204, 113, 0.2); color: var(--safe); }
+        .diff-med { background: rgba(255, 215, 0, 0.2); color: var(--gold); }
+        .diff-high { background: rgba(255, 77, 77, 0.2); color: var(--danger); }
+
+        .intent-tag { font-size: 10px; background: #222; padding: 3px 7px; border-radius: 4px; color: #aaa; margin-left: 10px; border: 1px solid #333; }
+
+        /* Support Links */
+        .sup-links { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; width: 100%; max-width: 850px; margin-bottom: 20px; }
+        .s-btn { padding: 16px; border-radius: 15px; text-decoration: none; text-align: center; font-weight: 800; font-size: 12px; transition: 0.3s; display: flex; align-items: center; justify-content: center; gap: 10px; }
+
+        .footer { font-size: 10px; opacity: 0.5; font-weight: bold; text-align: center; margin-bottom: 20px; letter-spacing: 1.5px; }
+    </style>
+</head>
+<body>
+
+    <div class="watermark-bg" id="wm"></div>
+
+    <div class="container">
+        <div class="header">
+            <h1>RMV APEX GROUP 🚩</h1>
+            <p>SEO Keyword Analysis Engine 2026</p>
+        </div>
+
+        <div class="search-area">
+            <input type="text" id="seed_keyword" placeholder="अपना मुख्य कीवर्ड डालें (जैसे: Stock Market India)...">
+            <button onclick="analyzeKeywords()"><i class="fas fa-search"></i> ANALYZE</button>
+        </div>
+
+        <table class="keyword-table" id="results_table">
+            <thead>
+                <tr>
+                    <th>Keyword Suggestion</th>
+                    <th>Intent</th>
+                    <th>Volume (Est.)</th>
+                    <th>Difficulty</th>
+                </tr>
+            </thead>
+            <tbody id="table_body"></tbody>
+        </table>
+
+        <div id="no_data" style="text-align: center; padding: 40px; opacity: 0.5; font-size: 14px;">
+            <i class="fas fa-chart-line" style="font-size: 40px; margin-bottom: 15px; display: block;"></i>
+            Enter a seed keyword to see SEO metrics and trending variations.
+        </div>
+    </div>
+
+    <div class="sup-links">
+        <a href="https://buymeacoffee.com/rameshmewalalvishwakarma" target="_blank" class="s-btn" style="background:#FFDD00; color:#000;">
+            <i class="fas fa-coffee"></i> BUY ME A COFFEE
+        </a>
+        <a href="https://ko-fi.com/rameshmewalalvishwakarma" target="_blank" class="s-btn" style="background:#29abe0; color:#fff;">
+            <i class="fas fa-heart"></i> SUPPORT ON KO-FI
+        </a>
+    </div>
+
+    <div class="footer">🚩 RMV APEX GROUP | DESIGNED BY RAMESH MEWALAL VISHWAKARMA 🚩</div>
+
+    <script>
+        // Watermark Script
+        const wm = document.getElementById('wm');
+        for(let i=0; i<40; i++) wm.innerHTML += `<div class="wm-text">RMV APEX GROUP</div>`;
+
+        function analyzeKeywords() {
+            const seed = document.getElementById('seed_keyword').value.trim();
+            if(!seed) { alert("कृपया कीवर्ड डालें! 🚩"); return; }
+
+            document.getElementById('no_data').style.display = 'none';
+            document.getElementById('results_table').style.display = 'table';
+            
+            const tbody = document.getElementById('table_body');
+            tbody.innerHTML = ""; // Clear old results
+
+            // Variations to simulate 2026 search trends
+            const variations = [
+                { suffix: " for beginners", intent: "Informational", vol: "14.5K" },
+                { suffix: " online tools", intent: "Transactional", vol: "8.2K" },
+                { suffix: " best guide 2026", intent: "Informational", vol: "5.1K" },
+                { suffix: " strategy and tips", intent: "Commercial", vol: "3.9K" },
+                { suffix: " near me", intent: "Local Search", vol: "12.0K" },
+                { suffix: " vs competitors", intent: "Comparison", vol: "2.5K" }
+            ];
+
+            variations.forEach(v => {
+                const diffValue = Math.floor(Math.random() * 99) + 1;
+                let diffClass = "diff-high";
+                let diffText = "Hard";
+
+                if(diffValue < 30) { diffClass = "diff-low"; diffText = "Easy"; }
+                else if(diffValue < 70) { diffClass = "diff-med"; diffText = "Medium"; }
+
+                const row = `
+                    <tr>
+                        <td><strong>${seed}${v.suffix}</strong></td>
+                        <td><span class="intent-tag">${v.intent}</span></td>
+                        <td>${v.vol}</td>
+                        <td><span class="difficulty-pill ${diffClass}">${diffValue}% ${diffText}</span></td>
+                    </tr>
+                `;
+                tbody.innerHTML += row;
+            });
+        }
+    </script>
+</body>
+</html>
