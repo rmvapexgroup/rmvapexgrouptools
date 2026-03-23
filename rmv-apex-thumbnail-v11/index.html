@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RMV APEX GROUP | Thumbnail Maker 🚩</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root { --bg: #05070a; --accent: #ff4757; --glass: rgba(255, 255, 255, 0.05); --gold: #ffd700; --success: #2ecc71; }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: #fff; display: flex; flex-direction: column; align-items: center; padding: 20px; min-height: 100vh; }
+
+        .watermark-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; opacity: 0.05; display: flex; flex-wrap: wrap; justify-content: space-around; }
+        .wm-text { transform: rotate(-30deg); font-weight: 900; font-size: 18px; margin: 50px; color: #fff; }
+
+        .container { background: var(--glass); backdrop-filter: blur(15px); border: 1px solid rgba(255,255,255,0.1); padding: 30px; border-radius: 30px; width: 100%; max-width: 900px; border-top: 6px solid var(--accent); box-shadow: 0 20px 50px rgba(0,0,0,0.5); margin-bottom: 30px; }
+        .header h1 { color: var(--accent); text-align: center; font-weight: 900; letter-spacing: 1px; }
+        .header p { text-align: center; font-size: 10px; opacity: 0.6; margin-bottom: 25px; text-transform: uppercase; }
+        
+        .editor-layout { display: grid; grid-template-columns: 1fr 300px; gap: 20px; }
+        .canvas-area { background: #000; border: 2px solid #333; border-radius: 15px; overflow: hidden; position: relative; display: flex; align-items: center; justify-content: center; height: 360px; }
+        canvas { width: 100%; height: 100%; object-fit: contain; }
+
+        .controls { background: #111; padding: 20px; border-radius: 20px; border: 1px solid #333; }
+        .control-group { margin-bottom: 15px; }
+        .control-group label { display: block; font-size: 10px; color: #aaa; margin-bottom: 8px; text-transform: uppercase; font-weight: bold; }
+        .control-group input, .control-group select { background: #000; border: 1px solid #444; color: #fff; width: 100%; padding: 10px; border-radius: 8px; font-size: 13px; }
+
+        .btn-action { width: 100%; padding: 15px; border: none; border-radius: 12px; font-weight: 900; cursor: pointer; transition: 0.3s; margin-top: 10px; font-size: 14px; }
+        .btn-primary { background: var(--accent); color: #fff; }
+        .btn-success { background: var(--success); color: #000; }
+
+        .sup-links { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; width: 100%; max-width: 900px; margin-bottom: 20px; }
+        .s-btn { padding: 16px; border-radius: 15px; text-decoration: none; text-align: center; font-weight: bold; font-size: 11px; display: flex; align-items: center; justify-content: center; gap: 8px; }
+
+        .footer { font-size: 10px; opacity: 0.5; font-weight: bold; text-align: center; margin-bottom: 20px; }
+        @media (max-width: 768px) { .editor-layout { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+
+    <div class="watermark-bg" id="wm"></div>
+
+    <div class="container">
+        <div class="header">
+            <h1>RMV APEX GROUP 🚩</h1>
+            <p>Professional Thumbnail Maker Tool V11</p>
+        </div>
+
+        <div class="editor-layout">
+            <div class="canvas-area">
+                <canvas id="thumbCanvas" width="1280" height="720"></canvas>
+            </div>
+
+            <div class="controls">
+                <div class="control-group">
+                    <label>Background Image</label>
+                    <input type="file" id="bgInput" accept="image/*">
+                </div>
+                <div class="control-group">
+                    <label>Main Headline</label>
+                    <input type="text" id="mainText" value="VIRAL THUMBNAIL" oninput="updateCanvas()">
+                </div>
+                <div class="control-group">
+                    <label>Text Color</label>
+                    <input type="color" id="textColor" value="#ffd700" oninput="updateCanvas()">
+                </div>
+                <div class="control-group">
+                    <label>Add Branding</label>
+                    <select id="brandToggle" onchange="updateCanvas()">
+                        <option value="yes">RMV APEX Logo (On)</option>
+                        <option value="no">RMV APEX Logo (Off)</option>
+                    </select>
+                </div>
+                
+                <button class="btn-action btn-primary" onclick="updateCanvas()">🚀 REFRESH PREVIEW</button>
+                <button class="btn-action btn-success" onclick="downloadThumb()">📥 DOWNLOAD (1280x720)</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="sup-links">
+        <a href="https://buymeacoffee.com/rameshmewalalvishwakarma" target="_blank" class="s-btn" style="background:#FFDD00; color:#000;">
+            <i class="fas fa-coffee"></i> BUY ME A COFFEE
+        </a>
+        <a href="https://ko-fi.com/rameshmewalalvishwakarma" target="_blank" class="s-btn" style="background:#29abe0; color:#fff;">
+            <i class="fas fa-heart"></i> SUPPORT ON KO-FI
+        </a>
+    </div>
+
+    <div class="footer">🚩 RMV APEX GROUP | DESIGNED BY RAMESH MEWALAL VISHWAKARMA 🚩</div>
+
+    <script>
+        const wm = document.getElementById('wm');
+        for(let i=0; i<30; i++) wm.innerHTML += `<div class="wm-text">RMV APEX GROUP</div>`;
+
+        const canvas = document.getElementById('thumbCanvas');
+        const ctx = canvas.getContext('2d');
+        let bgImg = null;
+
+        document.getElementById('bgInput').addEventListener('change', function(e) {
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                const img = new Image();
+                img.onload = function() {
+                    bgImg = img;
+                    updateCanvas();
+                }
+                img.src = event.target.result;
+            }
+            reader.readAsDataURL(e.target.files[0]);
+        });
+
+        function updateCanvas() {
+            // Background
+            ctx.fillStyle = "#000";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            if (bgImg) {
+                const scale = Math.max(canvas.width / bgImg.width, canvas.height / bgImg.height);
+                const x = (canvas.width / 2) - (bgImg.width / 2) * scale;
+                const y = (canvas.height / 2) - (bgImg.height / 2) * scale;
+                ctx.drawImage(bgImg, x, y, bgImg.width * scale, bgImg.height * scale);
+            }
+
+            // Dark Overlay for text readability
+            ctx.fillStyle = "rgba(0,0,0,0.3)";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Headline Text
+            const text = document.getElementById('mainText').value;
+            const color = document.getElementById('textColor').value;
+            ctx.font = "bold 100px Arial";
+            ctx.fillStyle = color;
+            ctx.textAlign = "center";
+            ctx.shadowColor = "black";
+            ctx.shadowBlur = 20;
+            ctx.lineWidth = 10;
+            ctx.strokeText(text, canvas.width/2, 400);
+            ctx.fillText(text, canvas.width/2, 400);
+
+            // Branding Logo
+            if(document.getElementById('brandToggle').value === "yes") {
+                ctx.font = "900 30px Arial";
+                ctx.fillStyle = "#fff";
+                ctx.textAlign = "left";
+                ctx.fillText("🚩 RMV APEX GROUP", 50, 670);
+            }
+        }
+
+        function downloadThumb() {
+            const link = document.createElement('a');
+            link.download = 'RMV_APEX_Thumbnail.png';
+            link.href = canvas.toDataURL();
+            link.click();
+        }
+
+        // Initial update
+        updateCanvas();
+    </script>
+</body>
+</html>
