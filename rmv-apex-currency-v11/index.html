@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RMV APEX GROUP | Currency Converter 🚩</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root { --bg: #05070a; --accent: #00d2ff; --glass: rgba(255, 255, 255, 0.05); --gold: #ffd700; --success: #2ecc71; }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: #fff; display: flex; flex-direction: column; align-items: center; padding: 20px; min-height: 100vh; }
+
+        /* Branding Watermark */
+        .watermark-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; opacity: 0.06; display: flex; flex-wrap: wrap; justify-content: space-around; }
+        .wm-text { transform: rotate(-30deg); font-weight: 900; font-size: 18px; margin: 50px; color: #fff; }
+
+        .container { background: var(--glass); backdrop-filter: blur(15px); border: 1px solid rgba(255,255,255,0.1); padding: 30px; border-radius: 30px; width: 100%; max-width: 500px; border-top: 6px solid var(--accent); box-shadow: 0 20px 50px rgba(0,0,0,0.5); margin-bottom: 30px; }
+        .header h1 { color: var(--accent); text-align: center; font-weight: 900; letter-spacing: 1px; }
+        .header p { text-align: center; font-size: 10px; opacity: 0.6; margin-bottom: 25px; text-transform: uppercase; }
+        
+        .input-box { background: #000; border: 1px solid #333; border-radius: 12px; padding: 15px; margin-bottom: 15px; }
+        .input-box label { font-size: 10px; color: #aaa; display: block; margin-bottom: 8px; text-transform: uppercase; font-weight: bold; }
+        .input-box input { background: transparent; border: none; color: #fff; width: 100%; outline: none; font-size: 22px; font-weight: bold; }
+
+        .drop-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 20px; }
+        .select-box { flex: 1; background: #111; border: 1px solid #333; border-radius: 12px; padding: 10px; display: flex; align-items: center; gap: 8px; }
+        .select-box img { width: 25px; border-radius: 3px; }
+        .select-box select { background: transparent; border: none; color: #fff; width: 100%; outline: none; font-weight: bold; cursor: pointer; }
+
+        .swap-btn { background: var(--accent); color: #000; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.3s; }
+        .swap-btn:hover { transform: rotate(180deg); }
+
+        .btn-calc { width: 100%; padding: 18px; border: none; border-radius: 15px; background: linear-gradient(135deg, #00d2ff, #3a7bd5); color: #fff; font-weight: 900; cursor: pointer; font-size: 16px; margin-top: 10px; }
+        
+        #results { display: none; margin-top: 25px; padding: 20px; background: rgba(0,210,255,0.1); border-radius: 20px; border: 1px dashed var(--accent); text-align: center; }
+        .res-text { font-size: 1.8rem; font-weight: 900; color: var(--success); }
+        .rate-info { font-size: 11px; opacity: 0.7; margin-top: 10px; }
+
+        /* Support Buttons Styling */
+        .sup-links { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; width: 100%; max-width: 500px; margin-bottom: 20px; }
+        .s-btn { padding: 15px; border-radius: 15px; text-decoration: none; text-align: center; font-weight: bold; font-size: 10px; transition: 0.3s; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .s-btn:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
+
+        .footer { font-size: 10px; opacity: 0.5; font-weight: bold; text-align: center; margin-bottom: 20px; }
+    </style>
+</head>
+<body>
+
+    <div class="watermark-bg" id="wm"></div>
+
+    <div class="container">
+        <div class="header">
+            <h1>RMV APEX GROUP 🚩</h1>
+            <p>Live Real-Time Currency Converter V11</p>
+        </div>
+
+        <div class="input-box">
+            <label>Enter Amount</label>
+            <input type="number" id="amount" value="1" placeholder="0.00">
+        </div>
+
+        <div class="drop-row">
+            <div class="select-box">
+                <img id="from-flag" src="https://flagsapi.com/US/flat/64.png">
+                <select id="from-currency"></select>
+            </div>
+            <div class="swap-btn" onclick="swapCurrency()">
+                <i class="fas fa-exchange-alt"></i>
+            </div>
+            <div class="select-box">
+                <img id="to-flag" src="https://flagsapi.com/IN/flat/64.png">
+                <select id="to-currency"></select>
+            </div>
+        </div>
+
+        <button class="btn-calc" onclick="getExchangeRate()">🚀 CONVERT NOW</button>
+
+        <div id="results">
+            <div id="exchange-rate-text" class="res-text">Getting Rate...</div>
+            <div id="rate-info" class="rate-info"></div>
+        </div>
+    </div>
+
+    <div class="sup-links">
+        <a href="https://buymeacoffee.com/rameshmewalalvishwakarma" target="_blank" class="s-btn" style="background:#FFDD00; color:#000;">
+            <i class="fas fa-coffee"></i> BUY ME A COFFEE
+        </a>
+        <a href="https://ko-fi.com/rameshmewalalvishwakarma" target="_blank" class="s-btn" style="background:#29abe0; color:#fff;">
+            <i class="fas fa-heart"></i> SUPPORT ON KO-FI
+        </a>
+    </div>
+
+    <div class="footer">🚩 RMV APEX GROUP | DESIGNED BY RAMESH MEWALAL VISHWAKARMA 🚩</div>
+
+    <script>
+        // Watermark logic
+        const wm = document.getElementById('wm');
+        for(let i=0; i<30; i++) wm.innerHTML += `<div class="wm-text">RMV APEX GROUP</div>`;
+
+        const fromCurrency = document.querySelector("#from-currency");
+        const toCurrency = document.querySelector("#to-currency");
+        const fromFlag = document.querySelector("#from-flag");
+        const toFlag = document.querySelector("#to-flag");
+
+        // Common Currency Codes & Country Codes for Flags
+        const country_list = {
+            "USD": "US", "INR": "IN", "EUR": "FR", "GBP": "GB", "AED": "AE", "CAD": "CA", "AUD": "AU", "JPY": "JP", "CNY": "CN", "SAR": "SA", "KWD": "KW", "OMR": "OM", "BHD": "BH", "QAR": "QA", "SGD": "SG"
+        };
+
+        // Initialize selects
+        function init() {
+            for (let curr_code in country_list) {
+                let selectedFrom = curr_code == "USD" ? "selected" : "";
+                let selectedTo = curr_code == "INR" ? "selected" : "";
+                fromCurrency.insertAdjacentHTML("beforeend", `<option value="${curr_code}" ${selectedFrom}>${curr_code}</option>`);
+                toCurrency.insertAdjacentHTML("beforeend", `<option value="${curr_code}" ${selectedTo}>${curr_code}</option>`);
+            }
+        }
+
+        fromCurrency.addEventListener("change", e => updateFlag(e.target, fromFlag));
+        toCurrency.addEventListener("change", e => updateFlag(e.target, toFlag));
+
+        function updateFlag(element, flagImg) {
+            let code = country_list[element.value];
+            flagImg.src = `https://flagsapi.com/${code}/flat/64.png`;
+        }
+
+        function swapCurrency() {
+            let tempCode = fromCurrency.value;
+            fromCurrency.value = toCurrency.value;
+            toCurrency.value = tempCode;
+            updateFlag(fromCurrency, fromFlag);
+            updateFlag(toFlag, toFlag); // Wait, toFlag fix
+            updateFlag(toCurrency, toFlag);
+            getExchangeRate();
+        }
+
+        async function getExchangeRate() {
+            const amount = document.querySelector("#amount").value;
+            const exchangeRateTxt = document.querySelector("#exchange-rate-text");
+            const rateInfo = document.querySelector("#rate-info");
+            const resultBox = document.querySelector("#results");
+
+            if (amount == "" || amount == "0") {
+                alert("Please enter a valid amount!");
+                return;
+            }
+
+            resultBox.style.display = "block";
+            exchangeRateTxt.innerText = "Fetching Live Rate...";
+
+            try {
+                // Using free api.exchangerate-api.com
+                let url = `https://api.exchangerate-api.com/v4/latest/${fromCurrency.value}`;
+                let response = await fetch(url);
+                let result = await response.json();
+                let exchangeRate = result.rates[toCurrency.value];
+                let totalExRate = (amount * exchangeRate).toFixed(2);
+                
+                exchangeRateTxt.innerText = `${amount} ${fromCurrency.value} = ${totalExRate} ${toCurrency.value}`;
+                rateInfo.innerText = `1 ${fromCurrency.value} = ${exchangeRate} ${toCurrency.value}`;
+            } catch (error) {
+                exchangeRateTxt.innerText = "Something went wrong!";
+            }
+        }
+
+        init();
+    </script>
+</body>
+</html>
