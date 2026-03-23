@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RMV APEX GROUP | Future Planner 🚩</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root { --bg: #05070a; --accent: #00d2ff; --glass: rgba(255, 255, 255, 0.05); --gold: #ffd700; --success: #2ecc71; }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: #fff; display: flex; flex-direction: column; align-items: center; padding: 20px; position: relative; overflow-x: hidden; }
+
+        /* Branding Watermark */
+        .watermark-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; opacity: 0.07; display: flex; flex-wrap: wrap; justify-content: space-around; align-content: space-around; }
+        .wm-text { transform: rotate(-30deg); font-weight: 900; font-size: 18px; margin: 40px; color: #fff; }
+
+        .container { background: var(--glass); backdrop-filter: blur(15px); border: 1px solid rgba(255,255,255,0.1); padding: 30px; border-radius: 30px; width: 100%; max-width: 800px; border-top: 6px solid var(--accent); box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
+        .header h1 { color: var(--accent); text-align: center; font-weight: 900; letter-spacing: 2px; }
+        .header p { text-align: center; font-size: 10px; opacity: 0.6; margin-bottom: 25px; }
+        
+        .input-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 15px; margin-bottom: 20px; }
+        .i-box { background: #000; border: 1px solid #333; border-radius: 12px; padding: 12px; }
+        .i-box label { font-size: 10px; color: var(--accent); display: block; font-weight: bold; margin-bottom: 5px; text-transform: uppercase; }
+        .i-box input, .i-box select { background: transparent; border: none; color: #fff; width: 100%; outline: none; font-size: 16px; font-weight: bold; }
+
+        .btn-calc { width: 100%; padding: 18px; border: none; border-radius: 15px; background: linear-gradient(135deg, #00d2ff, #3a7bd5); color: #fff; font-weight: 900; cursor: pointer; font-size: 16px; margin-bottom: 15px; }
+        
+        #results { display: none; background: rgba(255,255,255,0.03); border: 1px dashed var(--accent); border-radius: 20px; padding: 25px; text-align: center; margin-top: 20px; }
+        .res-big { font-size: 2.5rem; font-weight: 900; color: var(--success); margin: 10px 0; }
+        .detail-row { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 14px; }
+
+        .action-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 25px; }
+        .act-btn { padding: 12px; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; color: #fff; font-size: 11px; }
+
+        .sup-links { margin-top: 35px; display: grid; grid-template-columns: 1fr 1fr; gap: 15px; width: 100%; max-width: 800px; }
+        .s-btn { padding: 18px; border-radius: 15px; text-decoration: none; font-weight: bold; text-align: center; font-size: 11px; }
+        .footer { margin-top: 40px; font-size: 10px; opacity: 0.5; font-weight: bold; }
+    </style>
+</head>
+<body onload="loadData()">
+
+    <div class="watermark-bg" id="wm"></div>
+
+    <div class="container" id="printable">
+        <div class="header">
+            <h1>RMV APEX GROUP 🚩</h1>
+            <p>SMART FUTURE GOAL & RETIREMENT PLANNER V11</p>
+        </div>
+
+        <div class="input-grid">
+            <div class="i-box">
+                <label>Goal Type</label>
+                <select id="goal_type">
+                    <option value="Child Education">Child Education / Marriage</option>
+                    <option value="Retirement">Retirement Planning</option>
+                    <option value="House">Dream House</option>
+                </select>
+            </div>
+            <div class="i-box"><label>Cost at Today's Price (₹)</label><input type="number" id="current_cost" placeholder="eg. 15,00,000"></div>
+            <div class="i-box"><label>Years Left (Time)</label><input type="number" id="years" placeholder="eg. 15"></div>
+            <div class="i-box"><label>Expected Inflation (%)</label><input type="number" id="inflation" value="6"></div>
+            <div class="i-box" style="grid-column: span 2;"><label>Investment Return ROI (%)</label><input type="number" id="roi" value="12"></div>
+        </div>
+
+        <button class="btn-calc" onclick="planFuture()">🚀 ANALYZE FUTURE REQUIREMENT</button>
+
+        <div id="results">
+            <span style="font-size: 10px; opacity: 0.7; text-transform: uppercase;" id="goal_label">Future Value of Goal</span>
+            <div class="res-big" id="future_cost">₹0</div>
+            
+            <div style="margin: 20px 0; padding: 15px; background: rgba(0,210,255,0.1); border-radius: 10px;">
+                <span style="font-size: 11px; color: var(--gold); font-weight: bold;">Monthly Savings Needed Starting Today</span>
+                <div style="font-size: 1.8rem; font-weight: 900;" id="required_sip">₹0 / month</div>
+            </div>
+
+            <div class="detail-row"><span>Total Savings Required:</span><b id="tot_save">₹0</b></div>
+            <div class="detail-row"><span>Inflation Impact:</span><b id="inf_impact" style="color:var(--gold)">₹0</b></div>
+        </div>
+
+        <div class="action-row">
+            <button class="act-btn" style="background:#238636" onclick="saveData()">SAVE</button>
+            <button class="act-btn" style="background:#4a5568" onclick="exportPDF()">PDF REPORT</button>
+            <button class="act-btn" style="background:#c53030" onclick="resetForm()">CLEAR</button>
+        </div>
+    </div>
+
+    <div class="sup-links">
+        <a href="https://buymeacoffee.com/rameshmewalalvishwakarma" target="_blank" class="s-btn" style="background:#FFDD00; color:#000;">☕ BUY ME A COFFEE</a>
+        <a href="https://ko-fi.com/rameshmewalalvishwakarma" target="_blank" class="s-btn" style="background:#29abe0; color:#fff;">❤️ SUPPORT ON KO-FI</a>
+    </div>
+
+    <div class="footer">🚩 RMV APEX GROUP | DESIGNED BY RAMESH MEWALAL VISHWAKARMA 🚩</div>
+
+    <script>
+        const wm = document.getElementById('wm');
+        for(let i=0; i<40; i++) wm.innerHTML += `<div class="wm-text">RMV APEX GROUP</div>`;
+
+        function planFuture() {
+            const cost = parseFloat(document.getElementById('current_cost').value);
+            const years = parseFloat(document.getElementById('years').value);
+            const infl = parseFloat(document.getElementById('inflation').value) / 100;
+            const roi = parseFloat(document.getElementById('roi').value) / 100 / 12;
+            const months = years * 12;
+
+            if(!cost || !years) return alert("संख्याएं भरें! 🚩");
+
+            // 1. Calculate Inflation Adjusted Future Cost
+            const futureCost = cost * Math.pow(1 + infl, years);
+            
+            // 2. Calculate Required Monthly SIP to reach Future Cost
+            // Formula: P = FV / [ ((1+r)^n - 1) / r * (1+r) ]
+            const sipRequired = futureCost / (((Math.pow(1 + roi, months) - 1) / roi) * (1 + roi));
+
+            document.getElementById('future_cost').innerText = "₹" + Math.round(futureCost).toLocaleString('en-IN');
+            document.getElementById('required_sip').innerText = "₹" + Math.round(sipRequired).toLocaleString('en-IN') + " / Mo";
+            document.getElementById('tot_save').innerText = "₹" + Math.round(futureCost).toLocaleString('en-IN');
+            document.getElementById('inf_impact').innerText = "₹" + Math.round(futureCost - cost).toLocaleString('en-IN');
+            
+            document.getElementById('goal_label').innerText = "Future Cost for " + document.getElementById('goal_type').value;
+            document.getElementById('results').style.display = 'block';
+        }
+
+        function exportPDF() {
+            const element = document.getElementById('printable');
+            html2pdf().from(element).set({
+                margin: 10, filename: 'RMV_Future_Plan.pdf',
+                html2canvas: { scale: 2, backgroundColor: '#05070a' },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            }).save();
+        }
+
+        function saveData() {
+            const d = { c:document.getElementById('current_cost').value, y:document.getElementById('years').value, i:document.getElementById('inflation').value, r:document.getElementById('roi').value, g:document.getElementById('goal_type').value };
+            localStorage.setItem('rmv_goal_plan', JSON.stringify(d));
+            alert("Goal Saved! 🚩");
+        }
+
+        function loadData() {
+            const s = localStorage.getItem('rmv_goal_plan');
+            if(s) {
+                const d = JSON.parse(s);
+                document.getElementById('current_cost').value = d.c;
+                document.getElementById('years').value = d.y;
+                document.getElementById('inflation').value = d.i;
+                document.getElementById('roi').value = d.r;
+                document.getElementById('goal_type').value = d.g;
+            }
+        }
+
+        function resetForm() { localStorage.removeItem('rmv_goal_plan'); location.reload(); }
+    </script>
+</body>
+</html>
