@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RMV APEX GROUP | Car Cost Master 🚩</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root { --bg: #05070a; --accent: #ff9f43; --glass: rgba(255, 255, 255, 0.05); --petrol: #eb4d4b; --loan: #686de0; }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: #fff; display: flex; flex-direction: column; align-items: center; padding: 20px; }
+
+        .watermark-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; opacity: 0.06; display: flex; flex-wrap: wrap; justify-content: space-around; }
+        .wm-text { transform: rotate(-30deg); font-weight: 900; font-size: 16px; margin: 50px; color: #fff; }
+
+        .container { background: var(--glass); backdrop-filter: blur(15px); border: 1px solid rgba(255,255,255,0.1); padding: 30px; border-radius: 30px; width: 100%; max-width: 850px; border-top: 6px solid var(--accent); box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
+        .header h1 { color: var(--accent); text-align: center; font-weight: 900; }
+        .header p { text-align: center; font-size: 10px; opacity: 0.6; margin-bottom: 25px; }
+        
+        .section-title { font-size: 12px; color: var(--accent); margin: 15px 0 10px; font-weight: bold; text-transform: uppercase; border-left: 3px solid var(--accent); padding-left: 10px; }
+        .input-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin-bottom: 20px; }
+        .i-box { background: #000; border: 1px solid #333; border-radius: 12px; padding: 10px; }
+        .i-box label { font-size: 9px; color: #aaa; display: block; margin-bottom: 4px; }
+        .i-box input { background: transparent; border: none; color: #fff; width: 100%; outline: none; font-size: 15px; font-weight: bold; }
+
+        .btn-calc { width: 100%; padding: 18px; border: none; border-radius: 15px; background: linear-gradient(135deg, #ff9f43, #ff6b6b); color: #fff; font-weight: 900; cursor: pointer; font-size: 16px; margin-top: 10px; }
+        
+        #results { display: none; margin-top: 25px; }
+        .summary-box { background: rgba(255,255,255,0.05); padding: 20px; border-radius: 20px; text-align: center; border: 1px dashed var(--accent); }
+        .total-price { font-size: 2.5rem; font-weight: 900; color: #fff; margin: 10px 0; }
+
+        .analysis-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px; }
+        .ana-card { padding: 15px; border-radius: 15px; text-align: left; position: relative; }
+        .ana-card.loan { background: rgba(104, 109, 224, 0.15); border: 1px solid var(--loan); }
+        .ana-card.petrol { background: rgba(235, 77, 75, 0.15); border: 1px solid var(--petrol); }
+        .ana-card h4 { font-size: 10px; opacity: 0.8; text-transform: uppercase; }
+        .ana-card .val { font-size: 1.3rem; font-weight: 900; margin-top: 5px; }
+
+        .footer { margin-top: 40px; font-size: 10px; opacity: 0.5; font-weight: bold; text-align: center; }
+    </style>
+</head>
+<body>
+
+    <div class="watermark-bg" id="wm"></div>
+
+    <div class="container" id="printable">
+        <div class="header">
+            <h1>RMV APEX GROUP 🚩</h1>
+            <p>TOTAL COST OF CAR OWNERSHIP (LOAN + FUEL) V11</p>
+        </div>
+
+        <div class="section-title">Loan Details</div>
+        <div class="input-grid">
+            <div class="i-box"><label>Loan Amount (₹)</label><input type="number" id="loan_amt" value="800000"></div>
+            <div class="i-box"><label>Interest Rate (%)</label><input type="number" id="roi" value="9"></div>
+            <div class="i-box"><label>Tenure (Years)</label><input type="number" id="years" value="5"></div>
+        </div>
+
+        <div class="section-title">Usage & Fuel Details</div>
+        <div class="input-grid">
+            <div class="i-box"><label>Daily Run (KM)</label><input type="number" id="daily_km" value="30"></div>
+            <div class="i-box"><label>Car Mileage (KM/L)</label><input type="number" id="mileage" value="15"></div>
+            <div class="i-box"><label>Fuel Price (₹/L)</label><input type="number" id="fuel_price" value="105"></div>
+        </div>
+
+        <button class="btn-calc" onclick="calculateOwnership()">🚀 ANALYZE TOTAL OWNERSHIP COST</button>
+
+        <div id="results">
+            <div class="summary-box">
+                <span style="font-size: 10px; text-transform: uppercase; letter-spacing: 1px;">Estimated 5-Year Total Expense</span>
+                <div class="total-price" id="grand_total">₹0</div>
+                <p id="per_km_cost" style="font-size: 12px; color: var(--accent); font-weight: bold;"></p>
+            </div>
+
+            <div class="analysis-grid">
+                <div class="ana-card loan">
+                    <h4>Total Loan Cost (EMI + Int)</h4>
+                    <div class="val" id="total_loan_out">₹0</div>
+                    <div style="font-size: 10px; margin-top: 5px;">Monthly EMI: <span id="monthly_emi">₹0</span></div>
+                </div>
+                <div class="ana-card petrol">
+                    <h4>Total Fuel Cost (5 Yrs)</h4>
+                    <div class="val" id="total_fuel_out">₹0</div>
+                    <div style="font-size: 10px; margin-top: 5px;">Monthly Fuel: <span id="monthly_fuel">₹0</span></div>
+                </div>
+            </div>
+        </div>
+
+        <div style="margin-top:20px; display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
+            <button onclick="window.print()" style="padding:10px; border-radius:10px; border:none; background:#4a5568; color:white; cursor:pointer; font-weight:bold;">PRINT REPORT</button>
+            <button onclick="location.reload()" style="padding:10px; border-radius:10px; border:none; background:#c53030; color:white; cursor:pointer; font-weight:bold;">RESET</button>
+        </div>
+    </div>
+
+    <div class="footer">🚩 RMV APEX GROUP | DESIGNED BY RAMESH MEWALAL VISHWAKARMA 🚩</div>
+
+    <script>
+        const wm = document.getElementById('wm');
+        for(let i=0; i<30; i++) wm.innerHTML += `<div class="wm-text">RMV APEX GROUP</div>`;
+
+        function calculateOwnership() {
+            // Loan Calculation
+            const P = parseFloat(document.getElementById('loan_amt').value);
+            const r = parseFloat(document.getElementById('roi').value) / 12 / 100;
+            const n = parseInt(document.getElementById('years').value) * 12;
+            
+            const emi = P * r * Math.pow(1 + r, n) / (Math.pow(1 + r, n) - 1);
+            const totalLoanCost = emi * n;
+
+            // Fuel Calculation
+            const dailyKm = parseFloat(document.getElementById('daily_km').value);
+            const mileage = parseFloat(document.getElementById('mileage').value);
+            const fuelPrice = parseFloat(document.getElementById('fuel_price').value);
+            
+            const monthlyKm = dailyKm * 30;
+            const monthlyFuelCost = (monthlyKm / mileage) * fuelPrice;
+            const totalFuelCost = monthlyFuelCost * (parseInt(document.getElementById('years').value) * 12);
+
+            const grandTotal = totalLoanCost + totalFuelCost;
+            const totalKm = dailyKm * 365 * parseInt(document.getElementById('years').value);
+            const perKm = grandTotal / totalKm;
+
+            // Display Results
+            document.getElementById('grand_total').innerText = "₹" + Math.round(grandTotal).toLocaleString('en-IN');
+            document.getElementById('total_loan_out').innerText = "₹" + Math.round(totalLoanCost).toLocaleString('en-IN');
+            document.getElementById('total_fuel_out').innerText = "₹" + Math.round(totalFuelCost).toLocaleString('en-IN');
+            document.getElementById('monthly_emi').innerText = "₹" + Math.round(emi).toLocaleString('en-IN');
+            document.getElementById('monthly_fuel').innerText = "₹" + Math.round(monthlyFuelCost).toLocaleString('en-IN');
+            document.getElementById('per_km_cost').innerText = "Effective Cost: ₹" + perKm.toFixed(2) + " per KM";
+            
+            document.getElementById('results').style.display = 'block';
+        }
+    </script>
+</body>
+</html>
