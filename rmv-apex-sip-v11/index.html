@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RMV APEX GROUP | SIP Calculator 🚩</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root { --bg: #05070a; --accent: #00d2ff; --glass: rgba(255, 255, 255, 0.05); --gold: #ffd700; --success: #2ecc71; }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: #fff; display: flex; flex-direction: column; align-items: center; padding: 20px; position: relative; overflow-x: hidden; }
+
+        /* Repeating Watermark */
+        .watermark-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; opacity: 0.06; display: flex; flex-wrap: wrap; justify-content: space-around; align-content: space-around; }
+        .wm-text { transform: rotate(-30deg); font-weight: 900; font-size: 18px; margin: 40px; color: #fff; }
+
+        .container { background: var(--glass); backdrop-filter: blur(15px); border: 1px solid rgba(255,255,255,0.1); padding: 30px; border-radius: 30px; width: 100%; max-width: 700px; border-top: 6px solid var(--accent); box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
+        .header h1 { color: var(--accent); text-align: center; font-weight: 900; letter-spacing: 2px; text-transform: uppercase; }
+        .header p { text-align: center; font-size: 10px; opacity: 0.6; margin-bottom: 25px; letter-spacing: 1px; }
+        
+        .input-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 20px; }
+        .i-box { background: #000; border: 1px solid #333; border-radius: 12px; padding: 12px; }
+        .i-box label { font-size: 10px; color: var(--accent); display: block; font-weight: bold; margin-bottom: 5px; text-transform: uppercase; }
+        .i-box input { background: transparent; border: none; color: #fff; width: 100%; outline: none; font-size: 18px; font-weight: bold; }
+
+        .btn-calc { width: 100%; padding: 18px; border: none; border-radius: 15px; background: linear-gradient(135deg, #00d2ff, #3a7bd5); color: #fff; font-weight: 900; cursor: pointer; font-size: 16px; margin-bottom: 15px; box-shadow: 0 10px 20px rgba(0,210,255,0.2); }
+        
+        #results { display: none; background: rgba(255,255,255,0.03); border: 1px dashed var(--accent); border-radius: 20px; padding: 25px; text-align: center; margin-top: 20px; }
+        .res-big { font-size: 3rem; font-weight: 900; color: var(--success); margin: 10px 0; }
+        .detail-row { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 14px; }
+
+        .action-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 25px; }
+        .act-btn { padding: 12px; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; color: #fff; font-size: 11px; text-transform: uppercase; }
+
+        .sup-links { margin-top: 35px; display: grid; grid-template-columns: 1fr 1fr; gap: 15px; width: 100%; max-width: 700px; }
+        .s-btn { padding: 18px; border-radius: 15px; text-decoration: none; font-weight: bold; text-align: center; font-size: 12px; box-shadow: 0 10px 20px rgba(0,0,0,0.3); }
+        .footer { margin-top: 40px; font-size: 10px; opacity: 0.5; font-weight: bold; text-align: center; }
+    </style>
+</head>
+<body onload="loadStored()">
+
+    <div class="watermark-bg" id="wm"></div>
+
+    <div class="container" id="printable">
+        <div class="header">
+            <h1>RMV APEX GROUP 🚩</h1>
+            <p>PROFESSIONAL MUTUAL FUND SIP CALCULATOR V11</p>
+        </div>
+
+        <div class="input-grid">
+            <div class="i-box">
+                <label>Monthly Investment (₹)</label>
+                <input type="number" id="monthly_amt" placeholder="eg. 5000">
+            </div>
+            <div class="i-box">
+                <label>Expected Return Rate (%)</label>
+                <input type="number" id="return_rate" placeholder="eg. 12">
+            </div>
+            <div class="i-box" style="grid-column: span 2;">
+                <label>Investment Period (Years)</label>
+                <input type="number" id="years" placeholder="eg. 10">
+            </div>
+        </div>
+
+        <button class="btn-calc" onclick="calculateSIP()">🚀 CALCULATE WEALTH GAIN</button>
+
+        <div id="results">
+            <span style="font-size: 10px; opacity: 0.7; text-transform: uppercase;">Total Value After Period</span>
+            <div class="res-big" id="total_value">₹0</div>
+            
+            <div class="detail-row"><span>Invested Amount:</span><b id="invested_amt">₹0</b></div>
+            <div class="detail-row"><span>Estimated Returns:</span><b id="est_returns" style="color:var(--gold)">₹0</b></div>
+            <div class="detail-row"><span>Wealth Growth:</span><b id="growth_pct" style="color:var(--accent)">0%</b></div>
+        </div>
+
+        <div class="action-row">
+            <button class="act-btn" style="background:#238636" onclick="saveSIP()">SAVE</button>
+            <button class="act-btn" style="background:#4a5568" onclick="exportPDF()">PDF REPORT</button>
+            <button class="act-btn" style="background:#c53030" onclick="resetSIP()">CLEAR</button>
+        </div>
+    </div>
+
+    <div class="sup-links">
+        <a href="https://buymeacoffee.com/rameshmewalalvishwakarma" target="_blank" class="s-btn" style="background:#FFDD00; color:#000;">☕ BUY ME A COFFEE</a>
+        <a href="https://ko-fi.com/rameshmewalalvishwakarma" target="_blank" class="s-btn" style="background:#29abe0; color:#fff;">❤️ SUPPORT ON KO-FI</a>
+    </div>
+
+    <div class="footer">🚩 RMV APEX GROUP | CRAFTED BY RAMESH MEWALAL VISHWAKARMA 🚩</div>
+
+    <script>
+        // Watermark Tiling
+        const wm = document.getElementById('wm');
+        for(let i=0; i<40; i++) wm.innerHTML += `<div class="wm-text">RMV APEX GROUP</div>`;
+
+        function calculateSIP() {
+            const P = parseFloat(document.getElementById('monthly_amt').value);
+            const r = parseFloat(document.getElementById('return_rate').value) / 100 / 12;
+            const n = parseInt(document.getElementById('years').value) * 12;
+
+            if(!P || !r || !n) return alert("संख्याएं भरें! 🚩");
+
+            // SIP Formula: FV = P × ({[1 + r]^n - 1} / r) × (1 + r)
+            const futureValue = P * ((Math.pow(1 + r, n) - 1) / r) * (1 + r);
+            const totalInvested = P * n;
+            const returns = futureValue - totalInvested;
+            const growth = (returns / totalInvested) * 100;
+
+            document.getElementById('total_value').innerText = "₹" + Math.round(futureValue).toLocaleString('en-IN');
+            document.getElementById('invested_amt').innerText = "₹" + totalInvested.toLocaleString('en-IN');
+            document.getElementById('est_returns').innerText = "₹" + Math.round(returns).toLocaleString('en-IN');
+            document.getElementById('growth_pct').innerText = growth.toFixed(1) + "%";
+            
+            document.getElementById('results').style.display = 'block';
+        }
+
+        function exportPDF() {
+            const element = document.getElementById('printable');
+            html2pdf().from(element).set({
+                margin: 10, filename: 'RMV_SIP_Report.pdf',
+                html2canvas: { scale: 2, backgroundColor: '#05070a' },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            }).save();
+        }
+
+        function saveSIP() {
+            const data = { a: document.getElementById('monthly_amt').value, r: document.getElementById('return_rate').value, y: document.getElementById('years').value };
+            localStorage.setItem('rmv_sip_data', JSON.stringify(data));
+            alert("Data Saved! 🚩");
+        }
+
+        function loadStored() {
+            const s = localStorage.getItem('rmv_sip_data');
+            if(s) {
+                const d = JSON.parse(s);
+                document.getElementById('monthly_amt').value = d.a;
+                document.getElementById('return_rate').value = d.r;
+                document.getElementById('years').value = d.y;
+            }
+        }
+
+        function resetSIP() { localStorage.removeItem('rmv_sip_data'); location.reload(); }
+    </script>
+</body>
+</html>
