@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RMV APEX GROUP | Ad Copy Master 🚩</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root { --bg: #05070a; --accent: #ffd700; --glass: rgba(255, 255, 255, 0.05); --blue: #00d2ff; --success: #2ecc71; }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: #fff; display: flex; flex-direction: column; align-items: center; padding: 20px; min-height: 100vh; }
+
+        .watermark-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; opacity: 0.06; display: flex; flex-wrap: wrap; justify-content: space-around; }
+        .wm-text { transform: rotate(-30deg); font-weight: 900; font-size: 18px; margin: 50px; color: #fff; }
+
+        .container { background: var(--glass); backdrop-filter: blur(15px); border: 1px solid rgba(255,255,255,0.1); padding: 30px; border-radius: 30px; width: 100%; max-width: 700px; border-top: 6px solid var(--accent); box-shadow: 0 20px 50px rgba(0,0,0,0.5); margin-bottom: 30px; }
+        .header h1 { color: var(--accent); text-align: center; font-weight: 900; letter-spacing: 1px; }
+        .header p { text-align: center; font-size: 10px; opacity: 0.6; margin-bottom: 25px; text-transform: uppercase; }
+        
+        .section-title { font-size: 11px; color: var(--accent); margin: 15px 0 10px; font-weight: bold; text-transform: uppercase; border-left: 3px solid var(--accent); padding-left: 10px; }
+        .i-box { background: #000; border: 1px solid #333; border-radius: 12px; padding: 12px; margin-bottom: 15px; }
+        .i-box label { font-size: 10px; color: #aaa; display: block; margin-bottom: 5px; }
+        .i-box input, .i-box textarea, .i-box select { background: transparent; border: none; color: #fff; width: 100%; outline: none; font-size: 15px; font-weight: bold; font-family: inherit; }
+
+        .btn-gen { width: 100%; padding: 18px; border: none; border-radius: 15px; background: linear-gradient(135deg, #ffd700, #b8860b); color: #000; font-weight: 900; cursor: pointer; font-size: 16px; transition: 0.3s; margin-top: 10px; }
+        .btn-gen:hover { transform: scale(1.02); box-shadow: 0 0 20px rgba(255, 215, 0, 0.3); }
+        
+        #results { display: none; margin-top: 25px; animation: slideIn 0.5s ease-out; }
+        @keyframes slideIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        .copy-card { background: #111; border: 1px solid #333; border-radius: 20px; padding: 25px; position: relative; border-left: 5px solid var(--blue); }
+        .copy-tag { font-size: 10px; background: var(--blue); color: #000; padding: 3px 8px; border-radius: 5px; font-weight: 900; margin-bottom: 15px; display: inline-block; }
+        .copy-content { font-size: 14px; line-height: 1.6; white-space: pre-wrap; color: #ddd; margin-bottom: 20px; }
+
+        .action-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .act-btn { padding: 12px; border: none; border-radius: 10px; cursor: pointer; font-weight: bold; font-size: 12px; transition: 0.2s; }
+        .btn-copy { background: rgba(255,255,255,0.1); color: #fff; }
+        .btn-copy:hover { background: var(--success); color: #000; }
+
+        .sup-links { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; width: 100%; max-width: 700px; margin-bottom: 20px; }
+        .s-btn { padding: 16px; border-radius: 15px; text-decoration: none; text-align: center; font-weight: bold; font-size: 11px; transition: 0.3s; display: flex; align-items: center; justify-content: center; gap: 8px; }
+
+        .footer { font-size: 10px; opacity: 0.5; font-weight: bold; text-align: center; margin-bottom: 20px; }
+    </style>
+</head>
+<body>
+
+    <div class="watermark-bg" id="wm"></div>
+
+    <div class="container">
+        <div class="header">
+            <h1>RMV APEX GROUP 🚩</h1>
+            <p>High-Conversion AI Ad Copy Generator</p>
+        </div>
+
+        <div class="section-title">Product Information</div>
+        <div class="i-box">
+            <label>Product/Service Name</label>
+            <input type="text" id="p_name" placeholder="Ex: RMV Digital Agency, Organic Tea...">
+        </div>
+        <div class="i-box">
+            <label>Key Benefit (One main reason to buy)</label>
+            <input type="text" id="p_benefit" placeholder="Ex: Earn 2X more, Clear skin in 7 days...">
+        </div>
+
+        <div class="section-title">Target Audience & Style</div>
+        <div class="input-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+            <div class="i-box">
+                <label>Platform</label>
+                <select id="platform">
+                    <option value="Facebook">Facebook / Instagram</option>
+                    <option value="Google">Google Search Ad</option>
+                    <option value="LinkedIn">LinkedIn Professional</option>
+                </select>
+            </div>
+            <div class="i-box">
+                <label>Copy Formula</label>
+                <select id="formula">
+                    <option value="AIDA">AIDA (Attention-Desire)</option>
+                    <option value="PAS">PAS (Problem-Solution)</option>
+                </select>
+            </div>
+        </div>
+
+        <button class="btn-gen" onclick="generateAd()">🚀 GENERATE PROFITABLE AD COPY</button>
+
+        <div id="results">
+            <div class="copy-card">
+                <div class="copy-tag" id="formula_tag">AIDA FORMULA</div>
+                <div class="copy-content" id="ad_output"></div>
+                <div class="action-btns">
+                    <button class="act-btn btn-copy" onclick="copyAd()"><i class="far fa-copy"></i> Copy Ad Copy</button>
+                    <button class="act-btn btn-copy" onclick="location.reload()" style="background:rgba(255, 77, 77, 0.2)">Reset</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="sup-links">
+        <a href="https://buymeacoffee.com/rameshmewalalvishwakarma" target="_blank" class="s-btn" style="background:#FFDD00; color:#000;">
+            <i class="fas fa-coffee"></i> BUY ME A COFFEE
+        </a>
+        <a href="https://ko-fi.com/rameshmewalalvishwakarma" target="_blank" class="s-btn" style="background:#29abe0; color:#fff;">
+            <i class="fas fa-heart"></i> SUPPORT ON KO-FI
+        </a>
+    </div>
+
+    <div class="footer">🚩 RMV APEX GROUP | DESIGNED BY RAMESH MEWALAL VISHWAKARMA 🚩</div>
+
+    <script>
+        const wm = document.getElementById('wm');
+        for(let i=0; i<30; i++) wm.innerHTML += `<div class="wm-text">RMV APEX GROUP</div>`;
+
+        function generateAd() {
+            const name = document.getElementById('p_name').value.trim();
+            const benefit = document.getElementById('p_benefit').value.trim();
+            const formula = document.getElementById('formula').value;
+            const platform = document.getElementById('platform').value;
+
+            if(!name || !benefit) { alert("Please enter product details! 🚩"); return; }
+
+            let adText = "";
+            if(formula === "AIDA") {
+                adText = `📣 ATTENTION: Tired of missing out on ${benefit}? \n\n✨ INTEREST: Introducing ${name} - the ultimate solution built for winners like you. \n\n❤️ DESIRE: Imagine achieving your goals 2X faster without any stress. Join thousands of happy users! \n\n🚀 ACTION: Click the link below to get started TODAY and claim your 20% discount! 👇`;
+            } else {
+                adText = `❓ PROBLEM: Are you struggling with your current setup to get ${benefit}? \n\n🔥 AGITATION: Every day you wait, you're losing money and time to your competitors. It's frustrating, right? \n\n✅ SOLUTION: ${name} is here to end your struggle. Our proven system delivers results in record time. \n\n👉 Start your journey with ${name} now! (Link in bio)`;
+            }
+
+            document.getElementById('formula_tag').innerText = `${formula} - Optimized for ${platform}`;
+            document.getElementById('ad_output').innerText = adText;
+            document.getElementById('results').style.display = 'block';
+        }
+
+        function copyAd() {
+            const text = document.getElementById('ad_output').innerText;
+            navigator.clipboard.writeText(text);
+            alert("Ad Copy Copied! 🚩");
+        }
+    </script>
+</body>
+</html>
