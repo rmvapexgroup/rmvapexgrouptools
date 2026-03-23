@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RMV APEX GROUP | NPS Master 🚩</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root { --bg: #05070a; --accent: #00d2ff; --glass: rgba(255, 255, 255, 0.05); --gold: #ffd700; --success: #2ecc71; }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: #fff; display: flex; flex-direction: column; align-items: center; padding: 20px; position: relative; overflow-x: hidden; }
+
+        /* Branding Watermark */
+        .watermark-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; opacity: 0.08; display: flex; flex-wrap: wrap; justify-content: space-around; align-content: space-around; }
+        .wm-text { transform: rotate(-30deg); font-weight: 900; font-size: 18px; margin: 45px; color: #fff; }
+
+        .container { background: var(--glass); backdrop-filter: blur(15px); border: 1px solid rgba(255,255,255,0.1); padding: 30px; border-radius: 30px; width: 100%; max-width: 800px; border-top: 6px solid var(--accent); box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
+        .header h1 { color: var(--accent); text-align: center; font-weight: 900; letter-spacing: 2px; }
+        .header p { text-align: center; font-size: 10px; opacity: 0.6; margin-bottom: 25px; }
+        
+        .input-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 20px; }
+        .i-box { background: #000; border: 1px solid #333; border-radius: 12px; padding: 12px; }
+        .i-box label { font-size: 10px; color: var(--accent); display: block; font-weight: bold; margin-bottom: 5px; text-transform: uppercase; }
+        .i-box input { background: transparent; border: none; color: #fff; width: 100%; outline: none; font-size: 16px; font-weight: bold; }
+
+        .btn-calc { width: 100%; padding: 18px; border: none; border-radius: 15px; background: linear-gradient(135deg, #00d2ff, #3a7bd5); color: #fff; font-weight: 900; cursor: pointer; font-size: 16px; margin-bottom: 15px; }
+        
+        #results { display: none; margin-top: 20px; }
+        .res-main { background: rgba(255,255,255,0.03); border: 1px dashed var(--accent); border-radius: 20px; padding: 25px; text-align: center; }
+        .res-big { font-size: 2.5rem; font-weight: 900; color: var(--success); margin: 10px 0; }
+        
+        .split-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px; }
+        .split-box { background: rgba(255,215,0,0.1); padding: 15px; border-radius: 12px; border: 1px solid rgba(255,215,0,0.2); }
+        .split-box h4 { font-size: 10px; color: var(--gold); margin-bottom: 5px; text-transform: uppercase; }
+
+        .action-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 25px; }
+        .act-btn { padding: 12px; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; color: #fff; font-size: 11px; }
+
+        .sup-links { margin-top: 35px; display: grid; grid-template-columns: 1fr 1fr; gap: 15px; width: 100%; max-width: 800px; }
+        .s-btn { padding: 18px; border-radius: 15px; text-decoration: none; font-weight: bold; text-align: center; font-size: 11px; }
+        .footer { margin-top: 40px; font-size: 10px; opacity: 0.5; font-weight: bold; }
+    </style>
+</head>
+<body onload="loadData()">
+
+    <div class="watermark-bg" id="wm"></div>
+
+    <div class="container" id="printable">
+        <div class="header">
+            <h1>RMV APEX GROUP 🚩</h1>
+            <p>GOVERNMENT NPS PENSION & CORPUS CALCULATOR V11</p>
+        </div>
+
+        <div class="input-grid">
+            <div class="i-box"><label>Monthly Contribution (₹)</label><input type="number" id="monthly_inv" placeholder="eg. 5000"></div>
+            <div class="i-box"><label>Current Age</label><input type="number" id="age" placeholder="eg. 30"></div>
+            <div class="i-box"><label>Expected Return (%)</label><input type="number" id="roi" value="10"></div>
+            <div class="i-box"><label>Annuity Purchase (%)</label><input type="number" id="annuity_pct" value="40"></div>
+            <div class="i-box" style="grid-column: span 2;"><label>Expected Pension Rate (%)</label><input type="number" id="pension_roi" value="6"></div>
+        </div>
+
+        <button class="btn-calc" onclick="calculateNPS()">🚀 CALCULATE NPS BENEFITS</button>
+
+        <div id="results">
+            <div class="res-main">
+                <span style="font-size: 10px; opacity: 0.7; text-transform: uppercase;">Total Maturity Corpus</span>
+                <div class="res-big" id="total_corpus">₹0</div>
+            </div>
+
+            <div class="split-grid">
+                <div class="split-box">
+                    <h4>Tax-Free Lumpsum (60%)</h4>
+                    <div style="font-size: 1.2rem; font-weight: 900;" id="lumpsum_val">₹0</div>
+                </div>
+                <div class="split-box" style="background: rgba(0,210,255,0.1); border-color: rgba(0,210,255,0.2);">
+                    <h4 style="color: var(--accent);">Monthly Pension</h4>
+                    <div style="font-size: 1.2rem; font-weight: 900; color: #fff;" id="pension_val">₹0</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="action-row">
+            <button class="act-btn" style="background:#238636" onclick="save()">SAVE</button>
+            <button class="act-btn" style="background:#4a5568" onclick="pdf()">REPORT PDF</button>
+            <button class="act-btn" style="background:#c53030" onclick="reset()">CLEAR</button>
+        </div>
+    </div>
+
+    <div class="sup-links">
+        <a href="https://buymeacoffee.com/rameshmewalalvishwakarma" target="_blank" class="s-btn" style="background:#FFDD00; color:#000;">☕ BUY ME A COFFEE</a>
+        <a href="https://ko-fi.com/rameshmewalalvishwakarma" target="_blank" class="s-btn" style="background:#29abe0; color:#fff;">❤️ SUPPORT ON KO-FI</a>
+    </div>
+
+    <div class="footer">🚩 RMV APEX GROUP | DESIGNED BY RAMESH MEWALAL VISHWAKARMA 🚩</div>
+
+    <script>
+        const wm = document.getElementById('wm');
+        for(let i=0; i<40; i++) wm.innerHTML += `<div class="wm-text">RMV APEX GROUP</div>`;
+
+        function calculateNPS() {
+            const P = parseFloat(document.getElementById('monthly_inv').value);
+            const age = parseInt(document.getElementById('age').value);
+            const r = parseFloat(document.getElementById('roi').value) / 100 / 12;
+            const annPct = parseFloat(document.getElementById('annuity_pct').value) / 100;
+            const pROI = parseFloat(document.getElementById('pension_roi').value) / 100;
+
+            if(!P || !age || age >= 60) return alert("संख्याएं सही भरें (उम्र 60 से कम)! 🚩");
+
+            const months = (60 - age) * 12;
+
+            // FV of SIP Formula: M = P × [ (1 + i)^n – 1 ] / i × (1 + i)
+            const totalCorpus = P * ((Math.pow(1 + r, months) - 1) / r) * (1 + r);
+            
+            const annuityAmt = totalCorpus * annPct;
+            const lumpsumAmt = totalCorpus - annuityAmt;
+            const monthlyPension = (annuityAmt * pROI) / 12;
+
+            document.getElementById('total_corpus').innerText = "₹" + Math.round(totalCorpus).toLocaleString('en-IN');
+            document.getElementById('lumpsum_val').innerText = "₹" + Math.round(lumpsumAmt).toLocaleString('en-IN');
+            document.getElementById('pension_val').innerText = "₹" + Math.round(monthlyPension).toLocaleString('en-IN') + " / mo";
+            
+            document.getElementById('results').style.display = 'block';
+        }
+
+        function pdf() {
+            const element = document.getElementById('printable');
+            html2pdf().from(element).set({
+                margin: 10, filename: 'RMV_NPS_Plan.pdf',
+                html2canvas: { scale: 2, backgroundColor: '#05070a' },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            }).save();
+        }
+
+        function save() {
+            const d = { p:document.getElementById('monthly_inv').value, a:document.getElementById('age').value, r:document.getElementById('roi').value };
+            localStorage.setItem('rmv_nps_data', JSON.stringify(d));
+            alert("NPS Plan Saved! 🚩");
+        }
+
+        function loadData() {
+            const s = localStorage.getItem('rmv_nps_data');
+            if(s) {
+                const d = JSON.parse(s);
+                document.getElementById('monthly_inv').value = d.p;
+                document.getElementById('age').value = d.a;
+                document.getElementById('roi').value = d.r;
+            }
+        }
+
+        function reset() { localStorage.removeItem('rmv_nps_data'); location.reload(); }
+    </script>
+</body>
+</html>
