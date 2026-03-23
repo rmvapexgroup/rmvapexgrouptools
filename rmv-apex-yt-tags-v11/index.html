@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RMV APEX GROUP | YT Tags Master 🚩</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root { --bg: #05070a; --yt-red: #ff0000; --glass: rgba(255, 255, 255, 0.05); --gold: #ffd700; --success: #2ecc71; }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: #fff; display: flex; flex-direction: column; align-items: center; padding: 20px; min-height: 100vh; }
+
+        /* Branding Watermark */
+        .watermark-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; opacity: 0.06; display: flex; flex-wrap: wrap; justify-content: space-around; }
+        .wm-text { transform: rotate(-30deg); font-weight: 900; font-size: 18px; margin: 50px; color: #fff; }
+
+        .container { background: var(--glass); backdrop-filter: blur(15px); border: 1px solid rgba(255,255,255,0.1); padding: 30px; border-radius: 30px; width: 100%; max-width: 650px; border-top: 6px solid var(--yt-red); box-shadow: 0 20px 50px rgba(0,0,0,0.5); margin-bottom: 30px; }
+        .header h1 { color: var(--yt-red); text-align: center; font-weight: 900; letter-spacing: 1px; }
+        .header p { text-align: center; font-size: 10px; opacity: 0.6; margin-bottom: 25px; text-transform: uppercase; }
+        
+        .section-title { font-size: 11px; color: var(--yt-red); margin: 15px 0 10px; font-weight: bold; text-transform: uppercase; border-left: 3px solid var(--yt-red); padding-left: 10px; }
+        .i-box { background: #000; border: 1px solid #333; border-radius: 12px; padding: 12px; margin-bottom: 15px; }
+        .i-box label { font-size: 10px; color: #aaa; display: block; margin-bottom: 5px; }
+        .i-box input { background: transparent; border: none; color: #fff; width: 100%; outline: none; font-size: 15px; font-weight: bold; }
+
+        .btn-extract { width: 100%; padding: 18px; border: none; border-radius: 15px; background: var(--yt-red); color: #fff; font-weight: 900; cursor: pointer; font-size: 16px; transition: 0.3s; margin-top: 10px; }
+        .btn-extract:hover { transform: scale(1.02); box-shadow: 0 0 20px rgba(255, 0, 0, 0.4); }
+        
+        #results { display: none; margin-top: 30px; animation: fadeInUp 0.5s ease; }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        .tag-cloud { background: #111; border: 1px solid #333; border-radius: 20px; padding: 20px; position: relative; }
+        .tag-list { display: flex; flex-wrap: wrap; gap: 10px; }
+        .tag-item { background: rgba(255, 0, 0, 0.1); border: 1px solid var(--yt-red); padding: 5px 12px; border-radius: 20px; font-size: 12px; color: #fff; font-weight: bold; }
+
+        .copy-btn { width: 100%; background: rgba(255,255,255,0.1); border: 1px solid #444; color: #fff; padding: 12px; border-radius: 12px; cursor: pointer; font-size: 13px; margin-top: 15px; transition: 0.2s; font-weight: bold; }
+        .copy-btn:hover { background: var(--success); color: #000; }
+
+        /* Support Buttons */
+        .sup-links { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; width: 100%; max-width: 650px; margin-bottom: 20px; }
+        .s-btn { padding: 16px; border-radius: 15px; text-decoration: none; text-align: center; font-weight: bold; font-size: 11px; transition: 0.3s; display: flex; align-items: center; justify-content: center; gap: 8px; }
+
+        .footer { font-size: 10px; opacity: 0.5; font-weight: bold; text-align: center; margin-bottom: 20px; }
+    </style>
+</head>
+<body>
+
+    <div class="watermark-bg" id="wm"></div>
+
+    <div class="container">
+        <div class="header">
+            <h1>RMV APEX GROUP 🚩</h1>
+            <p>Smart YouTube Tags Extractor V11</p>
+        </div>
+
+        <div class="section-title">Paste YouTube Video Link</div>
+        <div class="i-box">
+            <label>YouTube Video URL</label>
+            <input type="text" id="video_url" placeholder="https://www.youtube.com/watch?v=...">
+        </div>
+
+        <button class="btn-extract" onclick="extractTags()">🚀 EXTRACT VIRAL TAGS</button>
+
+        <div id="results">
+            <div class="section-title">Extracted Tags</div>
+            <div class="tag-cloud">
+                <div class="tag-list" id="tag_display"></div>
+                <button class="copy-btn" onclick="copyAllTags()"><i class="far fa-copy"></i> Copy All Tags</button>
+            </div>
+            <p style="font-size: 9px; opacity: 0.6; text-align: center; margin-top: 10px;">Note: Tag extraction in this version is simulation-based for local deployment.</p>
+        </div>
+    </div>
+
+    <div class="sup-links">
+        <a href="https://buymeacoffee.com/rameshmewalalvishwakarma" target="_blank" class="s-btn" style="background:#FFDD00; color:#000;">
+            <i class="fas fa-coffee"></i> BUY ME A COFFEE
+        </a>
+        <a href="https://ko-fi.com/rameshmewalalvishwakarma" target="_blank" class="s-btn" style="background:#29abe0; color:#fff;">
+            <i class="fas fa-heart"></i> SUPPORT ON KO-FI
+        </a>
+    </div>
+
+    <div class="footer">🚩 RMV APEX GROUP | DESIGNED BY RAMESH MEWALAL VISHWAKARMA 🚩</div>
+
+    <script>
+        const wm = document.getElementById('wm');
+        for(let i=0; i<30; i++) wm.innerHTML += `<div class="wm-text">RMV APEX GROUP</div>`;
+
+        function extractTags() {
+            const url = document.getElementById('video_url').value.trim();
+            if(!url) { alert("कृपया यूट्यूब वीडियो लिंक डालें! 🚩"); return; }
+
+            // 2026 Simulation Logic for tags based on common niches
+            const tagBank = ["#Trending", "#ViralVideo", "#2026Tech", "#SuccessTips", "#RMVAPEXGROUP", "#FinancialFreedom", "#HowTo", "#MarketingMagic", "#NewUpdate", "#BestGuide"];
+            
+            const display = document.getElementById('tag_display');
+            display.innerHTML = "";
+            
+            // Randomly select tags to simulate extraction
+            const selectedTags = tagBank.sort(() => 0.5 - Math.random()).slice(0, 8);
+
+            selectedTags.forEach(tag => {
+                const span = document.createElement('span');
+                span.className = 'tag-item';
+                span.innerText = tag;
+                display.appendChild(span);
+            });
+
+            document.getElementById('results').style.display = 'block';
+        }
+
+        function copyAllTags() {
+            const tags = Array.from(document.querySelectorAll('.tag-item')).map(t => t.innerText).join(", ");
+            navigator.clipboard.writeText(tags);
+            alert("सभी टैग्स क्लिपबोर्ड पर कॉपी हो गए हैं! 🚩");
+        }
+    </script>
+</body>
+</html>
