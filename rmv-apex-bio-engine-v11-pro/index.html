@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RMV APEX GROUP | Ultra AI Bio Engine 🚩</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root { --bg: #030508; --primary: #00d2ff; --secondary: #3a7bd5; --gold: #ffd700; --glass: rgba(255, 255, 255, 0.03); --white: #ffffff; }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: #fff; display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
+
+        /* Branding Watermark */
+        .watermark-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; opacity: 0.04; display: flex; flex-wrap: wrap; justify-content: space-around; }
+        .wm-text { transform: rotate(-30deg); font-weight: 900; font-size: 15px; margin: 50px; color: #fff; }
+
+        .app-shell { display: flex; height: 100%; }
+
+        /* Left: Intelligence Panel */
+        .control-panel { width: 400px; background: #0a0c10; border-right: 1px solid #222; padding: 30px; overflow-y: auto; scrollbar-width: thin; }
+        .header-brand { text-align: center; margin-bottom: 30px; border-bottom: 1px solid #222; padding-bottom: 20px; }
+        .header-brand h1 { color: var(--primary); font-size: 22px; font-weight: 900; }
+        .header-brand p { font-size: 9px; letter-spacing: 2px; opacity: 0.6; margin-top: 5px; }
+
+        .input-group { margin-bottom: 20px; }
+        .input-group label { display: block; font-size: 10px; color: var(--gold); text-transform: uppercase; font-weight: 900; margin-bottom: 10px; letter-spacing: 1px; }
+        .input-group input, .input-group select, .input-group textarea { width: 100%; background: #000; border: 1px solid #333; color: #fff; padding: 12px; border-radius: 12px; font-size: 14px; outline: none; transition: 0.3s; }
+        .input-group input:focus { border-color: var(--primary); box-shadow: 0 0 15px rgba(0, 210, 255, 0.2); }
+
+        .btn-ai { width: 100%; padding: 18px; border: none; border-radius: 15px; background: linear-gradient(45deg, #00d2ff, #3a7bd5); color: #fff; font-weight: 900; cursor: pointer; font-size: 15px; transition: 0.3s; box-shadow: 0 10px 20px rgba(0, 210, 255, 0.2); }
+        .btn-ai:hover { transform: translateY(-3px); filter: brightness(1.1); }
+
+        /* Right: Platform Preview Pane */
+        .preview-pane { flex: 1; background: #161b22; padding: 40px; overflow-y: auto; display: flex; flex-direction: column; align-items: center; gap: 30px; }
+        
+        /* Platform UI Mocks */
+        .platform-mock { width: 350px; background: #fff; color: #000; border-radius: 20px; padding: 20px; box-shadow: 0 20px 50px rgba(0,0,0,0.5); position: relative; }
+        .platform-tag { position: absolute; top: -10px; left: 20px; background: #000; color: #fff; font-size: 9px; padding: 4px 12px; border-radius: 20px; font-weight: 900; }
+        
+        .insta-header { display: flex; align-items: center; gap: 15px; margin-bottom: 15px; }
+        .profile-pic { width: 60px; height: 60px; border-radius: 50%; background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); padding: 3px; }
+        .profile-pic-inner { width: 100%; height: 100%; background: #eee; border-radius: 50%; border: 2px solid #fff; }
+        
+        .bio-text { font-size: 13px; line-height: 1.5; white-space: pre-wrap; color: #262626; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto; }
+        .bio-link { color: #00376b; font-weight: bold; margin-top: 5px; cursor: pointer; }
+
+        /* Floating Support Bar */
+        .floating-bar { position: fixed; bottom: 30px; display: flex; gap: 10px; }
+        .act-btn { padding: 12px 25px; border-radius: 30px; border: none; font-weight: 900; cursor: pointer; display: flex; align-items: center; gap: 10px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); transition: 0.3s; text-decoration: none; }
+        .btn-bmc { background: #FFDD00; color: #000; }
+        .btn-copy { background: #2ecc71; color: #000; }
+    </style>
+</head>
+<body>
+
+    <div class="watermark-bg" id="wm"></div>
+
+    <div class="app-shell">
+        <aside class="control-panel">
+            <div class="header-brand">
+                <h1>RMV APEX GROUP 🚩</h1>
+                <p>ULTRA AI BIO ENGINE PRO</p>
+            </div>
+
+            <div class="input-group">
+                <label>Skills / Identity</label>
+                <input type="text" id="in_skills" placeholder="e.g. Trader, Developer, Artist" oninput="liveUpdate()">
+            </div>
+
+            <div class="input-group">
+                <label>Passion / Hobbies</label>
+                <input type="text" id="in_hobbies" placeholder="e.g. Coffee Lover, Traveler" oninput="liveUpdate()">
+            </div>
+
+            <div class="input-group">
+                <label>Bio Persona / Tone</label>
+                <select id="in_tone" onchange="liveUpdate()">
+                    <option value="Pro">Executive Professional</option>
+                    <option value="Creative">Aesthetic & Creative</option>
+                    <option value="GenZ">Savage & Bold (Gen-Z)</option>
+                    <option value="Hindi">Sanskari (Hindi Mix)</option>
+                </select>
+            </div>
+
+            <div class="input-group">
+                <label>Call to Action (CTA)</label>
+                <input type="text" id="in_cta" placeholder="e.g. DM for Collabs" oninput="liveUpdate()">
+            </div>
+
+            <button class="btn-ai" onclick="generateAI()">🚀 ENERGIZE BIO WITH AI</button>
+        </aside>
+
+        <main class="preview-pane">
+            <div class="platform-mock">
+                <div class="platform-tag">INSTAGRAM PREVIEW</div>
+                <div class="insta-header">
+                    <div class="profile-pic"><div class="profile-pic-inner"></div></div>
+                    <div>
+                        <div style="font-weight: 900; font-size: 14px;">rmv_apex_user</div>
+                        <div style="font-size: 11px; background: #efefef; padding: 4px 20px; border-radius: 5px; margin-top: 5px; font-weight: bold; text-align: center;">Edit Profile</div>
+                    </div>
+                </div>
+                <div class="bio-text" id="out_bio">Generated bio will appear here in real-time...</div>
+                <div class="bio-link" id="out_cta">Link in bio</div>
+            </div>
+
+            <div class="floating-bar">
+                <a href="https://buymeacoffee.com/rameshmewalalvishwakarma" target="_blank" class="act-btn btn-bmc">
+                    <i class="fas fa-coffee"></i> SUPPORT RMV
+                </a>
+                <button class="act-btn btn-copy" onclick="copyBio()">
+                    <i class="fas fa-copy"></i> COPY TO CLIPBOARD
+                </button>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Watermark
+        const wm = document.getElementById('wm');
+        for(let i=0; i<40; i++) wm.innerHTML += `<div class="wm-text">RMV APEX GROUP</div>`;
+
+        function liveUpdate() {
+            const skills = document.getElementById('in_skills').value || "Identity";
+            const hobbies = document.getElementById('in_hobbies').value || "Interests";
+            const cta = document.getElementById('in_cta').value || "Let's connect";
+            const tone = document.getElementById('in_tone').value;
+
+            let bio = "";
+            if(tone === 'Pro') {
+                bio = `💼 ${skills}\n🌟 Passionate about ${hobbies}\n🚀 Building the future at RMV APEX\n🎯 Goal: Excellence in every pixel.`;
+            } else if(tone === 'Creative') {
+                bio = `✨ ${skills} ✨\n🎨 Dreaming in ${hobbies}\n🌈 Creating magic every day\nStay inspired. 👇`;
+            } else if(tone === 'GenZ') {
+                bio = `🔥 ${skills} | No Cap 🧢\n💸 ${hobbies} Enthusiast\n👑 Living my best life\nVibe check: Passed ✅`;
+            } else {
+                bio = `🚩 ${skills} (सनातनी)\n🙏 ${hobbies} प्रेमी\n🇮🇳 भारत का गौरव\nखुश रहिए, खुशियाँ बाँटिये। ✨`;
+            }
+
+            document.getElementById('out_bio').innerText = bio;
+            document.getElementById('out_cta').innerText = "🔗 " + cta;
+        }
+
+        function generateAI() {
+            // Simulated AI enhancement
+            const currentBio = document.getElementById('out_bio').innerText;
+            document.getElementById('out_bio').innerText = "🤖 AI ENHANCED:\n" + currentBio.replace(/\n/g, " 🚀\n") + " 💎";
+            alert("AI Optimization Applied! 🚩");
+        }
+
+        function copyBio() {
+            const bio = document.getElementById('out_bio').innerText;
+            const cta = document.getElementById('out_cta').innerText;
+            navigator.clipboard.writeText(bio + "\n" + cta);
+            alert("Bio & CTA Copied! 🚩");
+        }
+
+        // Init
+        liveUpdate();
+    </script>
+</body>
+</html>
