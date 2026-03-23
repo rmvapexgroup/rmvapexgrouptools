@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RMV APEX GROUP | Insta Caption Master 🚩</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root { --bg: #05070a; --accent: #ff007a; --glass: rgba(255, 255, 255, 0.05); --gold: #ffd700; --success: #2ecc71; --insta: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: #fff; display: flex; flex-direction: column; align-items: center; padding: 20px; min-height: 100vh; }
+
+        /* Branding Watermark */
+        .watermark-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; opacity: 0.06; display: flex; flex-wrap: wrap; justify-content: space-around; }
+        .wm-text { transform: rotate(-30deg); font-weight: 900; font-size: 18px; margin: 50px; color: #fff; }
+
+        .container { background: var(--glass); backdrop-filter: blur(15px); border: 1px solid rgba(255,255,255,0.1); padding: 30px; border-radius: 30px; width: 100%; max-width: 600px; border-top: 6px solid #e6683c; box-shadow: 0 20px 50px rgba(0,0,0,0.5); margin-bottom: 30px; }
+        .header h1 { background: var(--insta); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-align: center; font-weight: 900; letter-spacing: 1px; }
+        .header p { text-align: center; font-size: 10px; opacity: 0.6; margin-bottom: 25px; text-transform: uppercase; color: #fff; }
+        
+        .section-title { font-size: 11px; color: #f09433; margin: 15px 0 10px; font-weight: bold; text-transform: uppercase; border-left: 3px solid #f09433; padding-left: 10px; }
+        .i-box { background: #000; border: 1px solid #333; border-radius: 12px; padding: 12px; margin-bottom: 15px; }
+        .i-box label { font-size: 10px; color: #aaa; display: block; margin-bottom: 5px; }
+        .i-box input, .i-box select, .i-box textarea { background: transparent; border: none; color: #fff; width: 100%; outline: none; font-size: 15px; font-weight: bold; font-family: inherit; }
+
+        .btn-calc { width: 100%; padding: 18px; border: none; border-radius: 15px; background: var(--insta); color: #fff; font-weight: 900; cursor: pointer; font-size: 16px; transition: 0.3s; margin-top: 10px; }
+        .btn-calc:hover { transform: scale(1.02); box-shadow: 0 0 20px rgba(220, 39, 67, 0.4); }
+        
+        #results { display: none; margin-top: 25px; animation: fadeIn 0.5s; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .caption-card { background: #111; border: 1px solid #333; border-radius: 20px; padding: 20px; position: relative; }
+        .caption-text { font-size: 14px; line-height: 1.6; white-space: pre-wrap; margin-bottom: 15px; color: #ddd; }
+        .hashtag-area { color: #3a7bd5; font-size: 13px; font-weight: bold; }
+
+        .copy-btn { position: absolute; top: 15px; right: 15px; background: rgba(255,255,255,0.1); border: none; color: #fff; padding: 8px 12px; border-radius: 10px; cursor: pointer; font-size: 12px; transition: 0.2s; }
+        .copy-btn:hover { background: var(--success); color: #000; }
+
+        /* Support Buttons */
+        .sup-links { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; width: 100%; max-width: 600px; margin-bottom: 20px; }
+        .s-btn { padding: 16px; border-radius: 15px; text-decoration: none; text-align: center; font-weight: bold; font-size: 11px; transition: 0.3s; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .s-btn:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
+
+        .footer { font-size: 10px; opacity: 0.5; font-weight: bold; text-align: center; margin-bottom: 20px; }
+    </style>
+</head>
+<body>
+
+    <div class="watermark-bg" id="wm"></div>
+
+    <div class="container">
+        <div class="header">
+            <h1>RMV APEX GROUP 🚩</h1>
+            <p>Viral Instagram Caption & Hashtag Generator</p>
+        </div>
+
+        <div class="section-title">What is your post about?</div>
+        <div class="i-box">
+            <label>Topic / Description</label>
+            <textarea id="topic" rows="2" placeholder="Ex: Morning coffee, New car, Office vibes..."></textarea>
+        </div>
+
+        <div class="section-title">Select Mood</div>
+        <div class="i-box">
+            <label>Tone of Voice</label>
+            <select id="mood">
+                <option value="Motivational">Motivational 💪</option>
+                <option value="Funny">Funny / Sarcastic 😂</option>
+                <option value="Aesthetic">Aesthetic / Minimalist ✨</option>
+                <option value="Professional">Professional / Business 💼</option>
+                <option value="Attitude">Attitude / Savage 🔥</option>
+            </select>
+        </div>
+
+        <button class="btn-calc" onclick="generateCaption()">🚀 GENERATE VIRAL CAPTION</button>
+
+        <div id="results">
+            <div class="caption-card">
+                <button class="copy-btn" onclick="copyCaption()"><i class="far fa-copy"></i> Copy</button>
+                <div class="caption-text" id="cap_display"></div>
+                <div class="hashtag-area" id="hash_display"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="sup-links">
+        <a href="https://buymeacoffee.com/rameshmewalalvishwakarma" target="_blank" class="s-btn" style="background:#FFDD00; color:#000;">
+            <i class="fas fa-coffee"></i> BUY ME A COFFEE
+        </a>
+        <a href="https://ko-fi.com/rameshmewalalvishwakarma" target="_blank" class="s-btn" style="background:#29abe0; color:#fff;">
+            <i class="fas fa-heart"></i> SUPPORT ON KO-FI
+        </a>
+    </div>
+
+    <div class="footer">🚩 RMV APEX GROUP | DESIGNED BY RAMESH MEWALAL VISHWAKARMA 🚩</div>
+
+    <script>
+        const wm = document.getElementById('wm');
+        for(let i=0; i<30; i++) wm.innerHTML += `<div class="wm-text">RMV APEX GROUP</div>`;
+
+        const data = {
+            Motivational: {
+                caps: ["The only way to do great work is to love what you do. ✨", "Success is not final, failure is not fatal: it is the courage to continue that counts. 🚀", "Don't stop until you're proud. 💯"],
+                tags: "#motivation #success #growth #hustle #rmvapexgroup"
+            },
+            Funny: {
+                caps: ["I’m on a seafood diet. I see food and I eat it. 😂", "Friday is my second favorite F word. 🍟", "Life is short. Smile while you still have teeth. 😁"],
+                tags: "#funny #life #vibes #smile #humor"
+            },
+            Aesthetic: {
+                caps: ["Creating my own sunshine. ✨", "Collect moments, not things. ☁️", "Simplicity is the ultimate sophistication. 🌿"],
+                tags: "#aesthetic #vibes #minimalist #dreamy #nature"
+            },
+            Professional: {
+                caps: ["Strategy is about making choices, trade-offs; it's about deliberately choosing to be different. 💼", "Excellence is not a skill, it’s an attitude. 📈", "Building the future, one step at a time. 🏛️"],
+                tags: "#business #leadership #professional #entrepreneur #branding"
+            },
+            Attitude: {
+                caps: ["I don't follow rules, I make them. 🔥", "My personality is who I am, my attitude depends on who you are. 😎", "Excellence is not a luxury, it's my habit. 👑"],
+                tags: "#attitude #savage #king #boss #style"
+            }
+        };
+
+        function generateCaption() {
+            const topic = document.getElementById('topic').value;
+            const mood = document.getElementById('mood').value;
+            const resultDiv = document.getElementById('results');
+            
+            if(!topic) { alert("Please enter a topic! 🚩"); return; }
+
+            const randomCap = data[mood].caps[Math.floor(Math.random() * data[mood].caps.length)];
+            
+            document.getElementById('cap_display').innerText = `${topic} \n\n${randomCap}`;
+            document.getElementById('hash_display').innerText = data[mood].tags;
+            
+            resultDiv.style.display = 'block';
+        }
+
+        function copyCaption() {
+            const text = document.getElementById('cap_display').innerText + "\n" + document.getElementById('hash_display').innerText;
+            navigator.clipboard.writeText(text);
+            alert("Caption Copied to Clipboard! 🚩");
+        }
+    </script>
+</body>
+</html>
