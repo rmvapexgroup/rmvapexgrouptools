@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RMV APEX GROUP | Business Name Master 🚩</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root { --bg: #0a0c10; --primary: #00d2ff; --secondary: #3a7bd5; --glass: rgba(255, 255, 255, 0.03); --gold: #ffd700; }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Poppins', sans-serif; background: var(--bg); color: #fff; display: flex; flex-direction: column; align-items: center; padding: 20px; min-height: 100vh; }
+
+        .watermark-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; opacity: 0.05; display: flex; flex-wrap: wrap; justify-content: space-around; }
+        .wm-text { transform: rotate(-30deg); font-weight: 900; font-size: 15px; margin: 40px; color: #fff; }
+
+        .container { background: var(--glass); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.1); padding: 30px; border-radius: 30px; width: 100%; max-width: 700px; border-top: 5px solid var(--primary); box-shadow: 0 25px 50px rgba(0,0,0,0.6); margin-bottom: 30px; }
+        .header h1 { background: linear-gradient(to right, #00d2ff, #3a7bd5); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-align: center; font-weight: 800; font-size: 28px; }
+        .header p { text-align: center; font-size: 10px; opacity: 0.6; margin-bottom: 25px; text-transform: uppercase; letter-spacing: 2px; }
+        
+        .section-title { font-size: 12px; color: var(--primary); margin: 20px 0 10px; font-weight: bold; text-transform: uppercase; display: flex; align-items: center; gap: 8px; }
+        .i-box { background: #000; border: 1px solid #222; border-radius: 15px; padding: 15px; margin-bottom: 15px; transition: 0.3s; }
+        .i-box:focus-within { border-color: var(--primary); box-shadow: 0 0 15px rgba(0,210,255,0.2); }
+        .i-box label { font-size: 10px; color: #888; display: block; margin-bottom: 8px; }
+        .i-box input, .i-box select { background: transparent; border: none; color: #fff; width: 100%; outline: none; font-size: 16px; font-weight: 500; }
+
+        .btn-gen { width: 100%; padding: 18px; border: none; border-radius: 15px; background: linear-gradient(45deg, #00d2ff, #3a7bd5); color: #fff; font-weight: 800; cursor: pointer; font-size: 16px; transition: 0.4s; letter-spacing: 1px; }
+        .btn-gen:hover { transform: translateY(-3px); box-shadow: 0 10px 25px rgba(0,210,255,0.4); }
+        
+        #results { display: none; margin-top: 30px; animation: slideUp 0.6s ease-out; }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+
+        .name-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .name-card { background: #111; border: 1px solid #333; padding: 20px; border-radius: 20px; cursor: pointer; transition: 0.3s; position: relative; overflow: hidden; }
+        .name-card:hover { border-color: var(--primary); background: #161a20; transform: scale(1.03); }
+        .name-card h3 { font-size: 18px; margin-bottom: 5px; color: var(--gold); }
+        .name-card span { font-size: 10px; color: #666; text-transform: uppercase; font-weight: bold; }
+        .copy-tag { position: absolute; top: 10px; right: 10px; font-size: 10px; color: var(--primary); opacity: 0; transition: 0.2s; }
+        .name-card:hover .copy-tag { opacity: 1; }
+
+        /* Support Links */
+        .sup-links { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; width: 100%; max-width: 700px; margin-bottom: 20px; }
+        .s-btn { padding: 16px; border-radius: 15px; text-decoration: none; text-align: center; font-weight: 700; font-size: 12px; transition: 0.3s; display: flex; align-items: center; justify-content: center; gap: 10px; }
+        .s-btn:hover { transform: translateY(-3px); filter: brightness(1.1); }
+
+        .footer { font-size: 10px; opacity: 0.5; font-weight: bold; text-align: center; margin-bottom: 20px; letter-spacing: 1px; }
+    </style>
+</head>
+<body>
+
+    <div class="watermark-bg" id="wm"></div>
+
+    <div class="container">
+        <div class="header">
+            <h1>RMV APEX GROUP 🚩</h1>
+            <p>Next-Gen Business Name Generator</p>
+        </div>
+
+        <div class="section-title"><i class="fas fa-keyboard"></i> Core Keywords</div>
+        <div class="i-box">
+            <label>Industry or Niche (e.g., Tech, Finance, Coffee)</label>
+            <input type="text" id="keywords" placeholder="Enter 1-2 main keywords...">
+        </div>
+
+        <div class="section-title"><i class="fas fa-magic"></i> Brand Style</div>
+        <div class="i-box">
+            <label>Naming Convention</label>
+            <select id="style">
+                <option value="modern">Modern & Techy (Short/Invented)</option>
+                <option value="professional">Professional & Trustworthy (Traditional)</option>
+                <option value="creative">Creative & Catchy (Compound/Mashup)</option>
+                <option value="minimal">Minimalist (Single Word)</option>
+            </select>
+        </div>
+
+        <button class="btn-gen" onclick="generateNames()">🚀 GENERATE BRAND NAMES</button>
+
+        <div id="results">
+            <div class="section-title"><i class="fas fa-lightbulb"></i> AI Suggestions (Click to Copy)</div>
+            <div class="name-grid" id="name_container"></div>
+        </div>
+    </div>
+
+    <div class="sup-links">
+        <a href="https://buymeacoffee.com/rameshmewalalvishwakarma" target="_blank" class="s-btn" style="background:#FFDD00; color:#000;">
+            <i class="fas fa-coffee"></i> BUY ME A COFFEE
+        </a>
+        <a href="https://ko-fi.com/rameshmewalalvishwakarma" target="_blank" class="s-btn" style="background:#29abe0; color:#fff;">
+            <i class="fas fa-heart"></i> SUPPORT ON KO-FI
+        </a>
+    </div>
+
+    <div class="footer">🚩 RMV APEX GROUP | DESIGNED BY RAMESH MEWALAL VISHWAKARMA 🚩</div>
+
+    <script>
+        // Background Watermark
+        const wm = document.getElementById('wm');
+        for(let i=0; i<40; i++) wm.innerHTML += `<div class="wm-text">RMV APEX GROUP</div>`;
+
+        const suffixes = {
+            modern: ["ly", "io", "ify", "nexus", "volt", "sync", "vantage"],
+            professional: ["Solutions", "Capital", "Group", "Advisors", "Partners", "Global", "Systems"],
+            creative: ["Sphere", "Hub", "Lab", "Forge", "Nest", "Wave", "Flow"],
+            minimal: ["Pure", "Elite", "Prime", "Core", "Zenith", "Apex", "Nova"]
+        };
+
+        function generateNames() {
+            const kw = document.getElementById('keywords').value.trim();
+            const style = document.getElementById('style').value;
+            const container = document.getElementById('name_container');
+
+            if(!kw) { alert("Please enter a keyword first! 🚩"); return; }
+
+            const cleanKw = kw.split(' ')[0]; // Take first keyword
+            const list = [];
+
+            // Generate 8 names based on logic
+            for(let i=0; i<8; i++) {
+                let name = "";
+                const randomSuffix = suffixes[style][Math.floor(Math.random() * suffixes[style].length)];
+
+                if(style === "modern") name = cleanKw + randomSuffix;
+                else if(style === "professional") name = cleanKw + " " + randomSuffix;
+                else if(style === "creative") name = randomSuffix + cleanKw;
+                else name = randomSuffix + (cleanKw.length > 5 ? "" : cleanKw);
+
+                list.push({ title: name, type: style });
+            }
+
+            container.innerHTML = "";
+            list.forEach(item => {
+                const card = document.createElement('div');
+                card.className = "name-card";
+                card.innerHTML = `
+                    <div class="copy-tag">COPY</div>
+                    <h3>${item.title}</h3>
+                    <span>Style: ${item.type}</span>
+                `;
+                card.onclick = () => {
+                    navigator.clipboard.writeText(item.title);
+                    alert(`"${item.title}" copied! 🚩`);
+                };
+                container.appendChild(card);
+            });
+
+            document.getElementById('results').style.display = 'block';
+        }
+    </script>
+</body>
+</html>
