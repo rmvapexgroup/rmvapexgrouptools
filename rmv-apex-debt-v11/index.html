@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RMV APEX GROUP | Debt Rescue 🚩</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root { --bg: #05070a; --accent: #ff4d4d; --safe: #2ecc71; --glass: rgba(255, 255, 255, 0.05); --gold: #ffd700; }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: #fff; display: flex; flex-direction: column; align-items: center; padding: 20px; }
+
+        .watermark-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; opacity: 0.05; display: flex; flex-wrap: wrap; justify-content: space-around; }
+        .wm-text { transform: rotate(-30deg); font-weight: 900; font-size: 16px; margin: 50px; color: #fff; }
+
+        .container { background: var(--glass); backdrop-filter: blur(15px); border: 1px solid rgba(255,255,255,0.1); padding: 30 swpx; border-radius: 30px; width: 100%; max-width: 850px; border-top: 6px solid var(--accent); box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
+        .header h1 { color: var(--accent); text-align: center; font-weight: 900; }
+        .header p { text-align: center; font-size: 10px; opacity: 0.6; margin-bottom: 25px; }
+        
+        .section-title { font-size: 12px; color: var(--accent); margin: 15px 0 10px; font-weight: bold; text-transform: uppercase; border-left: 3px solid var(--accent); padding-left: 10px; }
+        .input-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 15px; margin-bottom: 20px; }
+        .i-box { background: #000; border: 1px solid #333; border-radius: 12px; padding: 12px; }
+        .i-box label { font-size: 10px; color: #aaa; display: block; margin-bottom: 5px; }
+        .i-box input { background: transparent; border: none; color: #fff; width: 100%; outline: none; font-size: 16px; font-weight: bold; }
+
+        .btn-calc { width: 100%; padding: 18px; border: none; border-radius: 15px; background: linear-gradient(135deg, #ff4d4d, #c53030); color: #fff; font-weight: 900; cursor: pointer; font-size: 16px; margin-top: 10px; }
+        
+        #results { display: none; margin-top: 25px; }
+        .saver-box { background: rgba(46, 204, 113, 0.1); padding: 25px; border-radius: 20px; text-align: center; border: 2px dashed var(--safe); margin-bottom: 20px; }
+        .save-amt { font-size: 3rem; font-weight: 900; color: var(--safe); margin: 10px 0; }
+
+        .debt-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .debt-card { padding: 15px; border-radius: 15px; border: 1px solid rgba(255,255,255,0.1); }
+        .debt-card h4 { font-size: 11px; opacity: 0.8; text-transform: uppercase; margin-bottom: 10px; }
+        .debt-card .val { font-size: 1.5rem; font-weight: 900; }
+
+        .footer { margin-top: 40px; font-size: 10px; opacity: 0.5; font-weight: bold; text-align: center; }
+    </style>
+</head>
+<body>
+
+    <div class="watermark-bg" id="wm"></div>
+
+    <div class="container" id="printable">
+        <div class="header">
+            <h1>RMV APEX GROUP 🚩</h1>
+            <p>CREDIT CARD DEBT VS PERSONAL LOAN RESCUE V11</p>
+        </div>
+
+        <div class="section-title">Current Debt (Credit Card)</div>
+        <div class="input-grid">
+            <div class="i-box"><label>Total Outstanding (₹)</label><input type="number" id="cc_balance" value="200000"></div>
+            <div class="i-box"><label>Credit Card Interest (% p.a.)</label><input type="number" id="cc_roi" value="42"></div>
+            <div class="i-box"><label>Monthly Payment (₹)</label><input type="number" id="monthly_pay" value="10000"></div>
+        </div>
+
+        <div class="section-title">Rescue Option (Personal Loan)</div>
+        <div class="input-grid">
+            <div class="i-box"><label>Personal Loan Interest (%)</label><input type="number" id="pl_roi" value="14"></div>
+            <div class="i-box" style="grid-column: span 2;"><label>Target Tenure (Years)</label><input type="number" id="pl_years" value="3"></div>
+        </div>
+
+        <button class="btn-calc" onclick="rescueAnalysis()">🚀 ANALYZE DEBT SAVINGS</button>
+
+        <div id="results">
+            <div class="saver-box">
+                <span style="font-size: 11px; text-transform: uppercase; font-weight: bold;">Potential Interest Savings</span>
+                <div class="save-amt" id="total_save">₹0</div>
+                <p id="advice_txt" style="font-size: 13px; color: #fff;"></p>
+            </div>
+
+            <div class="debt-grid">
+                <div class="debt-card" style="background: rgba(255, 77, 77, 0.1);">
+                    <h4>Credit Card (Continuing)</h4>
+                    <div class="val" id="cc_total_int">₹0</div>
+                    <div style="font-size: 10px; margin-top: 5px; color: var(--accent);">Total Interest Paid</div>
+                </div>
+                <div class="debt-card" style="background: rgba(46, 204, 113, 0.1);">
+                    <h4>Personal Loan (Rescue)</h4>
+                    <div class="val" id="pl_total_int">₹0</div>
+                    <div style="font-size: 10px; margin-top: 5px; color: var(--safe);">Total Interest Paid</div>
+                </div>
+            </div>
+        </div>
+
+        <div style="margin-top:20px; display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
+            <button onclick="window.print()" style="padding:12px; border-radius:10px; border:none; background:#4a5568; color:white; cursor:pointer; font-weight:bold;">PRINT REPORT</button>
+            <button onclick="location.reload()" style="padding:12px; border-radius:10px; border:none; background:#c53030; color:white; cursor:pointer; font-weight:bold;">RESET</button>
+        </div>
+    </div>
+
+    <div class="footer">🚩 RMV APEX GROUP | DESIGNED BY RAMESH MEWALAL VISHWAKARMA 🚩</div>
+
+    <script>
+        const wm = document.getElementById('wm');
+        for(let i=0; i<40; i++) wm.innerHTML += `<div class="wm-text">RMV APEX GROUP</div>`;
+
+        function rescueAnalysis() {
+            // Credit Card Logic (Approximated amortized)
+            let ccBal = parseFloat(document.getElementById('cc_balance').value);
+            const ccRoi = parseFloat(document.getElementById('cc_roi').value) / 100 / 12;
+            const monthlyPay = parseFloat(document.getElementById('monthly_pay').value);
+            
+            let ccTotalInt = 0;
+            let tempBal = ccBal;
+            let monthsLimit = 0;
+            
+            while(tempBal > 0 && monthsLimit < 360) { // Max 30 years safety
+                let int = tempBal * ccRoi;
+                ccTotalInt += int;
+                tempBal = tempBal + int - monthlyPay;
+                monthsLimit++;
+                if(int >= monthlyPay) {
+                    alert("Warning: Payment is less than interest! CC debt will never end. 🚩");
+                    break;
+                }
+            }
+
+            // Personal Loan Logic
+            const plRoi = parseFloat(document.getElementById('pl_roi').value) / 100 / 12;
+            const plMonths = parseInt(document.getElementById('pl_years').value) * 12;
+            const plEmi = ccBal * plRoi * Math.pow(1 + plRoi, plMonths) / (Math.pow(1 + plRoi, plMonths) - 1);
+            const plTotalInt = (plEmi * plMonths) - ccBal;
+
+            const savings = ccTotalInt - plTotalInt;
+
+            document.getElementById('cc_total_int').innerText = "₹" + Math.round(ccTotalInt).toLocaleString('en-IN');
+            document.getElementById('pl_total_int').innerText = "₹" + Math.round(plTotalInt).toLocaleString('en-IN');
+            document.getElementById('total_save').innerText = "₹" + Math.round(savings).toLocaleString('en-IN');
+            document.getElementById('advice_txt').innerText = `🚩 RMV APEX ADVICE: Switching to a Personal Loan can reduce your interest burden significantly!`;
+            
+            document.getElementById('results').style.display = 'block';
+        }
+    </script>
+</body>
+</html>
