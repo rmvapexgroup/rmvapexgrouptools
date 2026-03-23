@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RMV APEX GROUP | Discount & Profit Master 🚩</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root { --bg: #05070a; --accent: #00d2ff; --profit: #2ecc71; --loss: #ff4d4d; --glass: rgba(255, 255, 255, 0.05); }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: #fff; display: flex; flex-direction: column; align-items: center; padding: 20px; min-height: 100vh; }
+
+        /* Watermark Background */
+        .watermark-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; opacity: 0.06; display: flex; flex-wrap: wrap; justify-content: space-around; }
+        .wm-text { transform: rotate(-30deg); font-weight: 900; font-size: 16px; margin: 50px; color: #fff; }
+
+        .container { background: var(--glass); backdrop-filter: blur(15px); border: 1px solid rgba(255,255,255,0.1); padding: 30px; border-radius: 30px; width: 100%; max-width: 800px; border-top: 6px solid var(--accent); box-shadow: 0 20px 50px rgba(0,0,0,0.5); margin-bottom: 30px; }
+        .header h1 { color: var(--accent); text-align: center; font-weight: 900; letter-spacing: 1px; }
+        .header p { text-align: center; font-size: 10px; opacity: 0.6; margin-bottom: 25px; text-transform: uppercase; }
+        
+        .section-title { font-size: 12px; color: var(--accent); margin: 15px 0 10px; font-weight: bold; text-transform: uppercase; border-left: 3px solid var(--accent); padding-left: 10px; }
+        .input-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 20px; }
+        .i-box { background: #000; border: 1px solid #333; border-radius: 12px; padding: 12px; }
+        .i-box label { font-size: 10px; color: #aaa; display: block; margin-bottom: 5px; }
+        .i-box input { background: transparent; border: none; color: #fff; width: 100%; outline: none; font-size: 18px; font-weight: bold; }
+
+        .btn-calc { width: 100%; padding: 18px; border: none; border-radius: 15px; background: linear-gradient(135deg, #00d2ff, #3a7bd5); color: #fff; font-weight: 900; cursor: pointer; font-size: 16px; transition: 0.3s; margin-top: 10px; }
+        .btn-calc:hover { transform: scale(1.02); box-shadow: 0 0 20px rgba(0, 210, 255, 0.3); }
+        
+        #results { display: none; margin-top: 25px; margin-bottom: 20px; }
+        .res-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .res-card { padding: 20px; border-radius: 20px; background: rgba(255,255,255,0.03); border: 1px solid #333; text-align: center; }
+        .res-card h4 { font-size: 11px; opacity: 0.7; text-transform: uppercase; margin-bottom: 8px; }
+        .res-card .val { font-size: 1.8rem; font-weight: 900; }
+
+        /* Support Section Styling */
+        .sup-links { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; width: 100%; max-width: 800px; margin-bottom: 20px; }
+        .s-btn { padding: 16px; border-radius: 15px; text-decoration: none; text-align: center; font-weight: bold; font-size: 11px; transition: 0.3s; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .s-btn:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
+
+        .footer { font-size: 10px; opacity: 0.5; font-weight: bold; text-align: center; margin-bottom: 20px; }
+
+        @media print { .sup-links, .btn-calc { display: none !important; } }
+    </style>
+</head>
+<body>
+
+    <div class="watermark-bg" id="wm"></div>
+
+    <div class="container" id="printable">
+        <div class="header">
+            <h1>RMV APEX GROUP 🚩</h1>
+            <p>Advanced Discount & Profit Calculator V11</p>
+        </div>
+
+        <div class="section-title">Pricing Details</div>
+        <div class="input-grid">
+            <div class="i-box"><label>Cost Price (खरीद मूल्य ₹)</label><input type="number" id="cp" value="1000"></div>
+            <div class="i-box"><label>MRP / Selling Price (₹)</label><input type="number" id="sp" value="1500"></div>
+            <div class="i-box" style="grid-column: span 2;"><label>Discount on MRP (%)</label><input type="number" id="disc_per" value="10"></div>
+        </div>
+
+        <button class="btn-calc" onclick="calculateProfit()">🚀 CALCULATE DISCOUNT & PROFIT</button>
+
+        <div id="results">
+            <div class="res-grid">
+                <div class="res-card">
+                    <h4>Final Selling Price</h4>
+                    <div class="val" id="final_sp" style="color: var(--accent);">₹0</div>
+                    <div style="font-size: 10px; margin-top: 5px; opacity: 0.7;">Discounted Price</div>
+                </div>
+                <div class="res-card">
+                    <h4>Discount Savings</h4>
+                    <div class="val" id="disc_amt" style="color: var(--loss);">₹0</div>
+                    <div style="font-size: 10px; margin-top: 5px; opacity: 0.7;">Amount Reduced</div>
+                </div>
+                <div class="res-card" style="grid-column: span 2;">
+                    <h4>Net Profit / Loss</h4>
+                    <div class="val" id="net_profit">₹0</div>
+                    <p id="profit_per_label" style="font-size: 12px; margin-top: 5px; opacity: 0.8; font-weight: bold;"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="sup-links">
+        <a href="https://buymeacoffee.com/rameshmewalalvishwakarma" target="_blank" class="s-btn" style="background:#FFDD00; color:#000;">
+            <i class="fas fa-coffee"></i> BUY ME A COFFEE
+        </a>
+        <a href="https://ko-fi.com/rameshmewalalvishwakarma" target="_blank" class="s-btn" style="background:#29abe0; color:#fff;">
+            <i class="fas fa-heart"></i> SUPPORT ON KO-FI
+        </a>
+    </div>
+
+    <div class="footer">🚩 RMV APEX GROUP | DESIGNED BY RAMESH MEWALAL VISHWAKARMA 🚩</div>
+
+    <script>
+        // Generate Background Watermarks
+        const wm = document.getElementById('wm');
+        for(let i=0; i<40; i++) wm.innerHTML += `<div class="wm-text">RMV APEX GROUP</div>`;
+
+        function calculateProfit() {
+            const cp = parseFloat(document.getElementById('cp').value);
+            const mrp = parseFloat(document.getElementById('sp').value);
+            const discPer = parseFloat(document.getElementById('disc_per').value);
+
+            // Calculations
+            const discAmt = (mrp * discPer) / 100;
+            const finalSp = mrp - discAmt;
+            const profitAmt = finalSp - cp;
+            const profitPer = (profitAmt / cp) * 100;
+
+            // UI Updates
+            document.getElementById('final_sp').innerText = "₹" + Math.round(finalSp).toLocaleString('en-IN');
+            document.getElementById('disc_amt').innerText = "₹" + Math.round(discAmt).toLocaleString('en-IN');
+            
+            const pNode = document.getElementById('net_profit');
+            pNode.innerText = (profitAmt >= 0 ? "Profit: " : "Loss: ") + "₹" + Math.abs(Math.round(profitAmt)).toLocaleString('en-IN');
+            pNode.style.color = profitAmt >= 0 ? "var(--profit)" : "var(--loss)";
+
+            document.getElementById('profit_per_label').innerText = "Margin: " + profitPer.toFixed(2) + "%";
+            document.getElementById('profit_per_label').style.color = profitAmt >= 0 ? "var(--profit)" : "var(--loss)";
+            
+            document.getElementById('results').style.display = 'block';
+        }
+    </script>
+</body>
+</html>
