@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RMV APEX GROUP | Ultra AI Resume Engine 🚩</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root { --bg: #05070a; --primary: #00d2ff; --glass: rgba(255, 255, 255, 0.03); --white: #ffffff; --accent: #ffd700; }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: #fff; overflow-x: hidden; }
+
+        /* Branding Watermark */
+        .watermark-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; opacity: 0.04; display: flex; flex-wrap: wrap; justify-content: space-around; }
+        .wm-text { transform: rotate(-30deg); font-weight: 900; font-size: 15px; margin: 50px; color: #fff; }
+
+        .app-container { display: flex; height: 100vh; width: 100vw; }
+
+        /* Left: Control Panel */
+        .control-panel { width: 450px; background: #0a0c10; border-right: 1px solid #222; padding: 30px; overflow-y: auto; scrollbar-width: thin; }
+        .header-brand { text-align: center; margin-bottom: 30px; border-bottom: 1px solid #222; padding-bottom: 20px; }
+        .header-brand h1 { color: var(--primary); font-size: 22px; font-weight: 900; }
+        .header-brand p { font-size: 9px; letter-spacing: 2px; opacity: 0.6; margin-top: 5px; }
+
+        .form-section { margin-bottom: 25px; }
+        .section-header { font-size: 11px; color: var(--accent); font-weight: 900; text-transform: uppercase; margin-bottom: 15px; display: flex; align-items: center; gap: 8px; }
+        
+        .input-group { margin-bottom: 12px; }
+        .input-group label { display: block; font-size: 10px; color: #888; margin-bottom: 5px; }
+        .input-group input, .input-group textarea, .input-group select { width: 100%; background: #000; border: 1px solid #333; color: #fff; padding: 12px; border-radius: 10px; font-size: 13px; outline: none; transition: 0.3s; }
+        .input-group input:focus { border-color: var(--primary); }
+
+        /* Right: Live Preview */
+        .preview-pane { flex: 1; background: #1a1c23; display: flex; justify-content: center; align-items: flex-start; padding: 40px; overflow-y: auto; }
+        .resume-paper { width: 210mm; min-height: 297mm; background: #fff; color: #333; padding: 50px; box-shadow: 0 50px 100px rgba(0,0,0,0.5); transform-origin: top center; transition: 0.3s; }
+
+        /* Resume Content Styling */
+        .res-header { text-align: center; border-bottom: 2px solid #333; padding-bottom: 15px; margin-bottom: 20px; }
+        .res-name { font-size: 32px; font-weight: 900; color: #000; text-transform: uppercase; line-height: 1; }
+        .res-sub { font-size: 12px; color: #666; margin-top: 8px; font-weight: bold; }
+        
+        .res-grid { display: grid; grid-template-columns: 1fr; gap: 20px; }
+        .res-sec-title { font-size: 14px; font-weight: 900; border-left: 5px solid #000; padding-left: 10px; margin-bottom: 10px; text-transform: uppercase; background: #f4f4f4; padding-top: 5px; padding-bottom: 5px; }
+        .res-content { font-size: 12px; line-height: 1.6; white-space: pre-wrap; }
+
+        .skill-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 5px; }
+        .tag { background: #333; color: #fff; padding: 3px 10px; border-radius: 4px; font-size: 10px; font-weight: bold; }
+
+        /* Action Buttons */
+        .floating-actions { position: fixed; bottom: 30px; right: 30px; display: flex; gap: 10px; }
+        .act-btn { padding: 15px 25px; border-radius: 30px; border: none; font-weight: 900; cursor: pointer; display: flex; align-items: center; gap: 10px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); transition: 0.3s; }
+        .btn-print { background: var(--primary); color: #000; }
+        .btn-support { background: var(--accent); color: #000; text-decoration: none; }
+
+        @media print {
+            .control-panel, .floating-actions { display: none !important; }
+            .preview-pane { padding: 0; background: #fff; }
+            .resume-paper { box-shadow: none; transform: scale(1) !important; width: 100%; margin: 0; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="watermark-bg" id="wm"></div>
+
+    <div class="app-container">
+        <aside class="control-panel">
+            <div class="header-brand">
+                <h1>RMV APEX GROUP 🚩</h1>
+                <p>ULTRA AI RESUME ENGINE PRO</p>
+            </div>
+
+            <div class="form-section">
+                <div class="section-header"><i class="fas fa-user-tie"></i> Personal Identity</div>
+                <div class="input-group">
+                    <label>Full Name</label>
+                    <input type="text" id="in_name" placeholder="Ramesh Vishwakarma" oninput="sync()">
+                </div>
+                <div class="input-group">
+                    <label>Professional Title</label>
+                    <input type="text" id="in_title" placeholder="Senior AI Developer" oninput="sync()">
+                </div>
+                <div class="input-group">
+                    <label>Contact Info (Email | Phone | Location)</label>
+                    <input type="text" id="in_contact" placeholder="ramesh@example.com | +91... | Mumbai" oninput="sync()">
+                </div>
+            </div>
+
+            <div class="form-section">
+                <div class="section-header"><i class="fas fa-pen-fancy"></i> Executive Summary</div>
+                <div class="input-group">
+                    <textarea id="in_summary" rows="4" placeholder="Briefly describe your expertise..." oninput="sync()"></textarea>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <div class="section-header"><i class="fas fa-briefcase"></i> Work Experience</div>
+                <div class="input-group">
+                    <textarea id="in_exp" rows="6" placeholder="Job Title @ Company (Date)&#10;• Key Achievement 1&#10;• Key Achievement 2" oninput="sync()"></textarea>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <div class="section-header"><i class="fas fa-tools"></i> Technical Skills</div>
+                <div class="input-group">
+                    <input type="text" id="in_skills" placeholder="Skill 1, Skill 2, Skill 3..." oninput="sync()">
+                </div>
+            </div>
+        </aside>
+
+        <main class="preview-pane">
+            <div class="resume-paper" id="resume">
+                <div class="res-header">
+                    <div class="res-name" id="out_name">YOUR NAME</div>
+                    <div class="res-sub" id="out_title">PROFESSIONAL TITLE</div>
+                    <div style="font-size: 10px; margin-top: 10px;" id="out_contact">CONTACT DETAILS</div>
+                </div>
+
+                <div class="res-grid">
+                    <div>
+                        <div class="res-sec-title">Professional Summary</div>
+                        <div class="res-content" id="out_summary">Your executive summary will appear here. Highlight your top strengths and career goals.</div>
+                    </div>
+
+                    <div>
+                        <div class="res-sec-title">Experience & Achievements</div>
+                        <div class="res-content" id="out_exp">Describe your work history and significant accomplishments.</div>
+                    </div>
+
+                    <div>
+                        <div class="res-sec-title">Core Competencies</div>
+                        <div class="skill-tags" id="out_skills">
+                            </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <div class="floating-actions">
+        <a href="https://buymeacoffee.com/rameshmewalalvishwakarma" target="_blank" class="act-btn btn-support">
+            <i class="fas fa-coffee"></i> SUPPORT
+        </a>
+        <button class="act-btn btn-print" onclick="window.print()">
+            <i class="fas fa-file-pdf"></i> EXPORT TO PDF
+        </button>
+    </div>
+
+    <script>
+        // Background Watermark Generator
+        const wm = document.getElementById('wm');
+        for(let i=0; i<40; i++) wm.innerHTML += `<div class="wm-text">RMV APEX GROUP</div>`;
+
+        function sync() {
+            // Basic Fields
+            document.getElementById('out_name').innerText = document.getElementById('in_name').value || "YOUR NAME";
+            document.getElementById('out_title').innerText = document.getElementById('in_title').value || "PROFESSIONAL TITLE";
+            document.getElementById('out_contact').innerText = document.getElementById('in_contact').value || "CONTACT DETAILS";
+            document.getElementById('out_summary').innerText = document.getElementById('in_summary').value || "Executive summary...";
+            document.getElementById('out_exp').innerText = document.getElementById('in_exp').value || "Work history...";
+
+            // Skill Tagging Engine
+            const skillsStr = document.getElementById('in_skills').value;
+            const skillsContainer = document.getElementById('out_skills');
+            skillsContainer.innerHTML = "";
+            
+            if(skillsStr) {
+                const skillsArr = skillsStr.split(',');
+                skillsArr.forEach(skill => {
+                    if(skill.trim()) {
+                        const tag = document.createElement('span');
+                        tag.className = 'tag';
+                        tag.innerText = skill.trim();
+                        skillsContainer.appendChild(tag);
+                    }
+                });
+            } else {
+                skillsContainer.innerHTML = "<span style='font-size:11px; color:#999;'>Skills will appear as tags...</span>";
+            }
+        }
+    </script>
+</body>
+</html>
