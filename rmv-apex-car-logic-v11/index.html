@@ -10,12 +10,12 @@
     <style>
         :root { --bg: #05070a; --accent: #ff9f43; --glass: rgba(255, 255, 255, 0.05); --petrol: #eb4d4b; --loan: #686de0; }
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: #fff; display: flex; flex-direction: column; align-items: center; padding: 20px; }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: #fff; display: flex; flex-direction: column; align-items: center; padding: 20px; min-height: 100vh; }
 
         .watermark-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; opacity: 0.06; display: flex; flex-wrap: wrap; justify-content: space-around; }
         .wm-text { transform: rotate(-30deg); font-weight: 900; font-size: 16px; margin: 50px; color: #fff; }
 
-        .container { background: var(--glass); backdrop-filter: blur(15px); border: 1px solid rgba(255,255,255,0.1); padding: 30px; border-radius: 30px; width: 100%; max-width: 850px; border-top: 6px solid var(--accent); box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
+        .container { background: var(--glass); backdrop-filter: blur(15px); border: 1px solid rgba(255,255,255,0.1); padding: 30px; border-radius: 30px; width: 100%; max-width: 850px; border-top: 6px solid var(--accent); box-shadow: 0 20px 50px rgba(0,0,0,0.5); margin-bottom: 30px; }
         .header h1 { color: var(--accent); text-align: center; font-weight: 900; }
         .header p { text-align: center; font-size: 10px; opacity: 0.6; margin-bottom: 25px; }
         
@@ -27,7 +27,7 @@
 
         .btn-calc { width: 100%; padding: 18px; border: none; border-radius: 15px; background: linear-gradient(135deg, #ff9f43, #ff6b6b); color: #fff; font-weight: 900; cursor: pointer; font-size: 16px; margin-top: 10px; }
         
-        #results { display: none; margin-top: 25px; }
+        #results { display: none; margin-top: 25px; margin-bottom: 20px; }
         .summary-box { background: rgba(255,255,255,0.05); padding: 20px; border-radius: 20px; text-align: center; border: 1px dashed var(--accent); }
         .total-price { font-size: 2.5rem; font-weight: 900; color: #fff; margin: 10px 0; }
 
@@ -38,7 +38,12 @@
         .ana-card h4 { font-size: 10px; opacity: 0.8; text-transform: uppercase; }
         .ana-card .val { font-size: 1.3rem; font-weight: 900; margin-top: 5px; }
 
-        .footer { margin-top: 40px; font-size: 10px; opacity: 0.5; font-weight: bold; text-align: center; }
+        /* Support Buttons Styling */
+        .sup-links { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; width: 100%; max-width: 850px; margin-bottom: 20px; }
+        .s-btn { padding: 16px; border-radius: 15px; text-decoration: none; text-align: center; font-weight: bold; font-size: 11px; transition: 0.3s; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .s-btn:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
+
+        .footer { font-size: 10px; opacity: 0.5; font-weight: bold; text-align: center; margin-bottom: 20px; }
     </style>
 </head>
 <body>
@@ -85,18 +90,22 @@
                     <div class="val" id="total_fuel_out">₹0</div>
                     <div style="font-size: 10px; margin-top: 5px;">Monthly Fuel: <span id="monthly_fuel">₹0</span></div>
                 </div>
-                <div class="sup-links" style="margin-top: 35px; display: grid; grid-template-columns: 1fr 1fr; gap: 15px; width: 100%;">
-    <a href="https://buymeacoffee.com/rameshmewalalvishwakarma" target="_blank" class="s-btn" style="background:#FFDD00; color:#000; padding:18px; border-radius:15px; text-decoration:none; text-align:center; font-weight:bold; font-size:11px;">☕ BUY ME A COFFEE</a>
-    <a href="https://ko-fi.com/rameshmewalalvishwakarma" target="_blank" class="s-btn" style="background:#29abe0; color:#fff; padding:18px; border-radius:15px; text-decoration:none; text-align:center; font-weight:bold; font-size:11px;">❤️ SUPPORT ON KO-FI</a>
-</div>
-<div class="footer" style="margin-top:40px; text-align:center; font-size:10px; opacity:0.5;">🚩 RMV APEX GROUP | DESIGNED BY RAMESH MEWALAL VISHWAKARMA 🚩</div>
             </div>
         </div>
 
         <div style="margin-top:20px; display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
-            <button onclick="window.print()" style="padding:10px; border-radius:10px; border:none; background:#4a5568; color:white; cursor:pointer; font-weight:bold;">PRINT REPORT</button>
-            <button onclick="location.reload()" style="padding:10px; border-radius:10px; border:none; background:#c53030; color:white; cursor:pointer; font-weight:bold;">RESET</button>
+            <button onclick="window.print()" style="padding:12px; border-radius:10px; border:none; background:#4a5568; color:white; cursor:pointer; font-weight:bold;"><i class="fas fa-print"></i> PRINT REPORT</button>
+            <button onclick="location.reload()" style="padding:12px; border-radius:10px; border:none; background:#c53030; color:white; cursor:pointer; font-weight:bold;"><i class="fas fa-redo"></i> RESET</button>
         </div>
+    </div>
+
+    <div class="sup-links">
+        <a href="https://buymeacoffee.com/rameshmewalalvishwakarma" target="_blank" class="s-btn" style="background:#FFDD00; color:#000;">
+            <i class="fas fa-coffee"></i> BUY ME A COFFEE
+        </a>
+        <a href="https://ko-fi.com/rameshmewalalvishwakarma" target="_blank" class="s-btn" style="background:#29abe0; color:#fff;">
+            <i class="fas fa-heart"></i> SUPPORT ON KO-FI
+        </a>
     </div>
 
     <div class="footer">🚩 RMV APEX GROUP | DESIGNED BY RAMESH MEWALAL VISHWAKARMA 🚩</div>
@@ -106,11 +115,12 @@
         for(let i=0; i<30; i++) wm.innerHTML += `<div class="wm-text">RMV APEX GROUP</div>`;
 
         function calculateOwnership() {
-            // Loan Calculation
             const P = parseFloat(document.getElementById('loan_amt').value);
             const r = parseFloat(document.getElementById('roi').value) / 12 / 100;
-            const n = parseInt(document.getElementById('years').value) * 12;
+            const years = parseInt(document.getElementById('years').value);
+            const n = years * 12;
             
+            // EMI Calculation
             const emi = P * r * Math.pow(1 + r, n) / (Math.pow(1 + r, n) - 1);
             const totalLoanCost = emi * n;
 
@@ -119,15 +129,14 @@
             const mileage = parseFloat(document.getElementById('mileage').value);
             const fuelPrice = parseFloat(document.getElementById('fuel_price').value);
             
-            const monthlyKm = dailyKm * 30;
+            const monthlyKm = dailyKm * 30.42; // Average days in month
             const monthlyFuelCost = (monthlyKm / mileage) * fuelPrice;
-            const totalFuelCost = monthlyFuelCost * (parseInt(document.getElementById('years').value) * 12);
+            const totalFuelCost = monthlyFuelCost * n;
 
             const grandTotal = totalLoanCost + totalFuelCost;
-            const totalKm = dailyKm * 365 * parseInt(document.getElementById('years').value);
+            const totalKm = dailyKm * 365.25 * years;
             const perKm = grandTotal / totalKm;
 
-            // Display Results
             document.getElementById('grand_total').innerText = "₹" + Math.round(grandTotal).toLocaleString('en-IN');
             document.getElementById('total_loan_out').innerText = "₹" + Math.round(totalLoanCost).toLocaleString('en-IN');
             document.getElementById('total_fuel_out').innerText = "₹" + Math.round(totalFuelCost).toLocaleString('en-IN');
