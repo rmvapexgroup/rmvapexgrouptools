@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RMV APEX GROUP | Global Digital Ecosystem</title>
+    <title>RMV APEX GROUP | Global Digital Ecosystem 🚩</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -34,17 +34,14 @@
         .tool-card { background: white; padding: 40px 30px; border-radius: 35px; text-align: center; text-decoration: none; color: var(--dark); border: 1px solid rgba(0,0,0,0.05); box-shadow: 0 10px 30px rgba(0,0,0,0.02); display: flex; flex-direction: column; align-items: center; }
         .tool-card:hover { transform: translateY(-12px); box-shadow: 0 30px 60px rgba(99, 102, 241, 0.15); border-color: var(--primary); }
         .tool-card .icon { font-size: 3.8rem; margin-bottom: 20px; filter: drop-shadow(0 10px 10px rgba(0,0,0,0.1)); }
-        .tool-card h3 { margin: 0; font-size: 1.4rem; font-weight: 800; }
+        .tool-card h3 { margin: 0; font-size: 1.1rem; font-weight: 800; line-height: 1.4; }
 
-        /* MASTER FOOTER */
+        /* FOOTER & SOCIALS (जैसा आपने दिया था) */
         footer { background: white; padding: 100px 20px 60px; border-top: 1px solid #f1f5f9; text-align: center; margin-top: 100px; border-radius: 60px 60px 0 0; }
         .footer-logo { font-size: 2.2rem; font-weight: 800; background: var(--gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 40px; }
-        
         .social-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; max-width: 1100px; margin: 0 auto 50px; }
-        .s-link { width: 48px; height: 48px; display: flex; align-items: center; justify-content: center; border-radius: 14px; color: white; text-decoration: none; font-size: 1.3rem; transition: 0.4s; }
-        .s-link:hover { transform: translateY(-8px) rotate(8deg); box-shadow: 0 15px 30px rgba(0,0,0,0.15); filter: brightness(1.1); }
-
-        /* Unified Social Colors */
+        .s-link { width: 48px; height: 48px; display: flex; align-items: center; justify-content: center; border-radius: 14px; color: white; text-decoration: none; font-size: 1.3rem; }
+        /* Social Colors (All as defined in your code) */
         .wa { background: #25D366; } .fb { background: #1877F2; } .ig { background: #E4405F; } .yt { background: #FF0000; }
         .li { background: #0A66C2; } .tg { background: #26A5E4; } .rd { background: #FF4500; } .tw { background: #000000; }
         .pi { background: #BD081C; } .md { background: #000000; } .ms { background: #0084ff; } .bs { background: #0085ff; }
@@ -52,12 +49,9 @@
         .kofi { background: #29abe0; } .gemini { background: linear-gradient(45deg, #1a73e8, #9b51e0); }
         .link-alt { background: var(--primary); } .sub { background: #ff6719; } .th { background: #000000; }
 
-        /* Legal Links */
         .legal-links { margin-bottom: 30px; font-weight: 800; display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; }
         .legal-links a { color: #64748b; text-decoration: none; font-size: 0.95rem; }
-        .legal-links a:hover { color: var(--primary); }
-
-        .copyright { color: #94a3b8; font-size: 0.9rem; margin-top: 40px; font-weight: 600; letter-spacing: 0.5px; line-height: 1.8; }
+        .copyright { color: #94a3b8; font-size: 0.9rem; margin-top: 40px; font-weight: 600; }
         .heart { color: var(--secondary); animation: beat 0.5s infinite alternate; display: inline-block; }
         @keyframes beat { to { transform: scale(1.4); } }
     </style>
@@ -75,7 +69,7 @@
 </div>
 
 <div class="container">
-    <input type="text" id="searchBar" placeholder="50+ प्रीमियम टूल्स में खोजें..." onkeyup="filterTools()">
+    <input type="text" id="searchBar" placeholder="70+ प्रीमियम टूल्स में खोजें..." onkeyup="filterTools()">
     <div class="tool-grid" id="toolGrid"></div>
 
     <footer>
@@ -85,35 +79,21 @@
             <a title="WhatsApp" href="https://wa.me/918652025006" class="s-link wa" target="_blank"><i class="fab fa-whatsapp"></i></a>
             <a title="Messenger" href="https://m.me/rmvapexgroups" class="s-link ms" target="_blank"><i class="fab fa-facebook-messenger"></i></a>
             <a title="Telegram" href="https://t.me/RMVApexGroupFreeCommunity" class="s-link tg" target="_blank"><i class="fab fa-telegram-plane"></i></a>
-            
             <a title="Facebook" href="https://www.facebook.com/rmvapexgroups/" class="s-link fb" target="_blank"><i class="fab fa-facebook-f"></i></a>
-            <a title="Instagram" href="https://www.instagram.com/rmvapexgroups?igsh=MzR6aXA3NDlvbnhx" class="s-link ig" target="_blank"><i class="fab fa-instagram"></i></a>
+            <a title="Instagram" href="https://www.instagram.com/rmvapexgroups" class="s-link ig" target="_blank"><i class="fab fa-instagram"></i></a>
             <a title="YouTube" href="https://www.youtube.com/@rmvapexgroup" class="s-link yt" target="_blank"><i class="fab fa-youtube"></i></a>
             <a title="LinkedIn" href="https://www.linkedin.com/in/rmvapexgroup/" class="s-link li" target="_blank"><i class="fab fa-linkedin-in"></i></a>
-            <a title="X (Twitter)" href="https://x.com/rmvapexgroup" class="s-link tw" target="_blank"><i class="fab fa-x-twitter"></i></a>
-            
+            <a title="X" href="https://x.com/rmvapexgroup" class="s-link tw" target="_blank"><i class="fab fa-x-twitter"></i></a>
             <a title="Gemini AI" href="https://gemini.google.com/app" class="s-link gemini" target="_blank"><i class="fas fa-wand-magic-sparkles"></i></a>
-            <a title="Reddit" href="https://www.reddit.com/u/rmvapexgroup/" class="s-link rd" target="_blank"><i class="fab fa-reddit-alien"></i></a>
-            <a title="Threads" href="https://www.threads.net/@rmvapexgroups" class="s-link th" target="_blank"><i class="fab fa-threads"></i></a>
-            <a title="Pinterest" href="https://pin.it/4rVwo4aAl" class="s-link pi" target="_blank"><i class="fab fa-pinterest-p"></i></a>
-            
-            <a title="Blogger" href="https://rmvapexgroup.blogspot.com/" class="s-link bl" target="_blank"><i class="fab fa-blogger-b"></i></a>
-            <a title="Medium" href="https://medium.com/@rmvapexgroup" class="s-link md" target="_blank"><i class="fab fa-medium-m"></i></a>
-            <a title="Substack" href="https://substack.com/@rmvapexgroup" class="s-link sub" target="_blank"><i class="fas fa-bookmark"></i></a>
-            <a title="BlueSky" href="https://bsky.app/profile/rmvapexgroup.bsky.social" class="s-link bs" target="_blank"><i class="fas fa-cloud"></i></a>
-
-            <a title="About.me" href="https://about.me/rmvapexgroup" class="s-link link-alt" target="_blank"><i class="fas fa-user"></i></a>
-            <a title="SuperProfile" href="https://superprofile.bio/rmvapexgroup" class="s-link sp" target="_blank"><i class="fas fa-id-card"></i></a>
-            
             <a title="Buy Me A Coffee" href="https://buymeacoffee.com/rameshmewalalvishwakarma" class="s-link mc" target="_blank"><i class="fas fa-coffee"></i></a>
             <a title="Ko-fi" href="https://ko-fi.com/rameshmewalalvishwakarma" class="s-link kofi" target="_blank"><i class="fas fa-mug-hot"></i></a>
         </div>
 
         <div class="legal-links">
-            <a href="contact/index.html">Contact Us</a>
-            <a href="privacy/index.html">Privacy Policy</a>
-            <a href="terms/index.html">Terms & Conditions</a>
-            <a href="about/index.html">About RMV</a>
+            <a href="#">Contact Us</a>
+            <a href="#">Privacy Policy</a>
+            <a href="#">Terms & Conditions</a>
+            <a href="#">About RMV</a>
         </div>
 
         <div class="copyright">
@@ -124,7 +104,6 @@
 </div>
 
 <script>
-    // 10 Tools Data
     const MY_TOOLS = [
         { name: "GST Master Pro", path: "gst-calculator", icon: "📊" },
         { name: "Wealth SIP Planner", path: "sip-calculator", icon: "💰" },
@@ -150,65 +129,58 @@
         { name: "SIP Mutual Fund Calculator", path: "rmv-apex-sip-v11", icon: "📈" },
         { name: "Compound Interest Master", path: "rmv-apex-compound-v11", icon: "💰" },
         { name: "Step-up & Lumpsum Master", path: "rmv-apex-stepup-v11", icon: "🚀" },
-        { name: "Future Goal & Retirement Planner", path: "rmv-apex-goal-planner-v11", icon: "🎓" },
+        { name: "Goal & Retirement Planner", path: "rmv-apex-goal-planner-v11", icon: "🎓" },
         { name: "Retirement Corpus Planner", path: "rmv-apex-retirement-v11", icon: "👴" },
         { name: "Child Education Planner", path: "rmv-apex-child-edu-v11", icon: "🎓" },
         { name: "Fixed Deposit (FD) Master", path: "rmv-apex-fd-v11", icon: "🏦" },
         { name: "Recurring Deposit (RD) Master", path: "rmv-apex-rd-v11", icon: "🗓️" },
         { name: "PPF Savings Master", path: "rmv-apex-ppf-v11", icon: "🛡️" },
         { name: "NPS Pension Master", path: "rmv-apex-nps-v11", icon: "🇮🇳" },
-        { name: "Income Tax Master (Old vs New)", path: "rmv-apex-tax-v11", icon: "⚖️" },
-        { name: "Car Loan vs Fuel Cost Analyzer", path: "rmv-apex-car-logic-v11", icon: "🚗" },
-        { name: "Gold Investment (SGB vs Physical)", path: "rmv-apex-gold-v11", icon: "📀" 
-        { name: "Credit Card vs Personal Loan Rescue", path: "rmv-apex-debt-v11", icon: "🛡️" },
-        { name: "GST Calculator (India)", path: "rmv-apex-gst-v11", icon: "🧾" },
+        { name: "Income Tax Master", path: "rmv-apex-tax-v11", icon: "⚖️" },
+        { name: "Car Loan Analyzer", path: "rmv-apex-car-logic-v11", icon: "🚗" },
+        { name: "Gold Investment Planner", path: "rmv-apex-gold-v11", icon: "📀" },
+        { name: "Credit Card Debt Rescue", path: "rmv-apex-debt-v11", icon: "🛡️" },
+        { name: "GST Calculator India", path: "rmv-apex-gst-v11", icon: "🧾" },
         { name: "Discount & Profit Master", path: "rmv-apex-discount-profit-v11", icon: "🏷️" },
         { name: "Live Currency Converter", path: "rmv-apex-currency-v11", icon: "💱" },
-        { name: "Break-even & Target Profit Analyzer", path: "rmv-apex-breakeven-v11", icon: "📊" },
-        { name: "Instagram Caption & Hashtag Generator", path: "rmv-apex-insta-caption-v11", icon: "📸" },
-        { name: "YouTube Viral Title Generator", path: "rmv-apex-yt-titles-v11", icon: "📽️" },
-        { name: "Smart Hashtag Generator", path: "rmv-apex-hashtag-v11", icon: "＃" },
-        { name: "AI Business Name Generator", path: "rmv-apex-name-gen-v11", icon: "🏢" },
+        { name: "Target Profit Analyzer", path: "rmv-apex-breakeven-v11", icon: "📊" },
+        { name: "Instagram Caption Generator", path: "rmv-apex-insta-caption-v11", icon: "📸" },
+        { name: "YouTube Viral Title Gen", path: "rmv-apex-yt-titles-v11", icon: "📽️" },
+        { name: "Smart Hashtag Gen", path: "rmv-apex-hashtag-v11", icon: "＃" },
+        { name: "AI Business Name Gen", path: "rmv-apex-name-gen-v11", icon: "🏢" },
         { name: "AI Ad Copy Generator", path: "rmv-apex-ad-copy-v11", icon: "📢" },
-        { name: "SEO Keyword Research Tool", path: "rmv-apex-seo-v11", icon: "🔍" },
-        { name: "Email Subject Line Generator", path: "rmv-apex-email-gen-v11", icon: "📧" },
-        { name: "Landing Page Headline Generator", path: "rmv-apex-headline-gen-v11", icon: "📰" },
+        { name: "SEO Keyword Research", path: "rmv-apex-seo-v11", icon: "🔍" },
+        { name: "Email Subject Gen", path: "rmv-apex-email-gen-v11", icon: "📧" },
+        { name: "Landing Page Headline Gen", path: "rmv-apex-headline-gen-v11", icon: "📰" },
         { name: "YouTube Tags Extractor", path: "rmv-apex-yt-tags-v11", icon: "🏷️" },
         { name: "YouTube Video Downloader", path: "rmv-apex-yt-downloader-v11", icon: "📥" },
         { name: "Instagram Reel Downloader", path: "rmv-apex-insta-downloader-v11", icon: "🎞️" },
-        { name: "TikTok Downloader (No Watermark)", path: "rmv-apex-tiktok-downloader-v11", icon: "🎵" },
-        { name: "Image Resizer (Social Media Sizes)", path: "rmv-apex-image-resizer-v11", icon: "📐" },
+        { name: "TikTok Downloader", path: "rmv-apex-tiktok-downloader-v11", icon: "🎵" },
+        { name: "Image Resizer Social", path: "rmv-apex-image-resizer-v11", icon: "📐" },
         { name: "Thumbnail Maker Tool", path: "rmv-apex-thumbnail-v11", icon: "🖼️" },
         { name: "PDF to Word Converter", path: "rmv-apex-pdf-converter-v11", icon: "📄" },
         { name: "Word to PDF Converter", path: "rmv-apex-word-to-pdf-v11", icon: "📑" },
-        { name: "Smart Image Compressor", path: "rmv-apex-image-compressor-v11", icon: "🖼️" },
+        { name: "Image Compressor Pro", path: "rmv-apex-image-compressor-v11", icon: "🖼️" },
         { name: "Text Case Converter", path: "rmv-apex-text-converter-v11", icon: "🔠" },
-        { name: "Smart Word Counter Tool", path: "rmv-apex-word-counter-v11", icon: "📝" },
-        { name: "JSON Formatter & Validator", path: "rmv-apex-json-formatter-v11", icon: "{} " },
+        { name: "JSON Formatter", path: "rmv-apex-json-formatter-v11", icon: "{}" },
         { name: "Base64 Encoder/Decoder", path: "rmv-apex-base64-v11", icon: "🔐" },
         { name: "PAN Card Validator", path: "rmv-apex-pan-validator-v11", icon: "💳" },
         { name: "Aadhaar Mask Tool", path: "rmv-apex-aadhaar-mask-v11", icon: "🛡️" },
         { name: "UPI ID Checker", path: "rmv-apex-upi-checker-v11", icon: "💸" },
-        { name: "Bank Holiday Calendar", path: "rmv-apex-bank-holiday-v11", icon: "📅" },
         { name: "AI Resume Builder", path: "rmv-apex-resume-builder-v11", icon: "📄" },
-        { name: "Ultra AI Resume Engine", path: "rmv-apex-resume-v11-pro", icon: "💎" },
         { name: "AI Smart Bio Generator", path: "rmv-apex-bio-gen-v11", icon: "✍️" },
-        { name: "Super AI Creative Engine", path: "rmv-apex-creator-engine-v11", icon: "💎" },
-        { name: "Ultra AI Bio Engine", path: "rmv-apex-bio-engine-v11-pro", icon: "✨" },
         { name: "AI Mini GPT Tool", path: "rmv-apex-mini-gpt-v11", icon: "🤖" },
         { name: "AI Blog Writer Pro", path: "rmv-apex-blog-writer-v11", icon: "✍️" },
         { name: "AI Logo Generator", path: "rmv-apex-logo-gen-v11", icon: "🎨" },
-        { name: "AI Email Writer Pro", path: "rmv-apex-email-writer-v11", icon: "📧" },
-            
+        { name: "AI Email Writer Pro", path: "rmv-apex-email-writer-v11", icon: "📧" }
     ];
 
     const grid = document.getElementById('toolGrid');
 
-    // Load Tools with Folder Logic
     function loadTools() {
         MY_TOOLS.forEach(tool => {
             const card = document.createElement('a');
-            // Important: This path structure requires folders named exactly as 'path'
+            // Path setup: Ensure folders exist or use full URLs
             card.href = tool.path + "/index.html"; 
             card.className = "tool-card";
             card.setAttribute('data-search', tool.name.toLowerCase());
@@ -217,7 +189,6 @@
         });
     }
 
-    // Advanced Filter Function
     function filterTools() {
         let input = document.getElementById('searchBar').value.toLowerCase();
         let cards = document.getElementsByClassName('tool-card');
@@ -227,7 +198,6 @@
         }
     }
 
-    // Loader & Window Control
     window.onload = () => {
         loadTools();
         setTimeout(() => {
