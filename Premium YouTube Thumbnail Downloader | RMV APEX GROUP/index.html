@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Premium YouTube Thumbnail Downloader | RMV APEX GROUP</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --primary: #0a84ff;
+            --premium-gold: #ffd700;
+            --bg-dark: #0f172a;
+            --glass: rgba(255, 255, 255, 0.05);
+        }
+
+        /* Security Shield & Branding */
+        body {
+            background-color: var(--bg-dark);
+            color: white;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            overflow-x: hidden;
+            user-select: none; /* Security Shield */
+        }
+
+        /* Animated Watermark */
+        .watermark {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(-45deg);
+            font-size: 5vw;
+            color: rgba(255, 255, 255, 0.03);
+            white-space: nowrap;
+            z-index: -1;
+            pointer-events: none;
+            animation: float 10s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(-50%, -50%) rotate(-45deg) scale(1); }
+            50% { transform: translate(-50%, -55%) rotate(-45deg) scale(1.05); }
+        }
+
+        /* Layout */
+        .container { max-width: 900px; margin: auto; padding: 40px 20px; }
+        .glass-card {
+            background: var(--glass);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+        }
+
+        input[type="text"] {
+            width: 80%;
+            padding: 15px;
+            border-radius: 10px;
+            border: none;
+            background: rgba(255,255,255,0.1);
+            color: white;
+            font-size: 1.1rem;
+        }
+
+        .btn-premium {
+            background: linear-gradient(45deg, #0a84ff, #00d2ff);
+            color: white; border: none; padding: 15px 30px;
+            border-radius: 10px; cursor: pointer; font-weight: bold;
+            transition: 0.3s; margin-top: 10px;
+        }
+
+        .btn-premium:hover { transform: scale(1.05); box-shadow: 0 0 20px var(--primary); }
+
+        /* Glowing Revenue Buttons */
+        .revenue-btns { display: flex; justify-content: center; gap: 15px; margin: 20px 0; }
+        .glow-btn {
+            padding: 10px 20px; border-radius: 50px; text-decoration: none; font-weight: bold;
+            animation: glow 1.5s infinite alternate;
+        }
+        .bmc { background: #FFDD00; color: black; }
+        .kofi { background: #29abe0; color: white; }
+
+        @keyframes glow {
+            from { box-shadow: 0 0 5px #fff; }
+            to { box-shadow: 0 0 20px var(--premium-gold); }
+        }
+
+        /* Results & Chart */
+        #resultArea { margin-top: 30px; display: none; }
+        .thumb-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px; }
+        .thumb-card img { width: 100%; border-radius: 10px; }
+
+        /* Fixed Footer */
+        footer {
+            position: fixed; bottom: 0; width: 100%;
+            background: rgba(0,0,0,0.8); padding: 10px;
+            text-align: center; font-size: 0.8rem; border-top: 1px solid var(--primary);
+        }
+
+        /* Floating WhatsApp & UPI Modal */
+        .wa-float {
+            position: fixed; bottom: 60px; right: 20px;
+            background: #25d366; width: 60px; height: 60px;
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            font-size: 30px; color: white; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+
+        .modal {
+            display: none; position: fixed; z-index: 1000; top: 0; left: 0;
+            width: 100%; height: 100%; background: rgba(0,0,0,0.9);
+            justify-content: center; align-items: center;
+        }
+        .modal-content { background: white; color: black; padding: 20px; border-radius: 15px; text-align: center; }
+    </style>
+</head>
+<body oncontextmenu="return false;"> <div class="watermark">RMV APEX GROUP - RAMESH MEWALAL VISHWAKARMA</div>
+
+    <div class="container">
+        <div class="glass-card">
+            <h1><i class="fab fa-youtube" style="color: #ff0000;"></i> YT Thumbnail Master</h1>
+            <p>Proprietor: Ramesh Mewalal Vishwakarma</p>
+            
+            <div class="revenue-btns">
+                <a href="https://buymeacoffee.com/rameshmewalalvishwakarma" target="_blank" class="glow-btn bmc">Buy Me a Coffee</a>
+                <a href="https://ko-fi.com/rameshmewalalvishwakarma" target="_blank" class="glow-btn kofi">Support on Ko-fi</a>
+            </div>
+
+            <input type="text" id="videoUrl" placeholder="Paste YouTube Link Here...">
+            <br>
+            <button class="btn-premium" onclick="processVideo()">EXTRACT HD THUMBNAILS</button>
+        </div>
+
+        <div id="resultArea" class="glass-card">
+            <h3>Download Results</h3>
+            <div class="thumb-grid" id="thumbnailDisplay"></div>
+            <div style="margin-top: 20px;">
+                <canvas id="qualityChart"></canvas>
+            </div>
+            <button class="btn-premium" onclick="generateReport()">DOWNLOAD ANALYTICS PDF</button>
+        </div>
+    </div>
+
+    <div class="wa-float" onclick="window.open('https://wa.me/918652025006')">
+        <i class="fab fa-whatsapp"></i>
+    </div>
+
+    <div id="upiModal" class="modal">
+        <div class="modal-content">
+            <h3>Unlock Ultra 4K Quality</h3>
+            <p>Scan to Pay ₹99 for Lifetime Access</p>
+            <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=upi://pay?pa=8652025006@paytm&pn=RMV%20APEX%20GROUP&am=99" alt="UPI QR">
+            <br><br>
+            <button onclick="document.getElementById('upiModal').style.display='none'">Close</button>
+        </div>
+    </div>
+
+    <footer>
+        Powered by RMV APEX GROUP | Proprietor & Admin: RAMESH MEWALAL VISHWAKARMA
+    </footer>
+
+    <script>
+        const BRAND_MODE = true;
+        const TOOL_VARIANT = 'PREMIUM';
+
+        // Advanced Engine: Thumbnail Logic
+        function processVideo() {
+            const url = document.getElementById('videoUrl').value;
+            const videoId = url.split('v=')[1]?.split('&')[0] || url.split('/').pop();
+            
+            if(!videoId) return alert("Invalid URL");
+
+            const qualities = [
+                { label: 'Max Res (HD)', url: `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`, weight: 100 },
+                { label: 'High Quality', url: `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`, weight: 75 },
+                { label: 'Standard', url: `https://img.youtube.com/vi/${videoId}/sddefault.jpg`, weight: 50 }
+            ];
+
+            let html = '';
+            qualities.forEach(q => {
+                html += `
+                    <div class="thumb-card">
+                        <p>${q.label}</p>
+                        <img src="${q.url}">
+                        <a href="${q.url}" download class="btn-premium" style="display:block;text-decoration:none;">Download</a>
+                    </div>`;
+            });
+
+            document.getElementById('thumbnailDisplay').innerHTML = html;
+            document.getElementById('resultArea').style.display = 'block';
+            initChart();
+            
+            // Trigger UPI Modal for "Premium" feel
+            setTimeout(() => { document.getElementById('upiModal').style.display = 'flex'; }, 3000);
+        }
+
+        // Advanced Engine: Chart.js
+        function initChart() {
+            const ctx = document.getElementById('qualityChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['MaxRes', 'HQ', 'Standard'],
+                    datasets: [{
+                        label: 'Resolution Score',
+                        data: [1080, 720, 480],
+                        backgroundColor: ['#0a84ff', '#ffd700', '#ff0000']
+                    }]
+                },
+                options: { plugins: { legend: { display: false } } }
+            });
+        }
+
+        // Export Intelligence
+        function generateReport() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            doc.text("RMV APEX GROUP - Thumbnail Analysis Report", 10, 10);
+            doc.text("Proprietor: Ramesh Mewalal Vishwakarma", 10, 20);
+            doc.text("Analysis Date: " + new Date().toLocaleDateString(), 10, 30);
+            doc.save("RMV_Report.pdf");
+        }
+
+        // Security Shield Logic
+        document.onkeydown = function(e) {
+            if(e.keyCode == 123 || (e.ctrlKey && e.shiftKey && e.keyCode == 'I'.charCodeAt(0)) || (e.ctrlKey && e.keyCode == 'U'.charCodeAt(0))) {
+                return false;
+            }
+        };
+    </script>
+</body>
+</html>
